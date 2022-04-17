@@ -1,50 +1,48 @@
-CREATE TABLE User(
+CREATE TABLE Users (
 
-	user_id varchar(255),
+	userId varchar(255),
 	name varchar(255),
 	email varchar(255),
-	pass_word varchar(255),
+	password varchar(255),
 
-	primary key(user_id)
-
-);
-
-
-CREATE TABLE Frindship(
-
-	user_id1 varchar(255),
-	user_id2 varchar(255),
-	frind_Since time,
-
-
-	primary key(user_id1,user_id2),
-
-	foreign key(user_id1) references User(user_id1),
-	foreign key(user_id2) references User(user_id2)
+	PRIMARY KEY (userId)
 
 );
 
+CREATE TABLE Scendos (
 
-CREATE TABLE User_Scendo(
-
-	user_id varchar(255),
-	scendo_id varchar(255),
-	is_creator boolean,
-
-	primary key(user_id,scendo_id),
-
-	foreign key(user_id) references User(user_id),
-	foreign key(scendo_id) references Scendo(scendo_id)
-
-);
-
-
-CREATE TABLE Scendo(
-
-	scendo_id,
+	scendoId varchar(255),
 	location varchar(255),
-	scendo_time date,
+	scendoTime date,
 
-	primary key(scendo_id)
+	PRIMARY KEY (scendoId)
+
+);
+
+CREATE TABLE Friendships (
+
+	userId1 varchar(255),
+	userId2 varchar(255),
+	frindsSince time,
+
+
+	PRIMARY KEY (userId1,userId2),
+
+	FOREIGN KEY (userId1) REFERENCES Users(userId),
+	FOREIGN KEY (userId2) REFERENCES Users(userId)
+
+);
+
+
+CREATE TABLE User_Scendo (
+
+	userId varchar(255),
+	scendoId varchar(255),
+	isCreator boolean,
+
+	PRIMARY KEY (userId,scendoId),
+
+	FOREIGN KEY (userId) REFERENCES Users(userId),
+	FOREIGN KEY (scendoId) REFERENCES Scendos(scendoId)
 
 );
