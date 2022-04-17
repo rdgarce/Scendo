@@ -1,0 +1,3 @@
+This software is a webapp that allow users to create a "Scendo".
+A "Scendo" is an organization for a going out with friends. Each user can ceate multiple Scendo 
+and for each one he can specify the location, the time, the friends that are invited.
