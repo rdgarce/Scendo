@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-
-
 public class Scendo {
 
     private String creator_user_id;
