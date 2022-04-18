@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+
+import javax.jws.soap.SOAPBinding.Use;
+
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -124,7 +127,7 @@ public class dbManager {
          case NAME:
             RealDBField a = RealDBField.name;
             //facciamo la query su "dbisc"
-            /*query su:*/ a;
+            /*query su:*/ //a;
             
             break;
       
@@ -132,6 +135,22 @@ public class dbManager {
             break;
       }
       //usa dbManager per fare una query di ritiro di utente;
+   }
+
+   private boolean search_user_from_email(User us){
+
+      PreparedStatement pstmt = null;
+
+      
+
+      String query = "SELECT email from Users where email = ?";
+      pstmt = c.prepareStatement(query);
+      pstmt.setString(1, us.get_email());
+   
+
+      
+
+
    }
 
    /*
@@ -146,6 +165,21 @@ public class dbManager {
    public int pushUsers(ArrayList<User> users){
       //pusha nel db l'oggetto in questione utilizzando dbManager
 
+
+      for (int i = 0; i < users.size(); i++) {
+         
+         PreparedStatement pstmt = null;
+
+         String
+         pstmt = c.prepareStatement(sql)
+
+
+         if (users[i].get) {
+
+
+         }
+
+      }
 
    }
    
