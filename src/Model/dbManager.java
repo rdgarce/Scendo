@@ -114,24 +114,108 @@ public class dbManager {
    *  Retreive User(s) from the database filtering on the field
    *  specified in the [fieldID] where the value is equals to [val].
    *  Returns either an ArrayList of User(s) or a null value.
-   *  If the result of the query is only one User, a one-legth array is returned.
+   *  If the result of the query is only one User, a one-legth ArrayList is returned.
    */
    public ArrayList<User> retreiveUsers(userFieldID fieldID, String val){
-
-      String field_;
+      
+      ArrayList<User> result = new ArrayList<User>();
+      ResultSet rs;
 
       switch (fieldID) {
+
+         case USERID:
+            //Query on "userId"
+            try {
+
+               PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?");
+               stmt.setString(1, val);
+               rs = stmt.executeQuery();
+               
+               while (rs.next()) {
+
+                  User usr = new User();
+                  //User set method needed
+                  usr.set_user_id(rs.getString("userId"));
+                  usr.set_email(rs.getString("email"));
+                  usr.set_name(rs.getString("name"));
+                  usr.set_password(rs.getString("password"));
+
+                  result.add(usr);
+
+               }
+
+               return result;
+               
+            } catch (Exception e) {
+               
+               error_logs.add(e.getMessage());
+               return null;
+
+            }
+         
+         case EMAIL:
+            //Query on "email"
+            try {
+
+               PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE email = ?");
+               stmt.setString(1, val);
+               rs = stmt.executeQuery();
+               
+               while (rs.next()) {
+
+                  User usr = new User();
+                  //User set method needed
+                  usr.set_user_id(rs.getString("userId"));
+                  usr.set_email(rs.getString("email"));
+                  usr.set_name(rs.getString("name"));
+                  usr.set_password(rs.getString("password"));
+
+                  result.add(usr);
+
+               }
+
+               return result;
+               
+            } catch (Exception e) {
+               
+               error_logs.add(e.getMessage());
+               return null;
+
+            }
+         
          case NAME:
-            RealDBField a = RealDBField.name;
-            //facciamo la query su "dbisc"
-            /*query su:*/ a;
-            
-            break;
+            //Query on "name"
+            try {
+
+               PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?");
+               stmt.setString(1, val);
+               rs = stmt.executeQuery();
+               
+               while (rs.next()) {
+
+                  User usr = new User();
+                  //User set method needed
+                  usr.set_user_id(rs.getString("userId"));
+                  usr.set_email(rs.getString("email"));
+                  usr.set_name(rs.getString("name"));
+                  usr.set_password(rs.getString("password"));
+
+                  result.add(usr);
+
+               }
+
+               return result;
+               
+            } catch (Exception e) {
+               
+               error_logs.add(e.getMessage());
+               return null;
+
+            }
       
          default:
-            break;
+            return null;
       }
-      //usa dbManager per fare una query di ritiro di utente;
    }
 
    /*
