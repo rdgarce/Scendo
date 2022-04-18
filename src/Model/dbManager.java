@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.jws.soap.SOAPBinding.Use;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 
@@ -137,18 +138,24 @@ public class dbManager {
       //usa dbManager per fare una query di ritiro di utente;
    }
 
-   private boolean search_user_from_email(User us){
+   private int search_user_from_email(User us){
 
       PreparedStatement pstmt = null;
 
       
 
       String query = "SELECT email from Users where email = ?";
-      pstmt = c.prepareStatement(query);
-      pstmt.setString(1, us.get_email());
-   
+      try {
+       
+         pstmt = c.prepareStatement(query);
+         pstmt.setString(1, us.get_email());
 
-      
+
+         return 1;
+
+      } catch (SQLException e) {
+         return -1;
+      }
 
 
    }
