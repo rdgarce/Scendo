@@ -152,4 +152,29 @@ public class dbManager {
    public String getLastLog(){ return error_logs.get(error_logs.size()-1); }
    public ArrayList<String> getLogs(){ /*TBD: The function must return a deep copy of the error_logs and not a reference (are u serious?!)*/}
    
+   /*
+   *  Returns a UUID
+   */
+   private String getUUID(){
+
+      ResultSet rs;
+      Statement stmt;
+      String uuid;
+
+      try {
+         
+         stmt = c.createStatement();
+         rs = stmt.executeQuery("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";SELECT uuid_generate_v4();");
+         uuid = rs.getString(1);
+
+      } catch (Exception e) {
+         
+         error_logs.add(e.getMessage());
+         return null;
+
+      }
+
+      return uuid;
+          
+   }
 }
