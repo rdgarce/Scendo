@@ -1,13 +1,9 @@
 package Model;
 
-import java.io.PushbackInputStream;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import org.postgresql.util.PGPropertyMaxResultBufferParser;
-
 
 public class Scendo {
 
@@ -24,35 +20,34 @@ public class Scendo {
         this.time = time;
     }
 
-    public String get_creator_user_id(){
+    public String getCreatorUserID(){
 
         return this.creator_user_id;
 
     }
 
-    public String get_scendo_id(){
+    public String getScendoID(){
 
         return this.scendo_id;
 
     }
 
-    public java.util.Date get_time(){
+    public java.util.Date getTime(){
 
         return this.time;
 
     }
 
-    public String get_location(){
+    public String getLocation(){
 
         return this.location;
 
     }
 
-    public ArrayList<User> get_invited_users(){
+    public ArrayList<User> getInvitedUsers(){
 
         return this.invited_users;
 
     }
-
     
 }
