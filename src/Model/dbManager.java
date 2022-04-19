@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
-
 import javax.jws.soap.SOAPBinding.Use;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -223,34 +221,6 @@ public class dbManager {
    }
 
    /*
-   * Search the a user from his email.
-   * if the user is finds i return 1 else -1
-   */
-   private int search_user_from_email(User us){
-
-      PreparedStatement pstmt = null;
-
-      String query = "SELECT email from Users where email = ?";
-      try {
-       
-         pstmt = c.prepareStatement(query);
-         pstmt.setString(1, us.get_email());
-         ResultSet result = pstmt.executeQuery();
-
-         if(result.next() == false)
-            return 1;
-         else
-            return -1;
-
-      } catch (SQLException e) {
-         error_logs.add(e.getMessage());
-         return 0;
-      }
-
-
-   }
-
-   /*
    *  Push to the database an ArrayList of User(s).
    *  The function determins if the User need to be
    *  INSERTED or UPDATED into the db so the usage 
@@ -260,8 +230,6 @@ public class dbManager {
    *  or -1 if any error occurs.
    */
    public int pushUsers(ArrayList<User> users){
-      //pusha nel db l'oggetto in questione utilizzando dbManager
-
 
       for (int i = 0; i < users.size(); i++) {
          
@@ -280,12 +248,14 @@ public class dbManager {
    }
    
    public String getLastLog(){ return error_logs.get(error_logs.size()-1); }
-   public ArrayList<String> getLogs(){ /*TBD: The function must return a deep copy of the error_logs and not a reference (are u serious?!)*/}
+   public ArrayList<String> getLogs(){ /*TBD: The function must return a deep copy of the error_logs and not a reference*/}
    
    /*
-   *  Returns a UUID
+   *  Returns a String containing a UUID 
+   *  by executing a query on the database,
+   *  or null object if any error occurs.
    */
-   private String getUUID(){
+   private String get_UUID(){
 
       ResultSet rs;
       Statement stmt;
@@ -307,4 +277,36 @@ public class dbManager {
       return uuid;
           
    }
+
+   /*
+   *  Search if there is a User in the database
+   *  that match [us] email.
+   *  If the User is found, return 1 else -1.
+   *  0 is returned if an error occurs.
+   */
+  private int search_user_from_email(User us){
+
+   PreparedStatement pstmt;
+   ResultSet rs;
+
+   try {
+    
+      pstmt = c.prepareStatement("SELECT email FROM Users WHERE email = ?");
+      pstmt.setString(1, us.get_email());
+      rs = pstmt.executeQuery();
+
+      if(rs.next() == false)
+         return -1;
+      else
+         return 1;
+
+   } catch (SQLException e) {
+      error_logs.add(e.getMessage());
+      return 0;
+   }
+   
+   }
+   
 }
+
+   

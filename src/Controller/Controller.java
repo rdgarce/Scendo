@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.dbManager;
-
 import java.sql.ResultSet;
 
 public class Controller {
