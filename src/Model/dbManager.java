@@ -137,10 +137,10 @@ public class dbManager {
 
                   User usr = new User();
                   //User set method needed
-                  usr.set_user_id(rs.getString("userId"));
-                  usr.set_email(rs.getString("email"));
-                  usr.set_name(rs.getString("name"));
-                  usr.set_password(rs.getString("password"));
+                 // usr.set_user_id(rs.getString("userId"));
+                  usr.setEmail(rs.getString("email"));
+                  usr.setName(rs.getString("name"));
+                  usr.setPassword(rs.getString("password"));
 
                   result.add(usr);
 
@@ -167,10 +167,10 @@ public class dbManager {
 
                   User usr = new User();
                   //User set method needed
-                  usr.set_user_id(rs.getString("userId"));
-                  usr.set_email(rs.getString("email"));
-                  usr.set_name(rs.getString("name"));
-                  usr.set_password(rs.getString("password"));
+                  //usr.set_user_id(rs.getString("userId"));
+                  usr.setEmail(rs.getString("email"));
+                  usr.setName(rs.getString("name"));
+                  usr.setPassword(rs.getString("password"));
 
                   result.add(usr);
 
@@ -188,7 +188,7 @@ public class dbManager {
          case NAME:
             //Query on "name"
             try {
-
+               
                PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?");
                stmt.setString(1, val);
                rs = stmt.executeQuery();
@@ -198,9 +198,9 @@ public class dbManager {
                   User usr = new User();
                   //User set method needed
                   usr.set_user_id(rs.getString("userId"));
-                  usr.set_email(rs.getString("email"));
-                  usr.set_name(rs.getString("name"));
-                  usr.set_password(rs.getString("password"));
+                  usr.setEmail(rs.getString("email"));
+                  usr.setName(rs.getString("name"));
+                  usr.setPassword(rs.getString("password"));
 
                   result.add(usr);
 
@@ -218,6 +218,25 @@ public class dbManager {
          default:
             return null;
       }
+   }
+
+
+   private User load_user_from_email(String email) {
+
+      try{
+         ResultSet rs;
+         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?");
+         stmt.setString(1, email);
+         rs = stmt.executeQuery();
+         User us = new User(rs.getString("userId"),rs.getString("email"),rs.getString("name"),rs.getString("password"));
+         return us;
+      }catch(SQLException e){
+         return null;
+      }
+   }
+
+   private User load_user_from_user_id(String usid){
+
    }
 
    /*
@@ -244,7 +263,7 @@ public class dbManager {
          }
 
       }
-
+      return 1;
    }
    
    public String getLastLog(){ return error_logs.get(error_logs.size()-1); }
@@ -292,7 +311,7 @@ public class dbManager {
    try {
     
       pstmt = c.prepareStatement("SELECT email FROM Users WHERE email = ?");
-      pstmt.setString(1, us.get_email());
+      pstmt.setString(1, us.getEmail());
       rs = pstmt.executeQuery();
 
       if(rs.next() == false)
