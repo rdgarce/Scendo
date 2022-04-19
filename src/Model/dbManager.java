@@ -187,7 +187,7 @@ public class dbManager {
          case NAME:
             //Query on "name"
             try {
-
+               
                PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?");
                stmt.setString(1, val);
                rs = stmt.executeQuery();
@@ -219,6 +219,25 @@ public class dbManager {
       }
    }
 
+
+   private User load_user_from_email(String email) {
+
+      try{
+         ResultSet rs;
+         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?");
+         stmt.setString(1, email);
+         rs = stmt.executeQuery();
+         User us = new User(rs.getString("userId"),rs.getString("email"),rs.getString("name"),rs.getString("password"));
+         return us;
+      }catch(SQLException e){
+         return null;
+      }
+   }
+
+   private User load_user_from_user_id(String usid){
+
+   }
+
    /*
    *  Push to the database an ArrayList of User(s).
    *  The function determins if the User need to be
@@ -243,7 +262,7 @@ public class dbManager {
          }
 
       }
-
+      return 1;
    }
    
    public String getLastLog(){ return error_logs.get(error_logs.size()-1); }
