@@ -11,55 +11,46 @@ public class User {
         
     }
 
-    
-
-    public void set_email(String email){
+    public void setEmail(String email){
 
         this.email = email;
         
     }
 
-    public void set_user_id(String user_id){
-
-        this.user_id = user_id;
-
-    }
-
-    public void set_password(String password){
-
-        this.password = password;
-
-    }
-
-    public void set_name(String name){
+    public void setName(String name){
 
         this.name = name;
 
     }
 
-    public String get_email(){
+    public void setPassword(String password){
 
-        return this.email;
+        this.password = password;
 
     }
 
-    public String get_user_id(){
+    public String getUserID(){
 
         return this.user_id;
 
     }
 
-    public String get_name(){
+    public String getEmail(){
+
+        return this.email;
+
+    }
+
+    public String getName(){
 
         return this.name;
 
     }
 
-    public String get_password(){
+    public String getPassword(){
 
         return this.password;
 
     }
-
 
 }
