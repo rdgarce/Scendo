@@ -1,6 +1,5 @@
 package Model;
 
-import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

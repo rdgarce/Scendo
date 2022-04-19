@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
-import javax.jws.soap.SOAPBinding.Use;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -137,10 +136,10 @@ public class dbManager {
 
                   User usr = new User();
                   //User set method needed
-                  usr.set_user_id(rs.getString("userId"));
-                  usr.set_email(rs.getString("email"));
-                  usr.set_name(rs.getString("name"));
-                  usr.set_password(rs.getString("password"));
+                  usr.setUserID(rs.getString("userId"));
+                  usr.setEmail(rs.getString("email"));
+                  usr.setName(rs.getString("name"));
+                  usr.setPassword(rs.getString("password"));
 
                   result.add(usr);
 
@@ -167,10 +166,10 @@ public class dbManager {
 
                   User usr = new User();
                   //User set method needed
-                  usr.set_user_id(rs.getString("userId"));
-                  usr.set_email(rs.getString("email"));
-                  usr.set_name(rs.getString("name"));
-                  usr.set_password(rs.getString("password"));
+                  usr.setUserID(rs.getString("userId"));
+                  usr.setEmail(rs.getString("email"));
+                  usr.setName(rs.getString("name"));
+                  usr.setPassword(rs.getString("password"));
 
                   result.add(usr);
 
@@ -197,10 +196,10 @@ public class dbManager {
 
                   User usr = new User();
                   //User set method needed
-                  usr.set_user_id(rs.getString("userId"));
-                  usr.set_email(rs.getString("email"));
-                  usr.set_name(rs.getString("name"));
-                  usr.set_password(rs.getString("password"));
+                  usr.setUserID(rs.getString("userId"));
+                  usr.setEmail(rs.getString("email"));
+                  usr.setName(rs.getString("name"));
+                  usr.setPassword(rs.getString("password"));
 
                   result.add(usr);
 
@@ -279,6 +278,42 @@ public class dbManager {
    }
 
    /*
+   *  Check if the given [str] is a correct UUID.
+   *  Returns 0 if it's the case or -1 if the string
+   *  is not a correct UUID or any error occurs.
+   *  getLastLog() method can be called to retreive 
+   *  the error message of the last executed operation
+   */ 
+   private int test_UUID(String str){
+
+      PreparedStatement stmt;
+      ResultSet rs;
+
+      try {
+
+         stmt = c.prepareStatement("SELECT uuid_or_null('?') IS NULL;");
+         stmt.setString(1, str);
+         rs = stmt.executeQuery();
+
+         if (rs.getBoolean(1) == true){
+            
+            error_logs.add("The provided string is not an UUID");
+            return -1;
+            
+         }
+         else
+            return 0;
+         
+      } catch (Exception e) {
+         
+         error_logs.add(e.getMessage());
+         return -1;
+
+      }
+      
+   }
+
+   /*
    *  Search if there is a User in the database
    *  that match [us] email.
    *  If the User is found, return 1 else -1.
@@ -292,7 +327,7 @@ public class dbManager {
    try {
     
       pstmt = c.prepareStatement("SELECT email FROM Users WHERE email = ?");
-      pstmt.setString(1, us.get_email());
+      pstmt.setString(1, us.getEmail());
       rs = pstmt.executeQuery();
 
       if(rs.next() == false)
@@ -306,7 +341,7 @@ public class dbManager {
    }
    
    }
-   
+
 }
 
    
