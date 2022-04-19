@@ -138,23 +138,29 @@ public class dbManager {
       //usa dbManager per fare una query di ritiro di utente;
    }
 
+   /*
+   * Search the a user from his email.
+   * if the user is finds i return 1 else -1
+   */
    private int search_user_from_email(User us){
 
       PreparedStatement pstmt = null;
-
-      
 
       String query = "SELECT email from Users where email = ?";
       try {
        
          pstmt = c.prepareStatement(query);
          pstmt.setString(1, us.get_email());
+         ResultSet result = pstmt.executeQuery();
 
-
-         return 1;
+         if(result.next() == false)
+            return 1;
+         else
+            return -1;
 
       } catch (SQLException e) {
-         return -1;
+         error_logs.add(e.getMessage());
+         return 0;
       }
 
 
@@ -175,14 +181,13 @@ public class dbManager {
 
       for (int i = 0; i < users.size(); i++) {
          
-         PreparedStatement pstmt = null;
+         if(this.search_user_from_email(users.get(i))== -1){
 
-         String
-         pstmt = c.prepareStatement(sql)
+            //push on db
 
+         }else{
 
-         if (users[i].get) {
-
+            //update the db
 
          }
 
