@@ -219,7 +219,7 @@ public class dbManager {
       }
    }
 
-
+   // Commento da Raf: Questo metodo non fa la stessa cosa di retreiveUser()?
    private User load_user_from_email(String email) {
 
       try{
@@ -227,13 +227,14 @@ public class dbManager {
          PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?");
          stmt.setString(1, email);
          rs = stmt.executeQuery();
-         User us = new User(rs.getString("userId"),rs.getString("email"),rs.getString("name"),rs.getString("password"));
+         User us = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"));
          return us;
       }catch(SQLException e){
          return null;
       }
    }
 
+   //Commento da Raf: Stessa cosa questo qui, non ci basta retreiveUser()?
    private User load_user_from_user_id(String usid){
 
    }
