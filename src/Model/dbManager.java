@@ -252,6 +252,11 @@ public class dbManager {
 
    }
 
+   /*
+   *
+   * 
+   */
+
    private User load_user_from_name(String name){
 
 
@@ -350,7 +355,8 @@ public class dbManager {
 
             //push on db
             User us = this.load_user_from_email(users.get(i).getEmail());
-
+            
+            this.store_user_on_db(us);
 
          }else{
 
