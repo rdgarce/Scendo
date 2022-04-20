@@ -219,7 +219,12 @@ public class dbManager {
       }
    }
 
-   
+   /*
+   *Load user from email
+   *commit a query on database 
+   * 
+   * 
+   */
    
    private User load_user_from_email(String email) {
 
@@ -227,7 +232,7 @@ public class dbManager {
 
          ResultSet rs;
 
-         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE email = ?");
+         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE email = ?;");
 
          stmt.setString(1, email);
 
@@ -239,9 +244,39 @@ public class dbManager {
 
       }catch(SQLException e){
 
+         error_logs.add(e.getMessage());
+
          return null;
 
       }
+
+   }
+
+   private User load_user_from_name(String name){
+
+
+      try{
+
+         ResultSet rs;
+         
+         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?;");
+         
+         stmt.setString(1, name);
+         
+         rs = stmt.executeQuery();
+         
+         User us = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"));
+         
+         return us;
+      
+      }catch(SQLException e){
+      
+         error_logs.add(e.getMessage());
+
+         return null;
+      
+      }
+
 
    }
 
@@ -251,9 +286,9 @@ public class dbManager {
 
          ResultSet rs;
          
-         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?");
+         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?;");
          
-         stmt.setString(1, email);
+         stmt.setString(1, usid);
          
          rs = stmt.executeQuery();
          
@@ -263,6 +298,8 @@ public class dbManager {
       
       }catch(SQLException e){
       
+         error_logs.add(e.getMessage());
+
          return null;
       
       }
@@ -377,7 +414,9 @@ public class dbManager {
    try {
     
       pstmt = c.prepareStatement("SELECT email FROM Users WHERE email = ?");
+    
       pstmt.setString(1, us.getEmail());
+    
       rs = pstmt.executeQuery();
 
       if(rs.next() == false)
@@ -386,8 +425,11 @@ public class dbManager {
          return 1;
 
    } catch (SQLException e) {
+   
       error_logs.add(e.getMessage());
+    
       return 0;
+   
    }
    
    }
