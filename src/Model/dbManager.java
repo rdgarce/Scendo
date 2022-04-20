@@ -306,6 +306,33 @@ public class dbManager {
 
    }
 
+   private void store_user_on_db(User us){
+
+      ResultSet rs;
+      try{
+      
+         PreparedStatement stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
+      
+         stmt.setString(1,us.getUserID());
+
+         stmt.setString(2,us.getEmail());
+
+         stmt.setString(3,us.getName());
+
+         stmt.setString(4,us.getPassword());
+
+         rs = stmt.executeQuery();
+
+
+      }catch(SQLException e){
+
+         error_logs.add(e.getMessage());
+      
+      }
+      
+      
+   }
+
    /*
    *  Push to the database an ArrayList of User(s).
    *  The function determins if the User need to be
@@ -322,6 +349,8 @@ public class dbManager {
          if(this.search_user_from_email(users.get(i))== -1){
 
             //push on db
+            User us = this.load_user_from_email(users.get(i).getEmail());
+
 
          }else{
 
