@@ -7,9 +7,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 
 
 public class dbManager {
@@ -229,16 +231,18 @@ public class dbManager {
       try{
       
          PreparedStatement stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
-      
-         stmt.setString(1,us.getUserID());
+         
+        System.out.print(us.getUserID()+"\n");
 
-         stmt.setString(2,us.getEmail());
+         stmt.setObject(1, UUID.fromString(us.getUserID()));
 
-         stmt.setString(3,us.getName());
+         stmt.setString(2,us.getName());
+
+         stmt.setString(3,us.getEmail());
 
          stmt.setString(4,us.getPassword());
 
-         stmt.executeQuery();
+         stmt.execute();
 
 
       }catch(SQLException e){
@@ -263,12 +267,10 @@ public class dbManager {
 
       for (int i = 0; i < users.size(); i++) {
          
-         if(this.search_user_from_email(users.get(i))== -1){
+         if(this.search_user_from_email(users.get(i)) == -1){
 
             //push on db
-            User us = this.load_user_from_id(users.get(i).getEmail());
-            
-            this.store_user_on_db(us);
+            this.store_user_on_db(users.get(i));
             
 
          }else{
@@ -316,10 +318,6 @@ public class dbManager {
          error_logs.add(e.getMessage());
       }
 
-    
-      
-      
-
    }
    
 
@@ -328,7 +326,7 @@ public class dbManager {
    *  by executing a query on the database,
    *  or null object if any error occurs.
    */
-   public  String getUUID(){
+   public String getUUID(){
 
       ResultSet rs;
       Statement stmt;
@@ -337,11 +335,14 @@ public class dbManager {
       try {
          
          stmt = c.createStatement();
-         rs = stmt.executeQuery("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";SELECT uuid_generate_v4();");
+         stmt.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";");
+         rs = stmt.executeQuery("SELECT uuid_generate_v4();");
+         rs.next();
          uuid = rs.getString(1);
          log_db.add(rs);
+         
 
-      } catch (Exception e) {
+      } catch (SQLException e) {
          
          error_logs.add(e.getMessage());
          return null;
