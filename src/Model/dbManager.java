@@ -1,9 +1,15 @@
 package Model;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+
+import javax.tools.StandardJavaFileManager;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -290,6 +296,7 @@ public class dbManager {
             User us = this.load_user_from_id(users.get(i).getEmail());
             
             this.store_user_on_db(us);
+            
 
          }else{
 
@@ -301,9 +308,48 @@ public class dbManager {
       return 1;
    }
    
-   public String getLastLog(){ return error_logs.get(error_logs.size()-1); }
-   public ArrayList<String> getLogs(){ /*TBD: The function must return a deep copy of the error_logs and not a reference*/}
+   public String getLastLog(){ return this.error_logs.get(error_logs.size()-1); }
+
+   public ArrayList<String> getLogs(){ 
+      
+      ArrayList <String> copy = new ArrayList<String>();
+
+      copy.addAll(this.error_logs);
    
+      return copy;
+   
+   }
+   
+   public void store_log_db(){
+
+      String file_path = "log/query_scendo.log";
+      String dir_name = "log";
+      try {
+
+         File file = new File(file_path);
+         File dir = new File(dir_name);
+         if(file.isFile()==false)
+            dir.mkdir();
+            
+
+         FileWriter w = new FileWriter(file_path,true);
+        
+         for (ResultSet rs: log_db) {
+               w.write(rs.toString()+"\n");
+         }
+         w.flush();
+      } catch (IOException e) {
+         error_logs.add(e.getMessage());
+      }
+
+   
+    
+      
+      
+
+   }
+   
+
    /*
    *  Returns a String containing a UUID 
    *  by executing a query on the database,
