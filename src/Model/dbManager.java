@@ -16,6 +16,7 @@ public class dbManager {
    private String pswd;
    private Connection c;
    private ArrayList<String> error_logs;
+   private ArrayList<ResultSet> log_db;
 
 
    public enum userFieldID{
@@ -36,6 +37,7 @@ public class dbManager {
       this.usr = username;
       this.pswd = password;
       this.error_logs = new ArrayList<String>();
+      this.log_db = new ArrayList<ResultSet>();
       
    }
 
@@ -137,6 +139,7 @@ public class dbManager {
 
                   User usr = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"),rs.getString("userId"));
                   result.add(usr);
+                  log_db.add(rs);
 
                }
 
@@ -162,6 +165,7 @@ public class dbManager {
                   //User set method needed
                   User  usr =  new User(rs.getString("email"),rs.getString("name"),rs.getString("password"),rs.getString("userId"));
                   result.add(usr);
+                  log_db.add(rs);
 
                }
 
@@ -187,6 +191,7 @@ public class dbManager {
                   //User set method needed
                   User usr = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"),rs.getString("userId"));                 
                   result.add(usr);
+                  log_db.add(rs);
 
                }
 
@@ -222,7 +227,7 @@ public class dbManager {
          stmt.setString(1,id);
 
          rs = stmt.executeQuery();
-
+         log_db.add(rs);
          User us = new User(rs);
 
          return us;
@@ -315,6 +320,7 @@ public class dbManager {
          stmt = c.createStatement();
          rs = stmt.executeQuery("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";SELECT uuid_generate_v4();");
          uuid = rs.getString(1);
+         log_db.add(rs);
 
       } catch (Exception e) {
          
@@ -346,6 +352,8 @@ public class dbManager {
          stmt = c.prepareStatement("SELECT uuid_or_null('?') IS NULL;");
          stmt.setString(1, str);
          rs = stmt.executeQuery();
+         log_db.add(rs);
+
 
          if (rs.getBoolean(1) == true){
             
@@ -383,6 +391,9 @@ public class dbManager {
       pstmt.setString(1, us.getEmail());
     
       rs = pstmt.executeQuery();
+      
+      log_db.add(rs);
+
 
       if(rs.next() == false)
          return -1;
