@@ -48,6 +48,7 @@ public class Scendo {
 
     public ArrayList<User> getInvitedUsers(){
         
+        //Returns a copy of the arraylist.
         ArrayList <User> copy = new ArrayList<User>();
         copy.addAll(this.invited_users);
         return copy;
