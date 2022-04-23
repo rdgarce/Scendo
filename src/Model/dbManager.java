@@ -1,5 +1,8 @@
 package Model;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,6 +19,7 @@ public class dbManager {
    private String pswd;
    private Connection c;
    private ArrayList<String> error_logs;
+   private ArrayList<ResultSet> log_db;
 
 
    public enum userFieldID{
@@ -36,6 +40,7 @@ public class dbManager {
       this.usr = username;
       this.pswd = password;
       this.error_logs = new ArrayList<String>();
+      this.log_db = new ArrayList<ResultSet>();
       
    }
 
@@ -61,6 +66,7 @@ public class dbManager {
 
       return 0;
    }
+
 
    /* 
    *  Try to close the connection to the given database.
@@ -186,9 +192,62 @@ public class dbManager {
       }
    }
 
-   //Commento da Raf: Stessa cosa questo qui, non ci basta retreiveUser()?
-   private User load_user_from_user_id(String usid){
+   private User load_user_from_id(String id) {
 
+      try{
+
+         ResultSet rs;
+
+         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?;");
+
+         stmt.setString(1,id);
+
+         rs = stmt.executeQuery();
+         log_db.add(rs);
+         User us = new User(rs.getString("userId"), 
+                              rs.getString("email"), 
+                              rs.getString("name"), 
+                              rs.getString("password"));
+         return us;
+
+      }catch(SQLException e){
+
+         error_logs.add(e.getMessage());
+
+         return null;
+
+      }
+
+   }
+
+
+
+
+
+   private void store_user_on_db(User us){
+
+      try{
+      
+         PreparedStatement stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
+      
+         stmt.setString(1,us.getUserID());
+
+         stmt.setString(2,us.getEmail());
+
+         stmt.setString(3,us.getName());
+
+         stmt.setString(4,us.getPassword());
+
+         stmt.executeQuery();
+
+
+      }catch(SQLException e){
+
+         error_logs.add(e.getMessage());
+      
+      }
+      
+      
    }
 
    /*
@@ -207,6 +266,10 @@ public class dbManager {
          if(this.search_user_from_email(users.get(i))== -1){
 
             //push on db
+            User us = this.load_user_from_id(users.get(i).getEmail());
+            
+            this.store_user_on_db(us);
+            
 
          }else{
 
@@ -218,15 +281,54 @@ public class dbManager {
       return 1;
    }
    
-   public String getLastLog(){ return error_logs.get(error_logs.size()-1); }
-   public ArrayList<String> getLogs(){ /*TBD: The function must return a deep copy of the error_logs and not a reference*/}
+   public String getLastLog(){ return this.error_logs.get(error_logs.size()-1); }
+
+   public ArrayList<String> getLogs(){ 
+      
+      ArrayList <String> copy = new ArrayList<String>();
+
+      copy.addAll(this.error_logs);
    
+      return copy;
+   
+   }
+   
+   public void store_log_db(){
+
+      String file_path = "log/query_scendo.log";
+      String dir_name = "log";
+      try {
+
+         File file = new File(file_path);
+         File dir = new File(dir_name);
+         if(file.isFile()==false)
+            dir.mkdir();
+            
+
+         FileWriter w = new FileWriter(file_path,true);
+        
+         for (ResultSet rs: log_db) {
+               w.write(rs.toString()+"\n");
+         }
+         w.flush();
+      } catch (IOException e) {
+         error_logs.add(e.getMessage());
+      }
+
+   
+    
+      
+      
+
+   }
+   
+
    /*
    *  Returns a String containing a UUID 
    *  by executing a query on the database,
    *  or null object if any error occurs.
    */
-   public String getUUID(){
+   public  String getUUID(){
 
       ResultSet rs;
       Statement stmt;
@@ -237,6 +339,7 @@ public class dbManager {
          stmt = c.createStatement();
          rs = stmt.executeQuery("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";SELECT uuid_generate_v4();");
          uuid = rs.getString(1);
+         log_db.add(rs);
 
       } catch (Exception e) {
          
@@ -248,6 +351,8 @@ public class dbManager {
       return uuid;
           
    }
+
+
 
    /*
    *  Check if the given [str] is a correct UUID.
@@ -266,6 +371,8 @@ public class dbManager {
          stmt = c.prepareStatement("SELECT uuid_or_null('?') IS NULL;");
          stmt.setString(1, str);
          rs = stmt.executeQuery();
+         log_db.add(rs);
+
 
          if (rs.getBoolean(1) == true){
             
@@ -299,8 +406,13 @@ public class dbManager {
    try {
     
       pstmt = c.prepareStatement("SELECT email FROM Users WHERE email = ?");
+    
       pstmt.setString(1, us.getEmail());
+    
       rs = pstmt.executeQuery();
+      
+      log_db.add(rs);
+
 
       if(rs.next() == false)
          return -1;
@@ -308,8 +420,11 @@ public class dbManager {
          return 1;
 
    } catch (SQLException e) {
+   
       error_logs.add(e.getMessage());
+    
       return 0;
+   
    }
    
    }

@@ -21,11 +21,6 @@ public class User {
         
     }
 
-    public void setEmail(String email){
-
-        this.email = email;
-        
-    }
 
     public void setName(String name){
 
@@ -37,6 +32,12 @@ public class User {
 
         this.password = password;
 
+    }
+
+    public void setEmail(String email){
+
+        this.email = email;
+        
     }
 
     public void addScendo(String scendoId){
