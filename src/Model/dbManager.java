@@ -311,11 +311,11 @@ public class dbManager {
                w.write(rs.toString()+"\n");
          }
          w.flush();
+         w.close();
       } catch (IOException e) {
          error_logs.add(e.getMessage());
       }
 
-   
     
       
       
