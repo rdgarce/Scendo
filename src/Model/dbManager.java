@@ -62,6 +62,7 @@ public class dbManager {
       return 0;
    }
 
+
    /* 
    *  Try to close the connection to the given database.
    *  Returns 0 if the connection is closed without errors
@@ -134,13 +135,7 @@ public class dbManager {
                
                while (rs.next()) {
 
-                  User usr = new User();
-                  //User set method needed
-                  usr.setUserID(rs.getString("userId"));
-                  usr.setEmail(rs.getString("email"));
-                  usr.setName(rs.getString("name"));
-                  usr.setPassword(rs.getString("password"));
-
+                  User usr = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"),rs.getString("userId"));
                   result.add(usr);
 
                }
@@ -164,13 +159,8 @@ public class dbManager {
                
                while (rs.next()) {
 
-                  User usr = new User();
                   //User set method needed
-                  usr.setUserID(rs.getString("userId"));
-                  usr.setEmail(rs.getString("email"));
-                  usr.setName(rs.getString("name"));
-                  usr.setPassword(rs.getString("password"));
-
+                  User  usr =  new User(rs.getString("email"),rs.getString("name"),rs.getString("password"),rs.getString("userId"));
                   result.add(usr);
 
                }
@@ -194,13 +184,8 @@ public class dbManager {
                
                while (rs.next()) {
 
-                  User usr = new User();
                   //User set method needed
-                  usr.setUserID(rs.getString("userId"));
-                  usr.setEmail(rs.getString("email"));
-                  usr.setName(rs.getString("name"));
-                  usr.setPassword(rs.getString("password"));
-
+                  User usr = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"),rs.getString("userId"));                 
                   result.add(usr);
 
                }
@@ -226,90 +211,34 @@ public class dbManager {
    * 
    */
    
-   private User load_user_from_email(String email) {
+   private User load_user_from_id(String id) {
 
       try{
 
          ResultSet rs;
 
-         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE email = ?;");
-
-         stmt.setString(1, email);
-
-         rs = stmt.executeQuery();
-
-         User us = new User(rs);
-
-         return us;
-
-      }catch(SQLException e){
-
-         error_logs.add(e.getMessage());
-
-         return null;
-
-      }
-
-   }
-
-   /*
-   *
-   * 
-   */
-
-   private User load_user_from_name(String name){
-
-
-      try{
-
-         ResultSet rs;
-         
-         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?;");
-         
-         stmt.setString(1, name);
-         
-         rs = stmt.executeQuery();
-         
-         User us = new User(rs);
-         
-         return us;
-      
-      }catch(SQLException e){
-      
-         error_logs.add(e.getMessage());
-
-         return null;
-      
-      }
-
-
-   }
-
-   private User load_user_from_user_id(String usid){
-
-      try{
-
-         ResultSet rs;
-         
          PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?;");
-         
-         stmt.setString(1, usid);
-         
+
+         stmt.setString(1,id);
+
          rs = stmt.executeQuery();
-         
+
          User us = new User(rs);
-         
+
          return us;
-      
+
       }catch(SQLException e){
-      
+
          error_logs.add(e.getMessage());
 
          return null;
-      
+
       }
 
    }
+
+
+
 
    private void store_user_on_db(User us){
 
@@ -353,7 +282,7 @@ public class dbManager {
          if(this.search_user_from_email(users.get(i))== -1){
 
             //push on db
-            User us = this.load_user_from_email(users.get(i).getEmail());
+            User us = this.load_user_from_id(users.get(i).getEmail());
             
             this.store_user_on_db(us);
 

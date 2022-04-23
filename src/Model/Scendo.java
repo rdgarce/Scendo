@@ -5,13 +5,15 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.postgresql.copy.CopyDual;
+
 public class Scendo {
 
     private String creator_user_id;
     private String scendo_id;
     private String location;
     private java.util.Date time;
-    private ArrayList<User> invited_users;
+    private ArrayList<User> invited_users = null;
 
     public Scendo(String creatorUserId, String location, java.util.Date time){
 
@@ -45,8 +47,10 @@ public class Scendo {
     }
 
     public ArrayList<User> getInvitedUsers(){
-
-        return this.invited_users;
+        
+        ArrayList <User> copy = new ArrayList<User>();
+        copy.addAll(this.invited_users);
+        return copy;
 
     }
     
