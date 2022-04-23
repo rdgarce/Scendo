@@ -3,7 +3,6 @@ package Controller;
 import Model.dbManager;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
 
 public class Controller {
     public static void main(String[] args) {
