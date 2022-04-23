@@ -15,24 +15,6 @@ public class Controller {
             return;
         }
             
-        ResultSet rs = db.executeQueryFromString("SELECT * FROM Users;");
-
-        try {
-            
-            while (rs.next()) {
-            
-                System.out.println(rs.getString(1));
-                System.out.println(rs.getString(2));
-                System.out.println(rs.getString(3));
-                System.out.println(rs.getString(4));
-            }
-
-        } catch (Exception e) {
-            System.err.println(db.getLastLog());
-            //TODO: handle exception
-        }
-        
-
         
     }
 }

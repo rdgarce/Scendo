@@ -6,17 +6,49 @@ import java.util.Calendar;
 
 public class Scendo {
 
-    private String creator_user_id;
-    private String scendo_id;
+    private final String creator_user_id;
+    private final String scendo_id;
     private String location;
     private java.util.Date time;
-    private ArrayList<User> invited_users;
+    private ArrayList<String> invited_users_id;
 
-    public Scendo(String creatorUserId, String location, java.util.Date time){
+    public Scendo(String scendoId, String creatorUserId, String location, java.util.Date time){
 
+        this.scendo_id = scendoId;
         this.creator_user_id = creatorUserId;
         this.location = location;
         this.time = time;
+        this.invited_users_id = new ArrayList<String>();
+
+    }
+    
+    public void setLocation(String location){
+
+        this.location = location;
+    }
+    
+    public void setTime(java.util.Date time){
+
+        this.time = time;
+    }
+
+    public void addInvitedUser(String userId){
+        
+        if (this.invited_users_id.contains(userId) == false)
+            this.invited_users_id.add(userId);
+        
+    }
+
+    public void removeInvitedUser(String userId){
+
+        this.invited_users_id.remove(userId);
+
+    }
+
+    public boolean checkInvitedUser(String userId){
+        
+        return this.invited_users_id.contains(userId);
+
     }
 
     public String getCreatorUserID(){
@@ -43,10 +75,14 @@ public class Scendo {
 
     }
 
-    public ArrayList<User> getInvitedUsers(){
+    public ArrayList<String> getInvitedUsers(){
 
-        return this.invited_users;
+        ArrayList<String> copy = new ArrayList<String>();
+        copy.addAll(this.invited_users_id);
+
+        return copy;
 
     }
-    
+
+
 }

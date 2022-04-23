@@ -84,33 +84,6 @@ public class dbManager {
       return 0;
    }
 
-
-   /*
-   *  Execute a query from a String directly into the database.
-   *  Returns ResultSet or null if the query fails.
-   *  getLastLog() method can be called to retreive 
-   *  the error message of the last executed operation
-   */
-   public ResultSet executeQueryFromString(String query){
-
-      ResultSet rs;
-      Statement stmt;
-
-      try {
-         
-         stmt = c.createStatement();
-         rs = stmt.executeQuery(query);
-
-      } catch (Exception e) {
-         
-         error_logs.add(e.getMessage());
-         return null;
-
-      }
-      
-      return rs;
-   }
-
    /*
    *  Retreive User(s) from the database filtering on the field
    *  specified in the [fieldID] where the value is equals to [val].
@@ -128,18 +101,16 @@ public class dbManager {
             //Query on "userId"
             try {
 
-               PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?");
+               PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?;");
                stmt.setString(1, val);
                rs = stmt.executeQuery();
                
                while (rs.next()) {
 
-                  User usr = new User();
-                  //User set method needed
-                  usr.setUserID(rs.getString("userId"));
-                  usr.setEmail(rs.getString("email"));
-                  usr.setName(rs.getString("name"));
-                  usr.setPassword(rs.getString("password"));
+                  User usr = new User(rs.getString("userId"), 
+                                       rs.getString("email"), 
+                                       rs.getString("name"), 
+                                       rs.getString("password"));
 
                   result.add(usr);
 
@@ -158,18 +129,16 @@ public class dbManager {
             //Query on "email"
             try {
 
-               PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE email = ?");
+               PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE email = ?;");
                stmt.setString(1, val);
                rs = stmt.executeQuery();
                
                while (rs.next()) {
 
-                  User usr = new User();
-                  //User set method needed
-                  usr.setUserID(rs.getString("userId"));
-                  usr.setEmail(rs.getString("email"));
-                  usr.setName(rs.getString("name"));
-                  usr.setPassword(rs.getString("password"));
+                  User usr = new User(rs.getString("userId"), 
+                                       rs.getString("email"), 
+                                       rs.getString("name"), 
+                                       rs.getString("password"));
 
                   result.add(usr);
 
@@ -188,18 +157,16 @@ public class dbManager {
             //Query on "name"
             try {
                
-               PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?");
+               PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?;");
                stmt.setString(1, val);
                rs = stmt.executeQuery();
                
                while (rs.next()) {
 
-                  User usr = new User();
-                  //User set method needed
-                  usr.setUserID(rs.getString("userId"));
-                  usr.setEmail(rs.getString("email"));
-                  usr.setName(rs.getString("name"));
-                  usr.setPassword(rs.getString("password"));
+                  User usr = new User(rs.getString("userId"), 
+                                       rs.getString("email"), 
+                                       rs.getString("name"), 
+                                       rs.getString("password"));
 
                   result.add(usr);
 
@@ -216,21 +183,6 @@ public class dbManager {
       
          default:
             return null;
-      }
-   }
-
-   // Commento da Raf: Questo metodo non fa la stessa cosa di retreiveUser()?
-   private User load_user_from_email(String email) {
-
-      try{
-         ResultSet rs;
-         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE name = ?");
-         stmt.setString(1, email);
-         rs = stmt.executeQuery();
-         User us = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"));
-         return us;
-      }catch(SQLException e){
-         return null;
       }
    }
 
@@ -274,7 +226,7 @@ public class dbManager {
    *  by executing a query on the database,
    *  or null object if any error occurs.
    */
-   private String get_UUID(){
+   public String getUUID(){
 
       ResultSet rs;
       Statement stmt;
@@ -363,5 +315,3 @@ public class dbManager {
    }
 
 }
-
-   
