@@ -238,7 +238,7 @@ public class dbManager {
 
          rs = stmt.executeQuery();
 
-         User us = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"));
+         User us = new User(rs);
 
          return us;
 
@@ -270,7 +270,7 @@ public class dbManager {
          
          rs = stmt.executeQuery();
          
-         User us = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"));
+         User us = new User(rs);
          
          return us;
       
@@ -297,7 +297,7 @@ public class dbManager {
          
          rs = stmt.executeQuery();
          
-         User us = new User(rs.getString("email"),rs.getString("name"),rs.getString("password"));
+         User us = new User(rs);
          
          return us;
       
@@ -313,7 +313,6 @@ public class dbManager {
 
    private void store_user_on_db(User us){
 
-      ResultSet rs;
       try{
       
          PreparedStatement stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
@@ -326,7 +325,7 @@ public class dbManager {
 
          stmt.setString(4,us.getPassword());
 
-         rs = stmt.executeQuery();
+         stmt.executeQuery();
 
 
       }catch(SQLException e){
@@ -376,7 +375,7 @@ public class dbManager {
    *  by executing a query on the database,
    *  or null object if any error occurs.
    */
-   private String get_UUID(){
+   public  String getUUID(){
 
       ResultSet rs;
       Statement stmt;
@@ -398,6 +397,8 @@ public class dbManager {
       return uuid;
           
    }
+
+
 
    /*
    *  Check if the given [str] is a correct UUID.

@@ -1,27 +1,34 @@
 package Model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class User {
     
-    private String user_id;
+    private final String user_id;
     private String email;
     private String name;
     private String password;
 
-    public User(String email, String name, String password){
-        
+    public User(String email, String name, String password,String user_id){
+
+        this.user_id = user_id;
         this.email = email;
         this.name = name;
         this.password = password;
         
     }
-    
-    public User(){}
 
-    public void setUserID(String userId){
+    public User(ResultSet rs)throws SQLException{
 
-        this.user_id = userId;
-        
+        this.user_id = rs.getString("userId");
+        this.email  = rs.getString("email");
+        this.name = rs.getString("name");
+        this.email= rs.getString("password");
+
+
     }
+
 
 
     public void setEmail(String email){
