@@ -304,11 +304,26 @@ public class dbManager {
          error_logs.add(e.getMessage());
          return -1;
       }
-         
-      
+           
    }
 
-   public String getLastLog(){ return this.error_logs.get(error_logs.size()-1); }
+   public int pushScendo(Scendo scendo){
+      //TBD
+      return 0;
+   }
+
+   public int pushScendos(ArrayList<Scendo> scendos){
+      //TBD
+      return 0;
+   }
+
+   public ArrayList<Scendo> retreiveScendos(scendoFieldID fieldID, String val){
+      //TBD
+   }
+
+   public String getLastLog(){
+      return this.error_logs.get(error_logs.size()-1);
+   }
 
    public ArrayList<String> getLogs(){ 
       
