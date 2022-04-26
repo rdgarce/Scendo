@@ -30,8 +30,9 @@ public class Controller {
         a.add(hermo);
 
         db.pushUsers(a);
+        //System.out.print("Log after pushUsers: " + db.getLastLog());
 
-        System.out.print("log: " + db.getLogs().toString() + "\n");
+        //System.out.print("log: " + db.getLogs().toString() + "\n");
 
 
         ArrayList<User> b = db.retreiveUsers(userFieldID.EMAIL, "email@ramil.com");
@@ -42,10 +43,10 @@ public class Controller {
 
 
         catch (Exception e){
-            db.store_log_db();
+            db.storeLogDb();
         }
         finally{
-            db.store_log_db();
+            db.storeLogDb();
         }
         
     }

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -231,8 +232,6 @@ public class dbManager {
       try{
       
          PreparedStatement stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
-         
-        System.out.print(us.getUserID()+"\n");
 
          stmt.setObject(1, UUID.fromString(us.getUserID()));
 
@@ -265,22 +264,60 @@ public class dbManager {
    */
    public int pushUsers(ArrayList<User> users){
 
-      for (int i = 0; i < users.size(); i++) {
+      try {
          
-         if(this.search_user_from_email(users.get(i)) == -1){
+         Iterator<User> usr_it = users.iterator();
+         int insert_count = 0;
+         int update_count = 0;
+         PreparedStatement insert_stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
+         PreparedStatement update_stmt = c.prepareStatement("UPDATE Users SET userId = ?, name = ?, email = ?, password = ? WHERE userId = ?;");
 
-            //push on db
-            this.store_user_on_db(users.get(i));
-            
+         while (usr_it.hasNext()) {
 
-         }else{
+            User us = usr_it.next();
+            int test = search_user_by_id(us);
 
-            //update the db
-
+            if (test == 1 ) {
+               //Here we need to UPDATE the User
+               
+               update_stmt.setObject(1, UUID.fromString(us.getUserID()));
+               update_stmt.setString(2,us.getName());
+               update_stmt.setString(3,us.getEmail());
+               update_stmt.setString(4,us.getPassword());
+               update_stmt.setObject(5, UUID.fromString(us.getUserID()));
+               update_stmt.addBatch();
+               update_count += 1;
+            }
+            else if (test == -1 ){
+               //Here we need to INSERT the User
+               
+               insert_stmt.setObject(1, UUID.fromString(us.getUserID()));
+               insert_stmt.setString(2,us.getName());
+               insert_stmt.setString(3,us.getEmail());
+               insert_stmt.setString(4,us.getPassword());
+               insert_stmt.addBatch();
+               insert_count += 1;
+            }
          }
 
+         c.setAutoCommit(false);
+
+         if (insert_count > 0)
+            insert_stmt.executeBatch();
+         
+         if (update_count > 0)
+            update_stmt.executeBatch();
+
+         c.commit();
+         c.setAutoCommit(true);
+         
+         return 0;
+
+      } catch (Exception e) {
+         error_logs.add(e.getMessage());
+         return -1;
       }
-      return 1;
+
    }
    
    public String getLastLog(){ return this.error_logs.get(error_logs.size()-1); }
@@ -295,10 +332,11 @@ public class dbManager {
    
    }
    
-   public void store_log_db(){
+   public void storeLogDb(){
 
       String file_path = "log/query_scendo.log";
       String dir_name = "log";
+      
       try {
 
          File file = new File(file_path);
@@ -320,8 +358,9 @@ public class dbManager {
 
    }
    
-
    /*
+   *  Call this method to obtain a suitable
+   *  Id for a User or a Scendo.
    *  Returns a String containing a UUID 
    *  by executing a query on the database,
    *  or null object if any error occurs.
@@ -352,8 +391,6 @@ public class dbManager {
       return uuid;
           
    }
-
-
 
    /*
    *  Check if the given [str] is a correct UUID.
@@ -399,14 +436,14 @@ public class dbManager {
    *  If the User is found, return 1 else -1.
    *  0 is returned if an error occurs.
    */
-  private int search_user_from_email(User us){
+  private int search_user_by_email(User us){
 
    PreparedStatement pstmt;
    ResultSet rs;
 
    try {
     
-      pstmt = c.prepareStatement("SELECT email FROM Users WHERE email = ?");
+      pstmt = c.prepareStatement("SELECT * FROM Users WHERE email = ?");
     
       pstmt.setString(1, us.getEmail());
     
@@ -428,6 +465,45 @@ public class dbManager {
    
    }
    
+   }
+
+   /*
+   *  Search if there is a User in the database
+   *  that match [us] userId.
+   *  If the User is found, return 1 else -1.
+   *  0 is returned if an error occurs.
+   */
+   private int search_user_by_id(User us){
+
+      PreparedStatement pstmt;
+      ResultSet rs;
+
+      try {
+      
+         pstmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?");
+      
+
+         pstmt.setObject(1, UUID.fromString(us.getUserID()));
+
+      
+         rs = pstmt.executeQuery();
+         
+         log_db.add(rs);
+
+
+         if(rs.next() == false)
+            return -1;
+         else
+            return 1;
+
+      } catch (SQLException e) {
+      
+         error_logs.add(e.getMessage());
+      
+         return 0;
+      
+      }
+      
    }
 
 }
