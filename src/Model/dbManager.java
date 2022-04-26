@@ -195,64 +195,6 @@ public class dbManager {
       }
    }
 
-   private User load_user_from_id(String id) {
-
-      try{
-
-         ResultSet rs;
-
-         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?;");
-
-         stmt.setString(1,id);
-
-         rs = stmt.executeQuery();
-         log_db.add(rs);
-         User us = new User(rs.getString("userId"), 
-                              rs.getString("email"), 
-                              rs.getString("name"), 
-                              rs.getString("password"));
-         return us;
-
-      }catch(SQLException e){
-
-         error_logs.add(e.getMessage());
-
-         return null;
-
-      }
-
-   }
-
-
-
-
-
-   private void store_user_on_db(User us){
-
-      try{
-      
-         PreparedStatement stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
-
-         stmt.setObject(1, UUID.fromString(us.getUserID()));
-
-         stmt.setString(2,us.getName());
-
-         stmt.setString(3,us.getEmail());
-
-         stmt.setString(4,us.getPassword());
-
-         stmt.execute();
-
-
-      }catch(SQLException e){
-
-         error_logs.add(e.getMessage());
-      
-      }
-      
-      
-   }
-
    /*
    *  Push to the database an ArrayList of User(s).
    *  The function determins if the User need to be
@@ -270,7 +212,7 @@ public class dbManager {
          int insert_count = 0;
          int update_count = 0;
          PreparedStatement insert_stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
-         PreparedStatement update_stmt = c.prepareStatement("UPDATE Users SET userId = ?, name = ?, email = ?, password = ? WHERE userId = ?;");
+         PreparedStatement update_stmt = c.prepareStatement("UPDATE Users SET name = ?, email = ?, password = ? WHERE userId = ?;");
 
          while (usr_it.hasNext()) {
 
@@ -280,11 +222,10 @@ public class dbManager {
             if (test == 1 ) {
                //Here we need to UPDATE the User
                
-               update_stmt.setObject(1, UUID.fromString(us.getUserID()));
-               update_stmt.setString(2,us.getName());
-               update_stmt.setString(3,us.getEmail());
-               update_stmt.setString(4,us.getPassword());
-               update_stmt.setObject(5, UUID.fromString(us.getUserID()));
+               update_stmt.setString(1, us.getName());
+               update_stmt.setString(2, us.getEmail());
+               update_stmt.setString(3, us.getPassword());
+               update_stmt.setObject(4, UUID.fromString(us.getUserID()));
                update_stmt.addBatch();
                update_count += 1;
             }
@@ -292,9 +233,9 @@ public class dbManager {
                //Here we need to INSERT the User
                
                insert_stmt.setObject(1, UUID.fromString(us.getUserID()));
-               insert_stmt.setString(2,us.getName());
-               insert_stmt.setString(3,us.getEmail());
-               insert_stmt.setString(4,us.getPassword());
+               insert_stmt.setString(2, us.getName());
+               insert_stmt.setString(3, us.getEmail());
+               insert_stmt.setString(4, us.getPassword());
                insert_stmt.addBatch();
                insert_count += 1;
             }
@@ -503,6 +444,60 @@ public class dbManager {
          return 0;
       
       }
+      
+   }
+
+   private User load_user_from_id(String id) {
+
+      try{
+
+         ResultSet rs;
+
+         PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?;");
+
+         stmt.setString(1,id);
+
+         rs = stmt.executeQuery();
+         log_db.add(rs);
+         User us = new User(rs.getString("userId"), 
+                              rs.getString("email"), 
+                              rs.getString("name"), 
+                              rs.getString("password"));
+         return us;
+
+      }catch(SQLException e){
+
+         error_logs.add(e.getMessage());
+
+         return null;
+
+      }
+
+   }
+
+   private void store_user_on_db(User us){
+
+      try{
+      
+         PreparedStatement stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
+
+         stmt.setObject(1, UUID.fromString(us.getUserID()));
+
+         stmt.setString(2,us.getName());
+
+         stmt.setString(3,us.getEmail());
+
+         stmt.setString(4,us.getPassword());
+
+         stmt.execute();
+
+
+      }catch(SQLException e){
+
+         error_logs.add(e.getMessage());
+      
+      }
+      
       
    }
 

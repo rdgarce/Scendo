@@ -23,7 +23,7 @@ public class Controller {
         }
 
         User raf = new User(db.getUUID(), "email@ramil.com", "Raf", "password");
-        User hermo = new User(db.getUUID(), "email2@ramil.com", "Hermo", "password2");
+        User hermo = new User(db.getUUID(), "email@ramil.com", "Hermo", "password2");
 
         ArrayList<User> a = new ArrayList<User>();
         a.add(raf);
@@ -34,10 +34,11 @@ public class Controller {
 
         //System.out.print("log: " + db.getLogs().toString() + "\n");
 
-
         ArrayList<User> b = db.retreiveUsers(userFieldID.EMAIL, "email@ramil.com");
 
-        System.out.print(b.get(0).getName());
+        System.out.print(b.get(0).getName() + '\n' + b.get(1).getName());
+
+        db.pushUsers(a);
 
         }
 
