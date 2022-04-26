@@ -199,7 +199,7 @@ public class dbManager {
    *  Push to the database an ArrayList of User(s).
    *  The function determins if the User need to be
    *  INSERTED or UPDATED into the db so the usage 
-   *  is the same wether you want insert or update a
+   *  is the same wether you want to insert or update a
    *  User in the database.
    *  Returns 0 if the query is executed with no errors
    *  or -1 if any error occurs.
@@ -261,6 +261,53 @@ public class dbManager {
 
    }
    
+   /*
+   *  Push to the database a User.
+   *  The function determins if the User need to be
+   *  INSERTED or UPDATED into the db so the usage 
+   *  is the same wether you want to insert or update a
+   *  User in the database.
+   *  Returns 0 if the query is executed with no errors
+   *  or -1 if any error occurs.
+   */
+   public int pushUser(User user){
+
+      try {
+         
+         PreparedStatement insert_stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
+         PreparedStatement update_stmt = c.prepareStatement("UPDATE Users SET name = ?, email = ?, password = ? WHERE userId = ?;");
+
+         int test = search_user_by_id(user);
+
+         if (test == 1) {
+            //Here we need to UPDATE the User
+            update_stmt.setString(1, user.getName());
+            update_stmt.setString(2, user.getEmail());
+            update_stmt.setString(3, user.getPassword());
+            update_stmt.setObject(4, UUID.fromString(user.getUserID()));
+            update_stmt.executeQuery();
+            
+         }
+         else if (test == -1 ){
+            //Here we need to INSERT the User
+            insert_stmt.setObject(1, UUID.fromString(user.getUserID()));
+            insert_stmt.setString(2, user.getName());
+            insert_stmt.setString(3, user.getEmail());
+            insert_stmt.setString(4, user.getPassword());
+            insert_stmt.executeQuery();
+
+         }
+      
+         return 0;
+
+      } catch (Exception e) {
+         error_logs.add(e.getMessage());
+         return -1;
+      }
+         
+      
+   }
+
    public String getLastLog(){ return this.error_logs.get(error_logs.size()-1); }
 
    public ArrayList<String> getLogs(){ 

@@ -29,21 +29,28 @@ public class Controller {
         a.add(raf);
         a.add(hermo);
 
-        db.pushUsers(a);
+        db.pushUser(raf);
+        db.pushUser(raf);
+        db.pushUser(raf);
+        db.pushUser(raf);
         //System.out.print("Log after pushUsers: " + db.getLastLog());
 
         //System.out.print("log: " + db.getLogs().toString() + "\n");
 
         ArrayList<User> b = db.retreiveUsers(userFieldID.EMAIL, "email@ramil.com");
 
-        System.out.print(b.get(0).getName() + '\n' + b.get(1).getName());
+        //System.out.print(b.get(0).getName() + '\n' + b.get(1).getName());
 
+        db.pushUsers(a);
+        db.pushUsers(a);
+        db.pushUsers(a);
         db.pushUsers(a);
 
         }
 
 
         catch (Exception e){
+            System.out.println(db.getLastLog());
             db.storeLogDb();
         }
         finally{
