@@ -1,18 +1,17 @@
 package Model;
 
-import java.text.DateFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class Scendo {
 
     private final String creator_user_id;
     private final String scendo_id;
     private String location;
-    private java.util.Date time;
+    private Timestamp time;
     private ArrayList<String> invited_users_id;
 
-    public Scendo(String scendoId, String creatorUserId, String location, java.util.Date time){
+    public Scendo(String scendoId, String creatorUserId, String location, Timestamp time){
 
         this.scendo_id = scendoId;
         this.creator_user_id = creatorUserId;
@@ -27,7 +26,7 @@ public class Scendo {
         this.location = location;
     }
     
-    public void setTime(java.util.Date time){
+    public void setTime(Timestamp time){
 
         this.time = time;
     }
@@ -63,7 +62,7 @@ public class Scendo {
 
     }
 
-    public java.util.Date getTime(){
+    public Timestamp getTime(){
 
         return this.time;
 

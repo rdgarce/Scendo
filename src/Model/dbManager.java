@@ -24,7 +24,6 @@ public class dbManager {
    private ArrayList<String> error_logs;
    private ArrayList<ResultSet> log_db;
 
-
    public enum userFieldID{
       USERID,
       EMAIL,
@@ -69,7 +68,6 @@ public class dbManager {
 
       return 0;
    }
-
 
    /* 
    *  Try to close the connection to the given database.
@@ -307,9 +305,149 @@ public class dbManager {
            
    }
 
+   /*
+   *  Push the [scendo] and its invited users to the database.
+   *  The function determins if the [scendo] has to be inserted
+   *  or updated. In the former case they are also inserted all
+   *  the invited users, in the latter the function updates [scendo]
+   *  information and edit the User_Scendo table so that it reflects the
+   *  [scendo.getInvitedUsers()] list.
+   *  Returns 0 if the process is executed withour errors or
+   *  -1 if any one occurs.
+   */
    public int pushScendo(Scendo scendo){
-      //TBD
-      return 0;
+
+      try {
+         
+         PreparedStatement insert_scendo_stmt = c.prepareStatement("INSERT INTO Scendos VALUES(?,?,?);");
+         PreparedStatement update_scendo_stmt = c.prepareStatement("UPDATE Scendos SET location = ?, scendoTime = ? WHERE scendoId = ?;");
+
+         PreparedStatement insert_user_scendo_stmt = c.prepareStatement("INSERT INTO User_Scendo VALUES(?,?,?);");
+         PreparedStatement delete_user_scendo_stmt = c.prepareStatement("DELETE FROM User_Scendo WHERE userId = ? AND scendoId = ?;");
+
+         
+         int test = search_scendo_by_id(scendo);
+
+         if (test == 1) {
+            /*
+            *  Here we Update the Scendo
+            *  So we need to update:
+            *     - The Scendo itself (location, time).
+            *     - The list of the invited Users, so the User_Scendo table, inserting and deleting records.
+            */
+
+            update_scendo_stmt.setString(1, scendo.getLocation());
+            update_scendo_stmt.setTimestamp(2, scendo.getTime());
+            update_scendo_stmt.setObject(3, UUID.fromString(scendo.getScendoID()));
+            
+            //Getting every invited User to this Scendo from the User_Scendo table
+            PreparedStatement get_db_inv_usrs = c.prepareStatement("SELECT * FROM User_Scendo WHERE scendoId = ?;");
+            get_db_inv_usrs.setObject(1, UUID.fromString(scendo.getScendoID()));
+            ResultSet db_inv_usrs = get_db_inv_usrs.executeQuery();
+            
+            //Checking wether an invited user has to be added or deleted
+            ArrayList<String> inv_usrs = scendo.getInvitedUsers();
+            while (db_inv_usrs.next()) {
+
+               String db_inv_usr_id = db_inv_usrs.getObject("userId").toString();
+               if (db_inv_usrs.getBoolean("isCreator"))
+                     continue;
+               
+               if (inv_usrs.contains(db_inv_usr_id)) {
+                  /*
+                  *  Here we fall if the user in the db is
+                  *  present in the [inv_usrs] so nothing has
+                  *  to be done apart from removing
+                  *  that user from the [inv_usrs]
+                  */
+                  inv_usrs.remove(db_inv_usr_id);
+
+               }
+               else{
+                  /*
+                  *  If the invited user in the db is not in the [inv_usrs]
+                  *  it means it has to be deleted (from the db) because
+                  *  the new list does not contain it
+                  */                  
+                  delete_user_scendo_stmt.setObject(1, UUID.fromString(db_inv_usr_id));
+                  delete_user_scendo_stmt.setObject(2, UUID.fromString(scendo.getScendoID()));
+                  delete_user_scendo_stmt.addBatch();
+
+               }
+
+            }
+
+            /*
+            *  Here we are left with a [inv_usrs] that contains only 
+            *  the invited user that has to be added to the db
+            */
+            Iterator<String> inv_usr_it = inv_usrs.iterator();
+            while (inv_usr_it.hasNext()) {
+
+               String usr = inv_usr_it.next();
+               insert_user_scendo_stmt.setObject(1, UUID.fromString(usr));
+               insert_user_scendo_stmt.setObject(2, UUID.fromString(scendo.getScendoID()));
+               insert_user_scendo_stmt.setBoolean(3, false);
+               insert_user_scendo_stmt.addBatch();
+               
+            }
+
+            c.setAutoCommit(false);
+
+            delete_user_scendo_stmt.executeBatch();
+            insert_user_scendo_stmt.executeBatch();
+
+            c.commit();
+            c.setAutoCommit(true);
+            
+         }
+         else if (test == -1) {
+            /*
+            *  Here we Insert the Scendo
+            *  So we need to insert:
+            *     - The Scendo itself (location, scendoTime).
+            *     - The list of the invited Users, so records in the User_Scendo table.
+            */
+            
+            insert_scendo_stmt.setObject(1, UUID.fromString(scendo.getScendoID()));
+            insert_scendo_stmt.setString(2, scendo.getLocation());
+            insert_scendo_stmt.setTimestamp(3, scendo.getTime());
+            insert_scendo_stmt.execute();
+
+            //Inserting the Creator-of-the-Scendo in User_Scendo
+            insert_user_scendo_stmt.setObject(1, UUID.fromString(scendo.getCreatorUserID()));
+            insert_user_scendo_stmt.setObject(2, UUID.fromString(scendo.getScendoID()));
+            insert_user_scendo_stmt.setBoolean(3, true);
+            insert_user_scendo_stmt.addBatch();
+
+            //Inserting the invited users inside User_Scendo      
+            Iterator<String> inv_users = scendo.getInvitedUsers().iterator();
+            while (inv_users.hasNext()) {
+               
+               String usr = inv_users.next();
+               insert_user_scendo_stmt.setObject(1, UUID.fromString(usr));
+               insert_user_scendo_stmt.setObject(2, UUID.fromString(scendo.getScendoID()));
+               insert_user_scendo_stmt.setBoolean(3, false);
+               insert_user_scendo_stmt.addBatch();
+            
+         }
+
+         c.setAutoCommit(false);
+
+         insert_user_scendo_stmt.executeBatch();
+
+         c.commit();
+         c.setAutoCommit(true);
+
+         }
+
+         return 0;
+
+
+      } catch (Exception e) {
+         error_logs.add(e.getMessage());
+         return -1;
+      }
    }
 
    public int pushScendos(ArrayList<Scendo> scendos){
@@ -509,6 +647,45 @@ public class dbManager {
       
    }
 
+   /*
+   *  Search if there is a Scendo in the database
+   *  that match [scd] scendoId.
+   *  If the Scendo is found, return 1 else -1.
+   *  0 is returned if an error occurs.
+   */
+   private int search_scendo_by_id(Scendo scd){
+
+   PreparedStatement pstmt;
+   ResultSet rs;
+
+      try {
+      
+         pstmt = c.prepareStatement("SELECT * FROM Scendos WHERE scendoId = ?");
+      
+
+         pstmt.setObject(1, UUID.fromString(scd.getScendoID()));
+
+      
+         rs = pstmt.executeQuery();
+         
+         log_db.add(rs);
+
+
+         if(rs.next() == false)
+            return -1;
+         else
+            return 1;
+
+      } catch (SQLException e) {
+      
+         error_logs.add(e.getMessage());
+      
+         return 0;
+      
+      }
+   
+}
+
    private User load_user_from_id(String id) {
 
       try{
@@ -535,32 +712,6 @@ public class dbManager {
 
       }
 
-   }
-
-   private void store_user_on_db(User us){
-
-      try{
-      
-         PreparedStatement stmt = c.prepareStatement("INSERT INTO Users VALUES(?,?,?,?);");
-
-         stmt.setObject(1, UUID.fromString(us.getUserID()));
-
-         stmt.setString(2,us.getName());
-
-         stmt.setString(3,us.getEmail());
-
-         stmt.setString(4,us.getPassword());
-
-         stmt.execute();
-
-
-      }catch(SQLException e){
-
-         error_logs.add(e.getMessage());
-      
-      }
-      
-      
    }
 
 }

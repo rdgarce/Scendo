@@ -24,7 +24,7 @@ CREATE TABLE Scendos (
 
 	scendoId uuid,
 	location varchar(255),
-	scendoTime date,
+	scendoTime timestamp,
 
 	PRIMARY KEY (scendoId)
 
@@ -34,7 +34,7 @@ CREATE TABLE Friendships (
 
 	userId1 uuid,
 	userId2 uuid,
-	friendsSince time,
+	friendsSince timestamp,
 
 
 	PRIMARY KEY (userId1,userId2),
