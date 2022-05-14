@@ -339,6 +339,7 @@ public class dbManager {
             update_scendo_stmt.setString(1, scendo.getLocation());
             update_scendo_stmt.setTimestamp(2, scendo.getTime());
             update_scendo_stmt.setObject(3, UUID.fromString(scendo.getScendoID()));
+            update_scendo_stmt.execute();
             
             //Getting every invited User to this Scendo from the User_Scendo table
             PreparedStatement get_db_inv_usrs = c.prepareStatement("SELECT * FROM User_Scendo WHERE scendoId = ?;");
@@ -449,7 +450,7 @@ public class dbManager {
          return -1;
       }
    }
-
+   
    public int pushScendos(ArrayList<Scendo> scendos){
       //TBD
       return 0;

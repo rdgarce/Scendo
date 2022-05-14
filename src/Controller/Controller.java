@@ -6,9 +6,6 @@ import Model.dbManager;
 import Model.dbManager.userFieldID;
 import java.util.ArrayList;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 
 public class Controller {
     public static void main(String[] args) {
@@ -45,6 +42,7 @@ public class Controller {
 
         sc1.addInvitedUser(cozis.getUserID());
         sc1.removeInvitedUser(hermo.getUserID());
+        sc1.setLocation("Via Napoli");
 
         db.pushScendo(sc1);
         
