@@ -3,6 +3,7 @@ package Controller;
 import Model.Scendo;
 import Model.User;
 import Model.dbManager;
+import Model.dbManager.scendoFieldID;
 import Model.dbManager.userFieldID;
 import java.util.ArrayList;
 import java.sql.Timestamp;
@@ -30,6 +31,10 @@ public class Controller {
 
         db.pushUsers(a);
 
+        for (User us : db.retreiveUsers(userFieldID.USERID, raf.getUserID())) {
+            System.out.println(us.getName());
+        }
+
         
 
         Scendo sc1 = new Scendo(db.getUUID(), raf.getUserID(), "Via Roma", Timestamp.valueOf("2022-04-20 23:15:00"));
@@ -45,6 +50,12 @@ public class Controller {
         sc1.setLocation("Via Napoli");
 
         db.pushScendo(sc1);
+
+        ArrayList<Scendo> scendos = db.retreiveScendos(scendoFieldID.LOCATION, "Via Napoli");
+
+        for (Scendo scendo : scendos) {
+            System.out.println(scendo.getScendoID());
+        }
         
 
         }

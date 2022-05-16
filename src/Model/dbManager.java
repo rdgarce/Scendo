@@ -9,6 +9,10 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
+
+import javax.lang.model.util.ElementScanner14;
+import javax.naming.spi.DirStateFactory.Result;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -109,7 +113,7 @@ public class dbManager {
             try {
 
                PreparedStatement stmt = c.prepareStatement("SELECT * FROM Users WHERE userId = ?;");
-               stmt.setString(1, val);
+               stmt.setObject(1, UUID.fromString(val));
                rs = stmt.executeQuery();
                
                while (rs.next()) {
@@ -455,9 +459,116 @@ public class dbManager {
       //TBD
       return 0;
    }
-
+   
+   /*
+   *  Retreive Scendo(s) from the database filtering on the field
+   *  specified in the [fieldID] where the value is equals to [val].
+   *  Returns either an ArrayList of Scendo(s) or a null value.
+   *  If the result of the query is only one Scendo, a one-legth ArrayList is returned.
+   */
    public ArrayList<Scendo> retreiveScendos(scendoFieldID fieldID, String val){
-      //TBD
+      
+      try {
+
+         ArrayList<Scendo> scendo_list = new ArrayList<Scendo>();
+         ResultSet scendos;
+         int scendo_count = 0;
+
+         switch (fieldID) {
+
+            case SCENDOID:
+
+               PreparedStatement select_scendos_scendoId = c.prepareStatement("SELECT * FROM Scendos WHERE scendoId = ?;");
+   
+               select_scendos_scendoId.setObject(1, UUID.fromString(val));
+               scendos = select_scendos_scendoId.executeQuery();
+               
+               while (scendos.next()){
+
+                  ArrayList<String> invited_users = new ArrayList<String>();
+                  
+                  PreparedStatement select_user_scendos = c.prepareStatement("SELECT * FROM User_Scendo WHERE scendoId = ?;");
+                  select_user_scendos.setObject(1, UUID.fromString(scendos.getString("scendoId")));
+                  ResultSet user_scendo = select_user_scendos.executeQuery();
+
+                  while (user_scendo.next()){
+
+                     if (user_scendo.getBoolean("isCreator") == true) {
+                        
+                        Scendo s = new Scendo(scendos.getString("scendoId"),
+                                             user_scendo.getString("userId"),
+                                             scendos.getString("location"),
+                                             scendos.getTimestamp("scendoTime"));
+                        scendo_list.add(s);
+
+                     }
+                     else
+                        invited_users.add(user_scendo.getString("userId"));
+
+                  }
+
+                  for (String usr : invited_users)
+                     scendo_list.get(scendo_count).addInvitedUser(usr);
+                  
+                  scendo_count += 1;
+
+               }
+               
+               return scendo_list.isEmpty() ? null : scendo_list;
+            
+            case LOCATION:
+               
+               PreparedStatement select_scendos_location = c.prepareStatement("SELECT * FROM Scendos WHERE location = ?;");
+
+               select_scendos_location.setString(1, val);
+               scendos = select_scendos_location.executeQuery();
+
+            while (scendos.next()){
+
+               ArrayList<String> invited_users = new ArrayList<String>();
+               
+               PreparedStatement select_user_scendos = c.prepareStatement("SELECT * FROM User_Scendo WHERE scendoId = ?;");
+               select_user_scendos.setObject(1, UUID.fromString(scendos.getString("scendoId")));
+               ResultSet user_scendo = select_user_scendos.executeQuery();
+
+               while (user_scendo.next()){
+
+                  if (user_scendo.getBoolean("isCreator") == true) {
+                     
+                     Scendo s = new Scendo(scendos.getString("scendoId"),
+                                          user_scendo.getString("userId"),
+                                          scendos.getString("location"),
+                                          scendos.getTimestamp("scendoTime"));
+                     scendo_list.add(s);
+
+                  }
+                  else
+                     invited_users.add(user_scendo.getString("userId"));
+
+               }
+
+               for (String usr : invited_users)
+                  scendo_list.get(scendo_count).addInvitedUser(usr);
+               
+               scendo_count += 1;
+
+            }
+            
+            return scendo_list.isEmpty() ? null : scendo_list;
+   
+            default:
+               return null;
+         }
+
+         
+      } catch (Exception e) {
+         //TODO: handle exception
+         error_logs.add(e.getMessage());
+         return null;
+      }
+
+      
+
    }
 
    public String getLastLog(){
