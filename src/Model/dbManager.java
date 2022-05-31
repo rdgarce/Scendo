@@ -9,10 +9,6 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
-
-import javax.lang.model.util.ElementScanner14;
-import javax.naming.spi.DirStateFactory.Result;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
