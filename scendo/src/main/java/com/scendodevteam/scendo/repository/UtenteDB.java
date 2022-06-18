@@ -3,10 +3,10 @@ package com.scendodevteam.scendo.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.scendodevteam.scendo.model.User;
+import com.scendodevteam.scendo.entity.Utente;
 
 @Repository
-public interface UserDB extends JpaRepository<User, Long> {
+public interface UtenteDB extends JpaRepository<Utente, Long> {
 
     
 }
