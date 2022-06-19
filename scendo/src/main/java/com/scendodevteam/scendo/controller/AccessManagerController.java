@@ -1,13 +1,17 @@
 package com.scendodevteam.scendo.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scendodevteam.scendo.entity.Utente;
+import com.scendodevteam.scendo.entity.TokenRegistrazione;
+import com.scendodevteam.scendo.model.UtenteMD;
 import com.scendodevteam.scendo.service.UtenteSC;
 
 @RestController
@@ -17,11 +21,26 @@ public class AccessManagerController{
     private UtenteSC utenteSC;
 
     @PostMapping("/api/register")
-    public Utente registerUser(@Valid @RequestBody Utente usr){
+    public String registerUser(@Valid @RequestBody UtenteMD usr, HttpServletRequest request){
 
-        return utenteSC.save(usr);
+        TokenRegistrazione tokenRegistrazione = utenteSC.registerUser(usr);
+        String url = "http://" + 
+                    request.getServerName() + 
+                    ":" + 
+                    request.getServerPort() + 
+                    request.getContextPath() + 
+                    "/api/verify-registration?token=" + 
+                    tokenRegistrazione.getToken(); 
+        
+        return url;
     }
 
-    
+    @GetMapping("/api/verify-registration")
+    public String verifyRegistration(@RequestParam("token") String token){
+
+
+        
+        return utenteSC.verifyRegistration(token) ? "Account verificato" : "Errore";
+    }
     
 }

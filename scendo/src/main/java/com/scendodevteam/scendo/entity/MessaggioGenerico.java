@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessaggioErrore {
+public class MessaggioGenerico {
 
     private HttpStatus status;
-    private String error_message;
+    private String message;
 
 }
