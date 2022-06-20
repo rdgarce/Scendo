@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scendodevteam.scendo.entity.TokenRegistrazione;
+import com.scendodevteam.scendo.exception.UtenteGiaRegistrato;
 import com.scendodevteam.scendo.model.UtenteMD;
 import com.scendodevteam.scendo.service.UtenteSC;
 
@@ -21,7 +22,7 @@ public class AccessManagerController{
     private UtenteSC utenteSC;
 
     @PostMapping("/api/register")
-    public String registerUser(@Valid @RequestBody UtenteMD usr, HttpServletRequest request){
+    public String registerUser(@Valid @RequestBody UtenteMD usr, HttpServletRequest request) throws UtenteGiaRegistrato{
 
         TokenRegistrazione tokenRegistrazione = utenteSC.registerUser(usr);
         String url = "http://" + 
@@ -30,7 +31,7 @@ public class AccessManagerController{
                     request.getServerPort() + 
                     request.getContextPath() + 
                     "/api/verify-registration?token=" + 
-                    tokenRegistrazione.getToken(); 
+                    tokenRegistrazione.getToken();
         
         return url;
     }

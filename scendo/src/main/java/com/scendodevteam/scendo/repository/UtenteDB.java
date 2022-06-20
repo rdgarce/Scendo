@@ -8,5 +8,7 @@ import com.scendodevteam.scendo.entity.Utente;
 @Repository
 public interface UtenteDB extends JpaRepository<Utente, Long> {
 
+    Utente findByEmail(String email);
+
     
 }

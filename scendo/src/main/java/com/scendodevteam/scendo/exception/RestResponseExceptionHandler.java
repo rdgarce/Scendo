@@ -27,5 +27,14 @@ public class RestResponseExceptionHandler{
         return ResponseEntity.status(message.getStatus())
                 .body(message);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<MessaggioGenerico> utenteGiaRegistratoHandler(UtenteGiaRegistrato exception){
+        
+        MessaggioGenerico message = new MessaggioGenerico(HttpStatus.BAD_REQUEST,exception.getMessage());
+
+        return ResponseEntity.status(message.getStatus())
+                .body(message);
+    }
     
 }
