@@ -1,6 +1,5 @@
 package com.scendodevteam.scendo.entity;
 
-import javax.lang.model.element.ModuleElement.UsesDirective;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
