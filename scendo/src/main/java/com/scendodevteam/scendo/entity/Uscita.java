@@ -1,6 +1,5 @@
 package com.scendodevteam.scendo.entity;
 
-
 import java.util.Date;
 import java.util.Set;
 
@@ -11,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,32 +18,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "utenti")
-public class Utente{
+@Table(name = "uscite")
+public class Uscita{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long idUtente;
+    private long idUscita;
 
-    private String nome;
+    private String tipoUscita;
 
-    private String cognome;
+    private Date dataEOra;
 
-    private Date dataDiNascita;
+    private String locationUscita;
 
-    private Integer sesso;
+    private String locationIncontro;
 
-    private String email;
+    private boolean uscitaPrivata;
 
-    private String password;
+    private int numeroPartecipanti;
 
-    private String cittaDiResidenza;
+    private String descrizione;
 
-    private String codicePostale;
-
-    private boolean active = false;
-
-    @OneToMany(mappedBy = "utente")
-    private Set<UtenteUscita> uscite;
+    @OneToMany(mappedBy = "uscita")
+    private Set<UtenteUscita> utenti;
 
 }
