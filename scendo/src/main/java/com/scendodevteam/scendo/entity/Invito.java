@@ -28,4 +28,10 @@ public class Invito {
     nullable = false,
     foreignKey = @ForeignKey(name = "FK_INVITATO"))
     private Utente utenteInvitato;
+
+    @ManyToOne
+    @JoinColumn(name = "id_uscita",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "FK_Uscita"))
+    private Uscita uscita;
 }
