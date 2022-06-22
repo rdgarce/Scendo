@@ -20,21 +20,21 @@ public class Invito {
     @ManyToOne
     @JoinColumn(name = "id_invitante",
             nullable = false,
-            foreignKey = @ForeignKey(name = "FK_INVITANTE")
+            foreignKey = @ForeignKey(name = "FK_INVITI_INVITANTE")
     )
     private Utente utenteInvitante;
 
     @ManyToOne
     @JoinColumn(name = "id_invitato",
             nullable = false,
-            foreignKey = @ForeignKey(name = "FK_INVITATO")
+            foreignKey = @ForeignKey(name = "FK_INVITI_INVITATO")
     )
     private Utente utenteInvitato;
 
     @ManyToOne
     @JoinColumn(name = "id_uscita",
             nullable = false,
-            foreignKey = @ForeignKey(name = "FK_Uscita")
+            foreignKey = @ForeignKey(name = "FK_INVITI_USCITA")
     )
     private Uscita uscita;
 }

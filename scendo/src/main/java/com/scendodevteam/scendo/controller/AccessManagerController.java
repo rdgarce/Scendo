@@ -36,7 +36,7 @@ public class AccessManagerController{
         return url;
     }
 
-    @GetMapping("/api/verify-registration")
+    @GetMapping("/api/verify-registration") //localhost:8080/api/verify-registration?token=tokenstring
     public String verifyRegistration(@RequestParam("token") String token){
 
 

@@ -27,13 +27,13 @@ public class UtenteUscita {
     @ManyToOne
     @JoinColumn(name = "id_utente",
     nullable = false,
-    foreignKey = @ForeignKey(name="FK_UTENTE"))
+    foreignKey = @ForeignKey(name="FK_UTENTIUSCITE_UTENTE"))
     private Utente utente;
 
     @ManyToOne
     @JoinColumn(name = "id_uscita",
     nullable = false,
-    foreignKey = @ForeignKey(name="FK_USCITA"))
+    foreignKey = @ForeignKey(name="FK_UTENTIUSCITE_USCITA"))
     private Uscita uscita;
 
     private boolean utenteCreatore;

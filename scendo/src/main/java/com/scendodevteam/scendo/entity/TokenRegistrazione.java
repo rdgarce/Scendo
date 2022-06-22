@@ -35,7 +35,7 @@ public class TokenRegistrazione {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_utente",
     nullable = false,
-    foreignKey = @ForeignKey(name="FK_TOKEN_VERIFICA_UTENTE"))
+    foreignKey = @ForeignKey(name="FK_TOKENREGISTRAZIONE_UTENTE"))
     private Utente utente;
 
     public TokenRegistrazione(Utente utente, String token) {
