@@ -48,4 +48,11 @@ public class Utente{
     @OneToMany(mappedBy = "utente")
     private Set<UtenteUscita> uscite;
 
+    @OneToMany(mappedBy = "utenteInvitato")
+    private Set<Invito> invitiRicevuti;
+
+    @OneToMany(mappedBy = "utenteInvitante")
+    private Set<Invito> invitiInviati;
+
+
 }
