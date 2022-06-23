@@ -1,5 +1,6 @@
 package com.scendodevteam.scendo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Invito {
             nullable = false,
             foreignKey = @ForeignKey(name = "FK_INVITI_INVITANTE")
     )
+    @JsonIgnore
     private Utente utenteInvitante;
 
     @ManyToOne
@@ -29,6 +31,7 @@ public class Invito {
             nullable = false,
             foreignKey = @ForeignKey(name = "FK_INVITI_INVITATO")
     )
+    @JsonIgnore
     private Utente utenteInvitato;
 
     @ManyToOne
@@ -36,6 +39,7 @@ public class Invito {
             nullable = false,
             foreignKey = @ForeignKey(name = "FK_INVITI_USCITA")
     )
+    @JsonIgnore
     private Uscita uscita;
 
 

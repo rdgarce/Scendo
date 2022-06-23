@@ -41,4 +41,5 @@ public class Uscita{
     @OneToMany(mappedBy = "uscita", cascade = CascadeType.ALL)
     private List<Invito> inviti;
 
+
 }
