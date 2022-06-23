@@ -37,4 +37,11 @@ public class Invito {
             foreignKey = @ForeignKey(name = "FK_INVITI_USCITA")
     )
     private Uscita uscita;
+
+
+    public Invito(Utente utenteInvitante, Utente utenteInvitato, Uscita uscita) {
+        this.utenteInvitante = utenteInvitante;
+        this.utenteInvitato = utenteInvitato;
+        this.uscita = uscita;
+    }
 }

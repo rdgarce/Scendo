@@ -1,14 +1,10 @@
 package com.scendodevteam.scendo.entity;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,7 +38,7 @@ public class Uscita{
     @OneToMany(mappedBy = "uscita")
     private Set<UtenteUscita> utenti;
 
-    @OneToMany(mappedBy = "uscita")
-    private Set<Invito> inviti;
+    @OneToMany(mappedBy = "uscita", cascade = CascadeType.ALL)
+    private List<Invito> inviti;
 
 }

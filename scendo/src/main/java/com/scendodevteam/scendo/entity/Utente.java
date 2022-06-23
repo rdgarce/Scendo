@@ -2,14 +2,10 @@ package com.scendodevteam.scendo.entity;
 
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 import lombok.AllArgsConstructor;
@@ -48,11 +44,11 @@ public class Utente{
     @OneToMany(mappedBy = "utente")
     private Set<UtenteUscita> uscite;
 
-    @OneToMany(mappedBy = "utenteInvitato")
-    private Set<Invito> invitiRicevuti;
+    @OneToMany(mappedBy = "utenteInvitato", cascade = CascadeType.ALL)
+    private List<Invito> invitiRicevuti;
 
-    @OneToMany(mappedBy = "utenteInvitante")
-    private Set<Invito> invitiInviati;
+    @OneToMany(mappedBy = "utenteInvitante", cascade = CascadeType.ALL)
+    private List<Invito> invitiInviati;
 
 
 }
