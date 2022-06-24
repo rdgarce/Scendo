@@ -5,6 +5,7 @@ import com.scendodevteam.scendo.exception.UtenteGiaRegistrato;
 import com.scendodevteam.scendo.service.InvitoSC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +27,11 @@ public class InvitoController {
                               ) throws UtenteGiaRegistrato {
 
         return invitoSC.salvaInvito(invitante, email_invitato, uscita);
+    }
+
+    @DeleteMapping("/api/invito") //localhost:8080/api/invito?invitato=id_invitato&uscita=id_uscita
+    public String rifiutaInvito(@RequestParam(name = "invitato") Long invitato,
+                                @RequestParam(name = "uscita") Long uscita) throws UtenteGiaRegistrato {
+        return invitoSC.rifiutaInvito(invitato, uscita);
     }
 }

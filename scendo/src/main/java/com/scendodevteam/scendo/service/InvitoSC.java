@@ -5,4 +5,6 @@ import com.scendodevteam.scendo.exception.UtenteGiaRegistrato;
 
 public interface InvitoSC {
     public Invito salvaInvito(Long invitante, String email_invitato, Long uscita) throws UtenteGiaRegistrato;
+
+    public String rifiutaInvito(Long invitato, Long uscita) throws UtenteGiaRegistrato;
 }
