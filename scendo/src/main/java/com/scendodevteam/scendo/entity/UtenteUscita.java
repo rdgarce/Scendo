@@ -39,4 +39,11 @@ public class UtenteUscita {
     private boolean utenteCreatore;
 
     private boolean utenteOrganizzatore;
+
+    public UtenteUscita(Utente utente, Uscita uscita, boolean utenteCreatore, boolean utenteOrganizzatore) {
+        this.utente = utente;
+        this.uscita = uscita;
+        this.utenteCreatore = utenteCreatore;
+        this.utenteOrganizzatore = utenteOrganizzatore;
+    }
 }

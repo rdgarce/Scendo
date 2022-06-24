@@ -29,9 +29,15 @@ public class InvitoController {
         return invitoSC.salvaInvito(invitante, email_invitato, uscita);
     }
 
-    @DeleteMapping("/api/invito") //localhost:8080/api/invito?invitato=id_invitato&uscita=id_uscita
+    @DeleteMapping("/api/invito/rifiuta") //localhost:8080/api/invito/rifiuta?invitato=id_invitato&uscita=id_uscita
     public String rifiutaInvito(@RequestParam(name = "invitato") Long invitato,
                                 @RequestParam(name = "uscita") Long uscita) throws UtenteGiaRegistrato {
         return invitoSC.rifiutaInvito(invitato, uscita);
+    }
+
+    @PostMapping("/api/invito/accetta") //localhost:8080/api/invito/accetta?invitato=id_invitato&uscita=id_uscita
+    public String accettaInvito(@RequestParam(name = "invitato") Long invitato,
+                                @RequestParam(name = "uscita") Long uscita) throws UtenteGiaRegistrato {
+        return invitoSC.accettaInvito(invitato, uscita);
     }
 }
