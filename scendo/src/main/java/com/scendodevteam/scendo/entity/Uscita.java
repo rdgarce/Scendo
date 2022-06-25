@@ -35,7 +35,7 @@ public class Uscita{
 
     private String descrizione;
 
-    @OneToMany(mappedBy = "uscita")
+    @OneToMany(mappedBy = "uscita", cascade = CascadeType.ALL)
     private Set<UtenteUscita> utenti;
 
     @OneToMany(mappedBy = "uscita", cascade = CascadeType.ALL)

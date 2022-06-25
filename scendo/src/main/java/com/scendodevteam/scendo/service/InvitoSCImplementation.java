@@ -43,8 +43,11 @@ public class InvitoSCImplementation implements InvitoSC{
             throw new UtenteGiaRegistrato("Nessuna uscita è associata a questo id");
         Uscita uscita = uscitaDB.getReferenceById(id_uscita);
 
+        //check se l'invitato è già parte dell'uscita
+
         //check se l'invitante ha i diritti per invitare (ovvero fa parte dell'uscita)
-        if(utenteUscitaDB.findByUtenteAndUscita(utenteInvitante, uscita).isEmpty())
+        List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtenteAndUscita(utenteInvitante, uscita);
+        if(utentiUsciteList.isEmpty() || !utentiUsciteList.get(0).isUtenteCreatore() || !utentiUsciteList.get(0).isUtenteOrganizzatore())
             throw new UtenteGiaRegistrato("Non hai i diritti per invitare utenti a questa uscita");
 
         //check se l'invitato è stato già invitato all'uscita

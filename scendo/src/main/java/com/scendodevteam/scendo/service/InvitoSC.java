@@ -8,5 +8,5 @@ public interface InvitoSC {
 
     public String rifiutaInvito(Long invitato, Long uscita) throws UtenteGiaRegistrato;
 
-    String accettaInvito(Long invitato, Long uscita) throws UtenteGiaRegistrato;
+    public String accettaInvito(Long invitato, Long uscita) throws UtenteGiaRegistrato;
 }

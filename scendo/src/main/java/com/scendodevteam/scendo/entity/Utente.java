@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 
 
 import lombok.AllArgsConstructor;
@@ -42,7 +41,7 @@ public class Utente{
 
     private boolean active = false;
 
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
     private Set<UtenteUscita> uscite;
 
     @OneToMany(mappedBy = "utenteInvitato", cascade = CascadeType.ALL)

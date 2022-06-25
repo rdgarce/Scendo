@@ -21,7 +21,7 @@ public class AccessManagerController{
     @Autowired
     private UtenteSC utenteSC;
 
-    @PostMapping("/api/register")
+    @PostMapping("/api/registra")
     public String registerUser(@Valid @RequestBody UtenteMD usr, HttpServletRequest request) throws UtenteGiaRegistrato{
 
         TokenRegistrazione tokenRegistrazione = utenteSC.registerUser(usr);
@@ -30,13 +30,13 @@ public class AccessManagerController{
                     ":" + 
                     request.getServerPort() + 
                     request.getContextPath() + 
-                    "/api/verify-registration?token=" + 
+                    "/api/verifica-registrazione?token=" + 
                     tokenRegistrazione.getToken();
         
         return url;
     }
 
-    @GetMapping("/api/verify-registration") //localhost:8080/api/verify-registration?token=tokenstring
+    @GetMapping("/api/verifica-registrazione") //localhost:8080/api/verifica-registrazione?token=tokenstring
     public String verifyRegistration(@RequestParam("token") String token){
 
 
