@@ -21,7 +21,7 @@ public class InvitoController {
 
     @PostMapping("/api/invito") //localhost:8080/api/invito?invitante=id_invitante&email_invitato=email_invitato&uscita=id_uscita
     public Invito salvaInvito(@RequestParam(name = "invitante") Long invitante,
-                              @RequestParam(name = "email_invitato") @Email String email_invitato,
+                              @RequestParam(name = "email_invitato") @Email(message = "Email incorretta") String email_invitato,
                               @RequestParam(name = "uscita") Long uscita
                               ) throws UtenteGiaRegistrato {
 

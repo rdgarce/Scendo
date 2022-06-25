@@ -27,7 +27,7 @@ public class InvitoSCImplementation implements InvitoSC{
     private UtenteUscitaDB utenteUscitaDB;
 
     @Override
-    public Invito salvaInvito(Long invitante, String email_invitato, Long id_uscita) throws UtenteGiaRegistrato {
+    public Invito salvaInvito(long invitante, String email_invitato, long id_uscita) throws UtenteGiaRegistrato {
         //check id invitante
         if (!utenteDB.existsById(invitante))
             throw new UtenteGiaRegistrato("Nessun utente è associato a questo id");
@@ -59,7 +59,7 @@ public class InvitoSCImplementation implements InvitoSC{
     }
 
     @Override
-    public String rifiutaInvito(Long invitato, Long id_uscita) throws UtenteGiaRegistrato {
+    public String rifiutaInvito(long invitato, long id_uscita) throws UtenteGiaRegistrato {
 
         //check id invitato
         if (!utenteDB.existsById(invitato))
@@ -80,7 +80,7 @@ public class InvitoSCImplementation implements InvitoSC{
     }
 
     @Override
-    public String accettaInvito(Long invitato, Long id_uscita) throws UtenteGiaRegistrato {
+    public String accettaInvito(long invitato, long id_uscita) throws UtenteGiaRegistrato {
         //check id invitato
         if (!utenteDB.existsById(invitato))
             throw new UtenteGiaRegistrato("Nessun utente è associato a questo id");

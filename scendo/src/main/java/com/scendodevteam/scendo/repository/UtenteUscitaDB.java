@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface UtenteUscitaDB extends JpaRepository<UtenteUscita, Long> {
 
-    List<UtenteUscita> findByUtenteAndUscita(Utente utenteInvitante, Uscita uscita);
+    List<UtenteUscita> findByUtenteAndUscita(Utente utente, Uscita uscita);
 
 }

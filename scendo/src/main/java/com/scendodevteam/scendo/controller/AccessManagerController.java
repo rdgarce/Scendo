@@ -21,7 +21,7 @@ public class AccessManagerController{
     @Autowired
     private UtenteSC utenteSC;
 
-    @PostMapping("/api/registra")
+    @PostMapping("/api/registrazione")
     public String registerUser(@Valid @RequestBody UtenteMD usr, HttpServletRequest request) throws UtenteGiaRegistrato{
 
         TokenRegistrazione tokenRegistrazione = utenteSC.registerUser(usr);
