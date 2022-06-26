@@ -37,11 +37,11 @@ public class AccessManagerController{
     }
 
     @GetMapping("/api/verifica-registrazione") //localhost:8080/api/verifica-registrazione?token=tokenstring
-    public String verifyRegistration(@RequestParam("token") String token){
+    public String verifyRegistration(@RequestParam("token") String token) throws GenericError{
 
-
+        utenteSC.verifyRegistration(token);
         
-        return utenteSC.verifyRegistration(token) ? "Account verificato" : "Errore";
+        return "Account verificato";
     }
     
 }

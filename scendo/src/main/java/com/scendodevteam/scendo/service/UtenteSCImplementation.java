@@ -50,16 +50,16 @@ public class UtenteSCImplementation implements UtenteSC {
     }
 
     @Override
-    public boolean verifyRegistration(String token) {
+    public boolean verifyRegistration(String token) throws GenericError {
         
         TokenRegistrazione tokenRegistrazione = tokenRegistrazioneDB.findByToken(token);
 
         if (tokenRegistrazione == null)
-            return false;
+            throw new GenericError("Il token inserito non è corretto");
 
         if (tokenRegistrazione.scaduto()){
             tokenRegistrazioneDB.delete(tokenRegistrazione);
-            return false;
+            throw new GenericError("Il token inserito è scaduto");
         }
             
 

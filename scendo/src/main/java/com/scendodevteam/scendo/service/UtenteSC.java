@@ -8,6 +8,6 @@ public interface UtenteSC {
 
     public TokenRegistrazione registerUser(UtenteMD usr) throws GenericError;
 
-    public boolean verifyRegistration(String token);
+    public boolean verifyRegistration(String token) throws GenericError;
     
 }
