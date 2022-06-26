@@ -1,5 +1,6 @@
 package com.scendodevteam.scendo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,12 +90,17 @@ public class UscitaSCImplementazione implements UscitaSC{
     	if (!utente.isPresent())
             throw new GenericError("Non esiste nessun utente con questo Id");
     	
-    	List<Uscita> utentiUsciteList = utenteUscitaDB.findByUtente(utente.get());
+    	List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtente(utente.get());
         if (utentiUsciteList.isEmpty()) {
             throw new GenericError("L'utente specificato non partecipa a nessuna uscita attualmente");
         }
+
+        ArrayList<Uscita> uscite = new ArrayList<Uscita>();
+
+        for (UtenteUscita utenteUscita : utentiUsciteList)
+            uscite.add(utenteUscita.getUscita());
         
-    	return utentiUsciteList;
+    	return uscite;
     
     }
     
