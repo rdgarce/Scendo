@@ -3,7 +3,6 @@ package com.scendodevteam.scendo.entity;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
 
@@ -42,7 +41,7 @@ public class Utente{
     private boolean active = false;
 
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
-    private Set<UtenteUscita> uscite;
+    private List<UtenteUscita> uscite;
 
     @OneToMany(mappedBy = "utenteInvitato", cascade = CascadeType.ALL)
     private List<Invito> invitiRicevuti;

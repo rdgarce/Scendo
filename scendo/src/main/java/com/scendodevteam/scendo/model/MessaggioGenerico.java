@@ -1,4 +1,4 @@
-package com.scendodevteam.scendo.entity;
+package com.scendodevteam.scendo.model;
 
 import org.springframework.http.HttpStatus;
 
@@ -14,5 +14,8 @@ public class MessaggioGenerico {
 
     private HttpStatus status;
     private String message;
+    
+    //To Be Implemented
+    //private int code;
 
 }

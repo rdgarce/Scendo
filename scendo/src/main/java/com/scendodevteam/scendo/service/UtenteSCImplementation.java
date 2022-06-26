@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.scendodevteam.scendo.entity.TokenRegistrazione;
 import com.scendodevteam.scendo.entity.Utente;
-import com.scendodevteam.scendo.exception.UtenteGiaRegistrato;
+import com.scendodevteam.scendo.exception.GenericError;
 import com.scendodevteam.scendo.model.UtenteMD;
 import com.scendodevteam.scendo.repository.TokenRegistrazioneDB;
 import com.scendodevteam.scendo.repository.UtenteDB;
@@ -23,10 +23,10 @@ public class UtenteSCImplementation implements UtenteSC {
     private TokenRegistrazioneDB tokenRegistrazioneDB;
 
     @Override
-    public TokenRegistrazione registerUser(UtenteMD usr) throws UtenteGiaRegistrato{
+    public TokenRegistrazione registerUser(UtenteMD usr) throws GenericError{
 
         if (utenteDB.findByEmail(usr.getEmail()) != null) {
-            throw new UtenteGiaRegistrato("Esiste già un utente registrato con questa email");
+            throw new GenericError("Esiste già un utente registrato con questa email");
         }
 
         Utente utente = new Utente();

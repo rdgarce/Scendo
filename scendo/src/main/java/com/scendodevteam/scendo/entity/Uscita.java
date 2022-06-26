@@ -2,7 +2,6 @@ package com.scendodevteam.scendo.entity;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
 
@@ -31,12 +30,12 @@ public class Uscita{
 
     private boolean uscitaPrivata;
 
-    private int numeroPartecipanti;
+    private int numeroMaxPartecipanti;
 
     private String descrizione;
 
     @OneToMany(mappedBy = "uscita", cascade = CascadeType.ALL)
-    private Set<UtenteUscita> utenti;
+    private List<UtenteUscita> utenti;
 
     @OneToMany(mappedBy = "uscita", cascade = CascadeType.ALL)
     private List<Invito> inviti;

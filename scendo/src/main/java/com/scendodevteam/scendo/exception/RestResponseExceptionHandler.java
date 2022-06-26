@@ -7,7 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.scendodevteam.scendo.entity.MessaggioGenerico;
+import com.scendodevteam.scendo.model.MessaggioGenerico;
 
 @ControllerAdvice
 public class RestResponseExceptionHandler{
@@ -29,7 +29,7 @@ public class RestResponseExceptionHandler{
     }
 
     @ExceptionHandler
-    public ResponseEntity<MessaggioGenerico> utenteGiaRegistratoHandler(UtenteGiaRegistrato exception){
+    public ResponseEntity<MessaggioGenerico> utenteGiaRegistratoHandler(GenericError exception){
         
         MessaggioGenerico message = new MessaggioGenerico(HttpStatus.BAD_REQUEST,exception.getMessage());
 

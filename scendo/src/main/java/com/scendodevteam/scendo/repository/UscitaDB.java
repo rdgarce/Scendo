@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UscitaDB extends JpaRepository<Uscita,Long> {
 	
-	Uscita findById(long idUscita);
+
 	
 }
 
