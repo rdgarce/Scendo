@@ -2,6 +2,7 @@ package com.scendodevteam.scendo.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,5 +64,39 @@ public class UscitaSCImplementazione implements UscitaSC{
         return true;
 
     }
+    
+    @Override
+    public Uscita creaUscita(String tipo, Date dataOra, String locUscita, String locIncontro, boolean privata, int nPartecipanti, String descrizione) throws UtenteGiaRegistrato {
+    	
+    	//Non posso avere il numero di partecipanti uguali a 0
+    	if(nPartecipanti==0)
+            throw new UtenteGiaRegistrato("Non puoi avere zero partecipanti");
+    	
+    	//Non posso inserire una data del passato
+    	//NB il pattern di default Date in Java è EEE MMM dd HH:mm:ss zzz yyyy es.
+    	Date cur = new Date();
+    	if((cur.before(dataOra))) 
+    	    throw new UtenteGiaRegistrato("Non puoi inserire date passate");
+    	
+    	Uscita uscita = new Uscita();
+
+        uscita.setTipoUscita(tipo);
+        uscita.setDataEOra(dataOra);
+        uscita.setLocationUscita(locUscita);
+        uscita.setLocationUscita(locIncontro);
+        uscita.setUscitaPrivata(privata);
+        uscita.setNumeroPartecipanti(nPartecipanti);
+        uscita.setDescrizione(descrizione);
+
+        
+        return uscitaDB.save(uscita);
+    }
+    
+
+
+
+
+
+
     
 }

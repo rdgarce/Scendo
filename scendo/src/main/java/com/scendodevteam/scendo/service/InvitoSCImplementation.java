@@ -1,3 +1,4 @@
+
 package com.scendodevteam.scendo.service;
 
 import com.scendodevteam.scendo.entity.Invito;
