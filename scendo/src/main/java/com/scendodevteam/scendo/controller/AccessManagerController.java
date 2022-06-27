@@ -37,7 +37,7 @@ public class AccessManagerController{
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/api/authenticate", method = RequestMethod.POST)
+    @PostMapping(value = "/api/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());

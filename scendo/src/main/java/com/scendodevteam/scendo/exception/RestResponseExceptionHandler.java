@@ -29,7 +29,7 @@ public class RestResponseExceptionHandler{
     }
 
     @ExceptionHandler
-    public ResponseEntity<MessaggioGenerico> utenteGiaRegistratoHandler(GenericError exception){
+    public ResponseEntity<MessaggioGenerico> genericErrorHandler(GenericError exception){
         
         MessaggioGenerico message = new MessaggioGenerico(HttpStatus.BAD_REQUEST,exception.getMessage());
 
