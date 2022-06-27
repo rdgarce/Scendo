@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,9 +37,11 @@ public class Uscita{
     private String descrizione;
 
     @OneToMany(mappedBy = "uscita", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<UtenteUscita> utenti;
 
     @OneToMany(mappedBy = "uscita", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Invito> inviti;
 
 

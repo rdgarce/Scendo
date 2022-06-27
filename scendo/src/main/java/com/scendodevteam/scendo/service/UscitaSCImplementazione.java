@@ -69,6 +69,11 @@ public class UscitaSCImplementazione implements UscitaSC{
     @Override
     public Uscita creaUscita(UscitaMD uscitaMD, long idUtente) throws GenericError {
     	
+        //check se il creatore esiste
+        Optional<Utente> utente = utenteDB.findById(idUtente);
+        if (!utente.isPresent())
+            throw new GenericError("Nessun utente con questo id");
+
     	Uscita uscita = new Uscita();
 
         uscita.setTipoUscita(uscitaMD.getTipoUscita());
@@ -79,9 +84,7 @@ public class UscitaSCImplementazione implements UscitaSC{
         uscita.setNumeroMaxPartecipanti(uscitaMD.getNumeroMaxPartecipanti());
         uscita.setDescrizione(uscitaMD.getDescrizione());
         
-        Optional<Utente> user =  utenteDB.findById(idUtente);
-        Utente roomEntity = user.get();
-        UtenteUscita utenteUscita = new UtenteUscita(roomEntity, uscita, true, false);
+        UtenteUscita utenteUscita = new UtenteUscita(utente.get(), uscita, true, false);
         
         uscita = uscitaDB.save(uscita);
         utenteUscitaDB.save(utenteUscita);
