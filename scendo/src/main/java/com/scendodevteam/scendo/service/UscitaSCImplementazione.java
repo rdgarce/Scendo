@@ -67,7 +67,7 @@ public class UscitaSCImplementazione implements UscitaSC{
     }
     
     @Override
-    public Uscita creaUscita(UscitaMD uscitaMD) throws GenericError {
+    public Uscita creaUscita(UscitaMD uscitaMD, long idUtente) throws GenericError {
     	
     	Uscita uscita = new Uscita();
 
@@ -79,7 +79,14 @@ public class UscitaSCImplementazione implements UscitaSC{
         uscita.setNumeroMaxPartecipanti(uscitaMD.getNumeroMaxPartecipanti());
         uscita.setDescrizione(uscitaMD.getDescrizione());
         
-        return uscitaDB.save(uscita);
+        Optional<Utente> user =  utenteDB.findById(idUtente);
+        Utente roomEntity = user.get();
+        UtenteUscita utenteUscita = new UtenteUscita(roomEntity, uscita, true, false);
+        
+        uscita = uscitaDB.save(uscita);
+        utenteUscitaDB.save(utenteUscita);
+        
+        return uscita;
     }
 
     @Override

@@ -40,9 +40,9 @@ public class UscitaController {
     }
     
     @PostMapping("/api/crea-uscita")
-    public String creaUscita(@Valid @RequestBody UscitaMD uscitaMD) throws GenericError{
+    public String creaUscita(@Valid @RequestBody UscitaMD uscitaMD, @RequestParam("idUtente") long idUtente) throws GenericError{
 
-        uscitaSC.creaUscita(uscitaMD);
+        uscitaSC.creaUscita(uscitaMD,idUtente);
         
         return "Uscita creata con successo";
     }
