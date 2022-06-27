@@ -48,7 +48,7 @@ public class InvitoSCImplementation implements InvitoSC{
 
         //check se l'invitante ha i diritti per invitare (ovvero fa parte dell'uscita)
         List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtenteAndUscita(utenteInvitante, uscita);
-        if(utentiUsciteList.isEmpty() || !utentiUsciteList.get(0).isUtenteCreatore() || !utentiUsciteList.get(0).isUtenteOrganizzatore())
+        if(utentiUsciteList.isEmpty() || (!utentiUsciteList.get(0).isUtenteCreatore() && !utentiUsciteList.get(0).isUtenteOrganizzatore()))
             throw new GenericError("Non hai i diritti per invitare utenti a questa uscita");
 
         //check se l'invitato è stato già invitato all'uscita

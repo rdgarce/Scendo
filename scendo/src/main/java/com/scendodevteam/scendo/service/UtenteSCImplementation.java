@@ -3,6 +3,7 @@ package com.scendodevteam.scendo.service;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.scendodevteam.scendo.entity.TokenRegistrazione;
@@ -22,6 +23,9 @@ public class UtenteSCImplementation implements UtenteSC {
     @Autowired
     private TokenRegistrazioneDB tokenRegistrazioneDB;
 
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
+
     @Override
     public TokenRegistrazione registerUser(UtenteMD usr) throws GenericError{
 
@@ -37,7 +41,7 @@ public class UtenteSCImplementation implements UtenteSC {
         utente.setDataDiNascita(usr.getDataDiNascita());
         utente.setEmail(usr.getEmail());
         utente.setNome(usr.getNome());
-        utente.setPassword(usr.getPassword());
+        utente.setPassword(bcryptEncoder.encode(usr.getPassword()));
         utente.setSesso(usr.getSesso());
 
         utenteDB.save(utente);
