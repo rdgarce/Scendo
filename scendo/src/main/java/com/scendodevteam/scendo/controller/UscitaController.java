@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,16 +34,16 @@ public class UscitaController {
 
 
     @PostMapping("/api/uscita/{idUscita}/promuovi-partecipante")
-    public String promuoviPartecipante(@RequestParam long id_creatore,
-                                       @RequestParam @Email(message = "Email incorretta") String email_partecipante,
+    public String promuoviPartecipante(@RequestParam @Email(message = "Email incorretta") String email_partecipante,
                                        @PathVariable long idUscita) throws GenericError{
-
-        uscitaSC.promuoviPartecipante(id_creatore,email_partecipante,idUscita);
+        
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        uscitaSC.promuoviPartecipante(currentUser.getUsername(),email_partecipante,idUscita);
         return "Utente promosso ad Organizzatore";
     }
     
     @PostMapping("/api/crea-uscita")
-    public String creaUscita(@RequestParam("email") String email, @Valid @RequestBody UscitaMD uscitaMD) throws GenericError{
+    public String creaUscita(@Valid @RequestBody UscitaMD uscitaMD) throws GenericError{
 
     	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
@@ -54,7 +53,7 @@ public class UscitaController {
     }
 
     @GetMapping("api/calendario-uscite")
-	public List<Uscita> consultaCalendario(@RequestParam("email") String email)throws GenericError{
+	public List<Uscita> consultaCalendario()throws GenericError{
         
     	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
@@ -63,7 +62,7 @@ public class UscitaController {
     
 
     @GetMapping("api/leggi-inviti")
-	public List<Invito> leggiInviti(@RequestParam("email") String email)
+	public List<Invito> leggiInviti()
 			                        throws GenericError{
         
     	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

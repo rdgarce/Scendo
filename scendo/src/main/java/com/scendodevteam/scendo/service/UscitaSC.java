@@ -6,7 +6,7 @@ import com.scendodevteam.scendo.model.UscitaMD;
 
 public interface UscitaSC {
     
-    public boolean promuoviPartecipante(long creatore, String partecipante, long uscita) throws GenericError;
+    public boolean promuoviPartecipante(String email_creatore, String partecipante, long uscita) throws GenericError;
     
     public Uscita creaUscita(String email, UscitaMD uscitaMD) throws GenericError;
 

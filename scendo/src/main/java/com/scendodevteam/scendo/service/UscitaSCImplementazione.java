@@ -29,12 +29,12 @@ public class UscitaSCImplementazione implements UscitaSC{
     UtenteUscitaDB utenteUscitaDB;
 
     @Override
-    public boolean promuoviPartecipante(long id_creatore, String email_partecipante, long id_uscita) throws GenericError {
+    public boolean promuoviPartecipante(String email_creatore, String email_partecipante, long id_uscita) throws GenericError {
         
         //check se il creatore esiste
-        Optional<Utente> utente_creatore = utenteDB.findById(id_creatore);
-        if (!utente_creatore.isPresent())
-            throw new GenericError("Nessun utente è associato a questo id: "+ id_creatore);
+        Utente utente_creatore = utenteDB.findByEmail(email_creatore);
+        if (utente_creatore == null)
+            throw new GenericError("Nessun utente è associato a questa email: "+ email_creatore);
         
 
         //check se il partecipante esiste
@@ -48,7 +48,7 @@ public class UscitaSCImplementazione implements UscitaSC{
             throw new GenericError("Nessuna uscita associata a questo id: "+ id_uscita);
         
         //check se il creatore è veramente creatore dell'uscita
-        List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtenteAndUscita(utente_creatore.get(), uscita.get());
+        List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtenteAndUscita(utente_creatore, uscita.get());
         if(utentiUsciteList.isEmpty() || !utentiUsciteList.get(0).isUtenteCreatore())
             throw new GenericError("Non hai i diritti per eleggere un utente ad Organizzatore");
 
@@ -73,7 +73,7 @@ public class UscitaSCImplementazione implements UscitaSC{
     	//check se il partecipante esiste
         Utente utente = utenteDB.findByEmail(email);
         if (utente == null)
-           throw new GenericError("Nessun utente è associato a questa email: " + email);    	   		
+           throw new GenericError("Nessun utente è associato a questa email: " + email);
 
 
     	Uscita uscita = new Uscita();
