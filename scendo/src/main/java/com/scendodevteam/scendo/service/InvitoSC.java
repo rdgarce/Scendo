@@ -9,4 +9,6 @@ public interface InvitoSC {
     public String rifiutaInvito(String invitato, long uscita) throws GenericError;
 
     public String accettaInvito(String invitato, long uscita) throws GenericError;
+    
+    public java.util.List<Invito> leggiInviti(String email) throws GenericError;
 }

@@ -44,17 +44,30 @@ public class UscitaController {
     }
     
     @PostMapping("/api/crea-uscita")
-    public String creaUscita(@RequestParam("idUtente") long idUtente, @Valid @RequestBody UscitaMD uscitaMD) throws GenericError{
+    public String creaUscita(@RequestParam("email") String email, @Valid @RequestBody UscitaMD uscitaMD) throws GenericError{
 
-        uscitaSC.creaUscita(uscitaMD,1);
+    	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+    	uscitaSC.creaUscita(currentUser.getUsername(),uscitaMD);
         
         return "Uscita creata con successo";
     }
 
     @GetMapping("api/calendario-uscite")
-	public List<Uscita> consultaCalendario(@RequestParam("idUtente") long idUtente)throws GenericError{
+	public List<Uscita> consultaCalendario(@RequestParam("email") String email)throws GenericError{
         
-        return uscitaSC.consultaCalendario(idUtente);
+    	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+    	return uscitaSC.consultaCalendario((currentUser.getUsername()));
+    }
+    
+
+    @GetMapping("api/leggi-inviti")
+	public List<Invito> leggiInviti(@RequestParam("email") String email)
+			                        throws GenericError{
+        
+    	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return invitoSC.leggiInviti(currentUser.getUsername());
     }
 
 

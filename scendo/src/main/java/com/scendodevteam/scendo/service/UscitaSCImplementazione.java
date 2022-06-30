@@ -67,12 +67,14 @@ public class UscitaSCImplementazione implements UscitaSC{
     }
     
     @Override
-    public Uscita creaUscita(UscitaMD uscitaMD, long idUtente) throws GenericError {
+    public Uscita creaUscita(String email, UscitaMD uscitaMD) throws GenericError {
     	
-        //check se il creatore esiste
-        Optional<Utente> utente = utenteDB.findById(idUtente);
-        if (!utente.isPresent())
-            throw new GenericError("Nessun utente con questo id");
+    
+    	//check se il partecipante esiste
+        Utente utente = utenteDB.findByEmail(email);
+        if (utente == null)
+           throw new GenericError("Nessun utente è associato a questa email: " + email);    	   		
+
 
     	Uscita uscita = new Uscita();
 
@@ -84,7 +86,7 @@ public class UscitaSCImplementazione implements UscitaSC{
         uscita.setNumeroMaxPartecipanti(uscitaMD.getNumeroMaxPartecipanti());
         uscita.setDescrizione(uscitaMD.getDescrizione());
         
-        UtenteUscita utenteUscita = new UtenteUscita(utente.get(), uscita, true, false);
+        UtenteUscita utenteUscita = new UtenteUscita(utente, uscita, true, false);
         
         uscita = uscitaDB.save(uscita);
         utenteUscitaDB.save(utenteUscita);
@@ -93,14 +95,16 @@ public class UscitaSCImplementazione implements UscitaSC{
     }
 
     @Override
-    public List<Uscita> consultaCalendario(long idUtente) throws GenericError { 
+    public List<Uscita> consultaCalendario(String email) throws GenericError { 
     	
-    	//check se esiste l'utente
+    /*	//check se esiste l'utente
         Optional<Utente> utente = utenteDB.findById(idUtente);
     	if (!utente.isPresent())
-            throw new GenericError("Non esiste nessun utente con questo Id");
+            throw new GenericError("Non esiste nessun utente con questo Id");*/
     	
-    	List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtente(utente.get());
+    	 Utente utente = utenteDB.findByEmail(email);
+    	
+    	List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtente(utente);
         if (utentiUsciteList.isEmpty()) {
             throw new GenericError("L'utente specificato non partecipa a nessuna uscita attualmente");
         }

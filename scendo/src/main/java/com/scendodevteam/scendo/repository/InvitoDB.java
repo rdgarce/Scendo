@@ -12,4 +12,5 @@ import java.util.List;
 public interface InvitoDB extends JpaRepository<Invito, Long> {
 
     List<Invito> findByUscitaAndUtenteInvitato(Uscita uscita, Utente utenteInvitato);
+    List<Invito> findByUtenteInvitato(Utente utenteInvitato);
 }

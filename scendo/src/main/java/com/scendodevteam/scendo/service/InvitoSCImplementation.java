@@ -13,6 +13,7 @@ import com.scendodevteam.scendo.repository.UtenteUscitaDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -111,4 +112,16 @@ public class InvitoSCImplementation implements InvitoSC{
         return "Invito inesistente";
 
     }
+    @Override
+    public List<Invito> leggiInviti(String email) throws GenericError{
+    	         
+    	Utente utente = utenteDB.findByEmail(email);
+    	List<Invito> InvitiList = invitoDB.findByUtenteInvitato(utente);
+        if (InvitiList.isEmpty()) {
+            throw new GenericError("Nessun invito in archivio");
+        }
+
+    	return InvitiList;
+}
+    
 }
