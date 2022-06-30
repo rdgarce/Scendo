@@ -10,7 +10,7 @@ public interface UtenteDB extends JpaRepository<Utente, Long> {
 
     Utente findByEmail(String email);
 
-    boolean existsByEmail(long email);
+    boolean existsByEmail(String email);
 
     
 }

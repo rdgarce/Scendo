@@ -15,4 +15,6 @@ public interface UtenteUscitaDB extends JpaRepository<UtenteUscita, Long> {
     
     List<UtenteUscita> findByUtente(Utente utente);
 
+    List<UtenteUscita> findByUscita(Uscita uscita);
+
 }

@@ -28,11 +28,11 @@ public class InvitoSCImplementation implements InvitoSC{
     private UtenteUscitaDB utenteUscitaDB;
 
     @Override
-    public Invito salvaInvito(long invitante, String email_invitato, long id_uscita) throws GenericError {
-        //check id invitante
-        if (!utenteDB.existsById(invitante))
-            throw new GenericError("Nessun utente è associato a questo id");
-        Utente utenteInvitante = utenteDB.getReferenceById(invitante);
+    public Invito salvaInvito(String invitante, String email_invitato, long id_uscita) throws GenericError {
+        //check invitante
+        if (!utenteDB.existsByEmail(invitante))
+            throw new GenericError("Nessun utente è associato a questa email");
+        Utente utenteInvitante = utenteDB.findByEmail(invitante);
 
         //check email invitato
         Utente utenteInvitato = utenteDB.findByEmail(email_invitato);
@@ -45,8 +45,11 @@ public class InvitoSCImplementation implements InvitoSC{
         Uscita uscita = uscitaDB.getReferenceById(id_uscita);
 
         //check se l'invitato è già parte dell'uscita
+        List<UtenteUscita> utentiUscite = utenteUscitaDB.findByUtenteAndUscita(utenteInvitato, uscita);
+        if(!utentiUscite.isEmpty())
+            throw new GenericError("L'utente invitato fa già parte dell'uscita");
 
-        //check se l'invitante ha i diritti per invitare (ovvero fa parte dell'uscita)
+        //check se l'invitante ha i diritti per invitare
         List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtenteAndUscita(utenteInvitante, uscita);
         if(utentiUsciteList.isEmpty() || (!utentiUsciteList.get(0).isUtenteCreatore() && !utentiUsciteList.get(0).isUtenteOrganizzatore()))
             throw new GenericError("Non hai i diritti per invitare utenti a questa uscita");
@@ -60,12 +63,12 @@ public class InvitoSCImplementation implements InvitoSC{
     }
 
     @Override
-    public String rifiutaInvito(long invitato, long id_uscita) throws GenericError {
+    public String rifiutaInvito(String invitato, long id_uscita) throws GenericError {
 
         //check id invitato
-        if (!utenteDB.existsById(invitato))
-            throw new GenericError("Nessun utente è associato a questo id");
-        Utente utenteInvitato = utenteDB.getReferenceById(invitato);
+        if (!utenteDB.existsByEmail(invitato))
+            throw new GenericError("Nessun utente è associato a questa email");
+        Utente utenteInvitato = utenteDB.findByEmail(invitato);
 
         //check id uscita
         if (!uscitaDB.existsById(id_uscita))
@@ -81,20 +84,24 @@ public class InvitoSCImplementation implements InvitoSC{
     }
 
     @Override
-    public String accettaInvito(long invitato, long id_uscita) throws GenericError {
+    public String accettaInvito(String invitato, long id_uscita) throws GenericError {
         //check id invitato
-        if (!utenteDB.existsById(invitato))
-            throw new GenericError("Nessun utente è associato a questo id");
-        Utente utenteInvitato = utenteDB.getReferenceById(invitato);
+        if (!utenteDB.existsByEmail(invitato))
+            throw new GenericError("Nessun utente è associato a questa email");
+        Utente utenteInvitato = utenteDB.findByEmail(invitato);
 
         //check id uscita
         if (!uscitaDB.existsById(id_uscita))
             throw new GenericError("Nessuna uscita è associata a questo id");
         Uscita uscita = uscitaDB.getReferenceById(id_uscita);
 
-        List<Invito> invito = invitoDB.findByUscitaAndUtenteInvitato(uscita, utenteInvitato);
-        if (invito.size() > 0) {
-            invitoDB.deleteAll(invito);
+        //check su NumeroMaxPartecipanti
+        if(uscita.getNumeroMaxPartecipanti() == utenteUscitaDB.findByUscita(uscita).size())
+            throw new GenericError("Numero massimo di partecipanti raggiunto");
+
+        List<Invito> inviti = invitoDB.findByUscitaAndUtenteInvitato(uscita, utenteInvitato);
+        if (inviti.size() > 0) {
+            invitoDB.deleteAll(inviti);
 
             UtenteUscita utenteUscita = new UtenteUscita(utenteInvitato, uscita, false, false);
             utenteUscitaDB.save(utenteUscita);

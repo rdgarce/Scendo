@@ -6,6 +6,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +32,7 @@ public class UscitaController {
 
     @Autowired
     InvitoSC invitoSC;
+
 
     @PostMapping("/api/uscita/{idUscita}/promuovi-partecipante")
     public String promuoviPartecipante(@RequestParam long id_creatore,
@@ -54,25 +58,24 @@ public class UscitaController {
     }
 
 
-    @PostMapping("/api/uscita/{idUscita}/invita-partecipante") //localhost:8080/api/uscita/{idUScita}/invita-partecipante?invitante=id_invitante&email_invitato=email_invitato
-    public Invito salvaInvito(@RequestParam(name = "invitante") long invitante,
-                              @RequestParam(name = "email_invitato") @Email(message = "Email incorretta") String email_invitato,
+    @PostMapping("/api/uscita/{idUscita}/invita-partecipante") //localhost:8080/api/uscita/{idUScita}/invita-partecipante?email_invitato=email_invitato
+    public Invito salvaInvito(@RequestParam(name = "email_invitato") @Email(message = "Email incorretta") String email_invitato,
                               @PathVariable long idUscita
                               ) throws GenericError {
-
-        return invitoSC.salvaInvito(invitante, email_invitato, idUscita);
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return invitoSC.salvaInvito(currentUser.getUsername(), email_invitato, idUscita);
     }
 
-    @DeleteMapping("/api/rifiuta-invito") //localhost:8080/api/invito/rifiuta?invitato=id_invitato&uscita=id_uscita
-    public String rifiutaInvito(@RequestParam(name = "invitato") long invitato,
-                                @RequestParam(name = "uscita") long uscita) throws GenericError {
-        return invitoSC.rifiutaInvito(invitato, uscita);
+    @DeleteMapping("/api/rifiuta-invito") //localhost:8080/api/invito/rifiuta-invito?uscita=id_uscita
+    public String rifiutaInvito(@RequestParam(name = "uscita") long uscita) throws GenericError {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return invitoSC.rifiutaInvito(currentUser.getUsername(), uscita);
     }
 
-    @PostMapping("/api/accetta-invito") //localhost:8080/api/invito/accetta?invitato=id_invitato&uscita=id_uscita
-    public String accettaInvito(@RequestParam(name = "invitato") long invitato,
-                                @RequestParam(name = "uscita") long uscita) throws GenericError {
-        return invitoSC.accettaInvito(invitato, uscita);
+    @PostMapping("/api/accetta-invito") //localhost:8080/api/invito/accetta-invito?uscita=id_uscita
+    public String accettaInvito(@RequestParam(name = "uscita") long uscita) throws GenericError {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return invitoSC.accettaInvito(currentUser.getUsername(), uscita);
     }
     
 
