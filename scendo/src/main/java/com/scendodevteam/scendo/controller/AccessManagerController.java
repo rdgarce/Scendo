@@ -22,7 +22,7 @@ import com.scendodevteam.scendo.model.UtenteMD;
 import com.scendodevteam.scendo.service.UtenteSC;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class AccessManagerController{
 
     @Autowired

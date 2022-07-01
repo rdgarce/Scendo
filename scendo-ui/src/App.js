@@ -1,9 +1,11 @@
 import './App.css';
+import Registrazione from './Components/Registrazione';
 
 function App() {
   return (
-    <div className="App">
-    </div>
+    <>
+    <Registrazione/>
+    </>
   );
 }
 
