@@ -4,7 +4,7 @@ import org.springframework.security.core.AuthenticationException;
 
 public class CustomAuthenticationException extends AuthenticationException{
 
-    private int code;
+    private String code;
 
     public CustomAuthenticationException(String msg, Throwable cause) {
         super(msg, cause);
@@ -16,13 +16,13 @@ public class CustomAuthenticationException extends AuthenticationException{
 
     }
 
-    public CustomAuthenticationException(String msg, int code) {
+    public CustomAuthenticationException(String msg, String code) {
         super(msg);
         this.code = code;
 
     }
 
-    public int getCode(){
+    public String getCode(){
         return this.code;
     }
     

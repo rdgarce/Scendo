@@ -34,28 +34,28 @@ public class UscitaSCImplementazione implements UscitaSC{
         //check se il creatore esiste
         Utente utente_creatore = utenteDB.findByEmail(email_creatore);
         if (utente_creatore == null)
-            throw new GenericErrorException("Nessun utente è associato a questa email: "+ email_creatore);
+            throw new GenericErrorException("Nessun utente è associato a questa email: "+ email_creatore, "PP_001");
         
 
         //check se il partecipante esiste
         Utente utente_partecipante = utenteDB.findByEmail(email_partecipante);
         if (utente_partecipante == null)
-            throw new GenericErrorException("Nessun utente è associato a questa email: " + email_partecipante);
+            throw new GenericErrorException("Nessun utente è associato a questa email: " + email_partecipante, "PP_002");
 
         //check se l'uscita esiste
         Optional<Uscita> uscita = uscitaDB.findById(id_uscita);
         if (!uscita.isPresent())
-            throw new GenericErrorException("Nessuna uscita associata a questo id: "+ id_uscita);
+            throw new GenericErrorException("Nessuna uscita associata a questo id: "+ id_uscita, "PP_003");
         
         //check se il creatore è veramente creatore dell'uscita
         List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtenteAndUscita(utente_creatore, uscita.get());
         if(utentiUsciteList.isEmpty() || !utentiUsciteList.get(0).isUtenteCreatore())
-            throw new GenericErrorException("Non hai i diritti per eleggere un utente ad Organizzatore");
+            throw new GenericErrorException("Non hai i diritti per eleggere un utente ad Organizzatore", "PP_004");
 
         //check se il partecipante è veramente partecipante dell'uscita
         List<UtenteUscita> utentiUsciteList_2 = utenteUscitaDB.findByUtenteAndUscita(utente_partecipante, uscita.get());
         if(utentiUsciteList_2.isEmpty())
-            throw new GenericErrorException("Non esiste nessun partecipante con email \"" + email_partecipante +"\" per questa uscita");
+            throw new GenericErrorException("Non esiste nessun partecipante con email \"" + email_partecipante +"\" per questa uscita", "PP_005");
 
         UtenteUscita utenteUscita = utentiUsciteList_2.get(0);
         utenteUscita.setUtenteOrganizzatore(true);
@@ -73,7 +73,7 @@ public class UscitaSCImplementazione implements UscitaSC{
     	//check se il partecipante esiste
         Utente utente = utenteDB.findByEmail(email);
         if (utente == null)
-           throw new GenericErrorException("Nessun utente è associato a questa email: " + email);
+           throw new GenericErrorException("Nessun utente è associato a questa email: " + email,"CU_001");
 
 
     	Uscita uscita = new Uscita();
@@ -106,7 +106,7 @@ public class UscitaSCImplementazione implements UscitaSC{
     	
     	List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtente(utente);
         if (utentiUsciteList.isEmpty()) {
-            throw new GenericErrorException("L'utente specificato non partecipa a nessuna uscita attualmente");
+            throw new GenericErrorException("L'utente specificato non partecipa a nessuna uscita attualmente","CC_001");
         }
 
         ArrayList<Uscita> uscite = new ArrayList<Uscita>();

@@ -18,6 +18,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.scendodevteam.scendo.service.AuthUserService;
 import com.scendodevteam.scendo.util.JwtUtil;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+
 @Component
 public class JwtFIlter extends OncePerRequestFilter{
 
@@ -40,7 +44,21 @@ public class JwtFIlter extends OncePerRequestFilter{
                 if(authorization != null && authorization.startsWith("Bearer ")) {
                     
                     token = authorization.substring(7);
-                    userName = jwtUtil.getUsernameFromToken(token);
+
+                    try {
+                        userName = jwtUtil.getUsernameFromToken(token);
+                    } catch (ExpiredJwtException e) {
+                        System.out.println("Expired");
+                        logger.warn("Il token è scaduto");
+                        //throw new CustomAuthenticationException("Il token è scaduto","LG_004");
+                    }catch(SignatureException e){
+                        logger.warn("Non è possibile verificare la firma del token");
+                        //throw new CustomAuthenticationException("Non è possibile verificare la firma del token","LG_005");
+                    }catch(MalformedJwtException e){
+                        logger.warn("Il token è malformato");
+                        //throw new CustomAuthenticationException("Il token non è corretto","LG_006");
+                    }
+                    
                     
                 }
                 

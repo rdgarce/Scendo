@@ -57,6 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.exceptionHandling().authenticationEntryPoint(authExceptionHandler);
+        
 
         //necessario per la console h2
         http.headers().frameOptions().sameOrigin();

@@ -22,19 +22,19 @@ public class RestResponseExceptionHandler{
 		}
         sb.delete(sb.length()-2,sb.length());
         
-        MessaggioGenerico message = new MessaggioGenerico(HttpStatus.BAD_REQUEST,sb.toString());
+        MessaggioGenerico message = new MessaggioGenerico(sb.toString(),"NF_001");
                 
 
-        return ResponseEntity.status(message.getStatus())
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(message);
     }
 
     @ExceptionHandler
     public ResponseEntity<MessaggioGenerico> genericErrorHandler(GenericErrorException exception){
         
-        MessaggioGenerico message = new MessaggioGenerico(HttpStatus.BAD_REQUEST,exception.getMessage());
+        MessaggioGenerico message = new MessaggioGenerico(exception.getMessage(),exception.getCode());
 
-        return ResponseEntity.status(message.getStatus())
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(message);
     }
     

@@ -1,5 +1,6 @@
 package com.scendodevteam.scendo.service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class UtenteSCImplementation implements UtenteSC {
     public TokenRegistrazione registerUser(UtenteMD usr) throws GenericErrorException{
 
         if (utenteDB.findByEmail(usr.getEmail()) != null) {
-            throw new GenericErrorException("Esiste già un utente registrato con questa email");
+            throw new GenericErrorException("Esiste già un utente registrato con questa email","RG_001");
         }
 
         Utente utente = new Utente();
@@ -54,16 +55,20 @@ public class UtenteSCImplementation implements UtenteSC {
     }
 
     @Override
-    public boolean verifyRegistration(String token) throws GenericErrorException {
+    public boolean verifyRegistration(Optional<String> token) throws GenericErrorException {
         
-        TokenRegistrazione tokenRegistrazione = tokenRegistrazioneDB.findByToken(token);
+        if (!token.isPresent() || token.get() == "") {
+            throw new GenericErrorException("Non ha inserito nessun token","VR_001");
+        }
+
+        TokenRegistrazione tokenRegistrazione = tokenRegistrazioneDB.findByToken(token.get());
 
         if (tokenRegistrazione == null)
-            throw new GenericErrorException("Il token inserito non è corretto");
+            throw new GenericErrorException("Il token inserito non è corretto","VR_002");
 
         if (tokenRegistrazione.scaduto()){
             tokenRegistrazioneDB.delete(tokenRegistrazione);
-            throw new GenericErrorException("Il token inserito è scaduto");
+            throw new GenericErrorException("Il token inserito è scaduto","VR_003");
         }
             
 

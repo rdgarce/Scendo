@@ -2,22 +2,22 @@ package com.scendodevteam.scendo.exception;
 
 public class GenericErrorException extends Exception{
 
-    private int code;
+    private String code;
 
     public GenericErrorException() {
         super();
     }
 
-    public GenericErrorException(String message) {
-        super(message);
-    }
+    //public GenericErrorException(String message) {
+    //    super(message);
+    //}
 
-    public GenericErrorException(String message, int code) {
+    public GenericErrorException(String message, String code) {
         super(message);
         this.code = code;
     }
     
-    int getCode(){
+    public String getCode(){
         return this.code;
     }
 }

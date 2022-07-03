@@ -9,8 +9,6 @@ import com.scendodevteam.scendo.repository.UtenteDB;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,11 +26,11 @@ public class AuthUserService implements UserDetailsService{
         Utente utente = utenteDB.findByEmail(email);
         
         if (utente == null) {
-            throw new CustomAuthenticationException("Non esiste un utente con l'email specificata",101);
+            throw new CustomAuthenticationException("Non esiste un utente con l'email specificata","LG_002");
         }
 
         if (!utente.isActive()) {
-            throw new CustomAuthenticationException("L'utente non è attivo",202);
+            throw new CustomAuthenticationException("L'utente non è attivo","LG_003");
         }
 
         return new User(utente.getEmail(),utente.getPassword(), new ArrayList<>());
