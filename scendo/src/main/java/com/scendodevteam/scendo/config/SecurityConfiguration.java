@@ -48,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
         http.csrf().disable()
         .authorizeRequests()
-        .antMatchers("/api/login","/api/registrazione","/api/verifica-registrazione","/h2-console")
+        .antMatchers("/api/login","/api/registrazione","/api/verifica-registrazione","/h2-console/**")
         .permitAll()
         .anyRequest()
         .authenticated()
@@ -57,6 +57,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.exceptionHandling().authenticationEntryPoint(authExceptionHandler);
+
+        //necessario per la console h2
+        http.headers().frameOptions().sameOrigin();
 
         http.addFilterBefore(jwtFIlter, UsernamePasswordAuthenticationFilter.class);
     }

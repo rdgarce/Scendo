@@ -17,6 +17,10 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint{
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
 
+        
+        //Rimane da gestire la creazione di un json di risposta 
+        //e di gestire quando manca il token perché è invalido 
+        //e quando viene lanciata l'eccezzione standard da spring quando il token manca proprio
         System.out.println("ciao");
         
     }
