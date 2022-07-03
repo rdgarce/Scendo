@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import RegistrazioneService from "../Services/RegistrazioneService";
+import AuthService from "../Services/AuthService";
 
 const Registrazione = () =>{
 
@@ -14,6 +14,14 @@ const [utente, setUtente] = useState({
     codicePostale: "",
 });
 
+const [errore, setErrore] = useState({
+    messaggio: "",
+});
+
+const [successo, setSuccesso] = useState({
+    messaggio: "",
+});
+
 const handleChange = (e) => {
     const value = e.target.value;
     setUtente({...utente, [e.target.name]: value});
@@ -21,10 +29,18 @@ const handleChange = (e) => {
 
 const salvaUtente = (e) => {
     e.preventDefault();
-    RegistrazioneService.salvaUtente(utente).then((response) => {
-        console.log(response);
+    AuthService.register(utente).then((response) => {   
+        setErrore({...errore, messaggio: ""});
+        setSuccesso({...successo, messaggio: "Registrazione avvenuta con successo"})
+        console.log(response.data.message);
+
     }).catch((error) => {
         console.log(error);
+        if(error.response.data.message){
+            const value = error.response.data.message;
+            setSuccesso({...successo, messaggio: ""})
+            setErrore({...errore, messaggio: value});
+        }
     });
 }
 
@@ -103,6 +119,18 @@ return(
                         type="submit"
                         className="w-full text-center py-3 rounded bg-green-400 text-white hover:bg-green-700 focus:outline-none my-1"
                     >Crea Account</button>
+
+                    <text
+                        type="text"
+                        className="text-red-500"
+                    >{errore.messaggio} </text>
+
+                    <text
+                        type="text"
+                        className="text-green-400"
+                    >{successo.messaggio} </text>
+
+
                 </div>
 
                 <div className="text-grey-dark mt-6">
