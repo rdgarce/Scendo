@@ -27,7 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     private AuthUserService authUserService;
 
     @Autowired
-    private JwtFIlter jwtFIlter;
+    private JwtFIlter jwtFilter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -62,6 +62,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         //necessario per la console h2
         http.headers().frameOptions().sameOrigin();
 
-        http.addFilterBefore(jwtFIlter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
