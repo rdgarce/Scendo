@@ -1,4 +1,4 @@
-package com.scendodevteam.scendo.exception;
+package com.scendodevteam.scendo.exception.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.scendodevteam.scendo.exception.GenericErrorException;
 import com.scendodevteam.scendo.model.MessaggioGenerico;
 
 @ControllerAdvice
