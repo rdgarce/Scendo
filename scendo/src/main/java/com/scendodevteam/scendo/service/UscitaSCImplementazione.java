@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.entity.UtenteUscita;
-import com.scendodevteam.scendo.exception.GenericError;
+import com.scendodevteam.scendo.exception.GenericErrorException;
 import com.scendodevteam.scendo.model.UscitaMD;
 import com.scendodevteam.scendo.repository.UscitaDB;
 import com.scendodevteam.scendo.repository.UtenteDB;
@@ -29,33 +29,33 @@ public class UscitaSCImplementazione implements UscitaSC{
     UtenteUscitaDB utenteUscitaDB;
 
     @Override
-    public boolean promuoviPartecipante(String email_creatore, String email_partecipante, long id_uscita) throws GenericError {
+    public boolean promuoviPartecipante(String email_creatore, String email_partecipante, long id_uscita) throws GenericErrorException {
         
         //check se il creatore esiste
         Utente utente_creatore = utenteDB.findByEmail(email_creatore);
         if (utente_creatore == null)
-            throw new GenericError("Nessun utente è associato a questa email: "+ email_creatore);
+            throw new GenericErrorException("Nessun utente è associato a questa email: "+ email_creatore);
         
 
         //check se il partecipante esiste
         Utente utente_partecipante = utenteDB.findByEmail(email_partecipante);
         if (utente_partecipante == null)
-            throw new GenericError("Nessun utente è associato a questa email: " + email_partecipante);
+            throw new GenericErrorException("Nessun utente è associato a questa email: " + email_partecipante);
 
         //check se l'uscita esiste
         Optional<Uscita> uscita = uscitaDB.findById(id_uscita);
         if (!uscita.isPresent())
-            throw new GenericError("Nessuna uscita associata a questo id: "+ id_uscita);
+            throw new GenericErrorException("Nessuna uscita associata a questo id: "+ id_uscita);
         
         //check se il creatore è veramente creatore dell'uscita
         List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtenteAndUscita(utente_creatore, uscita.get());
         if(utentiUsciteList.isEmpty() || !utentiUsciteList.get(0).isUtenteCreatore())
-            throw new GenericError("Non hai i diritti per eleggere un utente ad Organizzatore");
+            throw new GenericErrorException("Non hai i diritti per eleggere un utente ad Organizzatore");
 
         //check se il partecipante è veramente partecipante dell'uscita
         List<UtenteUscita> utentiUsciteList_2 = utenteUscitaDB.findByUtenteAndUscita(utente_partecipante, uscita.get());
         if(utentiUsciteList_2.isEmpty())
-            throw new GenericError("Non esiste nessun partecipante con email \"" + email_partecipante +"\" per questa uscita");
+            throw new GenericErrorException("Non esiste nessun partecipante con email \"" + email_partecipante +"\" per questa uscita");
 
         UtenteUscita utenteUscita = utentiUsciteList_2.get(0);
         utenteUscita.setUtenteOrganizzatore(true);
@@ -67,13 +67,13 @@ public class UscitaSCImplementazione implements UscitaSC{
     }
     
     @Override
-    public Uscita creaUscita(String email, UscitaMD uscitaMD) throws GenericError {
+    public Uscita creaUscita(String email, UscitaMD uscitaMD) throws GenericErrorException {
     	
     
     	//check se il partecipante esiste
         Utente utente = utenteDB.findByEmail(email);
         if (utente == null)
-           throw new GenericError("Nessun utente è associato a questa email: " + email);
+           throw new GenericErrorException("Nessun utente è associato a questa email: " + email);
 
 
     	Uscita uscita = new Uscita();
@@ -95,7 +95,7 @@ public class UscitaSCImplementazione implements UscitaSC{
     }
 
     @Override
-    public List<Uscita> consultaCalendario(String email) throws GenericError { 
+    public List<Uscita> consultaCalendario(String email) throws GenericErrorException { 
     	
     /*	//check se esiste l'utente
         Optional<Utente> utente = utenteDB.findById(idUtente);
@@ -106,7 +106,7 @@ public class UscitaSCImplementazione implements UscitaSC{
     	
     	List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtente(utente);
         if (utentiUsciteList.isEmpty()) {
-            throw new GenericError("L'utente specificato non partecipa a nessuna uscita attualmente");
+            throw new GenericErrorException("L'utente specificato non partecipa a nessuna uscita attualmente");
         }
 
         ArrayList<Uscita> uscite = new ArrayList<Uscita>();
