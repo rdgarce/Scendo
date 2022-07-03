@@ -1,18 +1,16 @@
 package com.scendodevteam.scendo.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-import com.scendodevteam.scendo.entity.Invito;
-import com.scendodevteam.scendo.entity.Uscita;
-import com.scendodevteam.scendo.exception.GenericError;
+import com.scendodevteam.scendo.exception.GenericErrorException;
+import com.scendodevteam.scendo.model.MessaggioGenerico;
 import com.scendodevteam.scendo.model.UscitaMD;
 import com.scendodevteam.scendo.service.InvitoSC;
 import com.scendodevteam.scendo.service.UscitaSC;
@@ -29,61 +27,68 @@ public class UscitaController {
 
 
     @PostMapping("/api/uscita/{idUscita}/promuovi-partecipante")
-    public String promuoviPartecipante(@RequestParam @Email(message = "Email incorretta") String email_partecipante,
-                                       @PathVariable long idUscita) throws GenericError{
-        
+    public MessaggioGenerico promuoviPartecipante(@RequestBody Map<String, String> json, @PathVariable long idUscita) throws GenericErrorException{
+    
+        String email = json.get("email_partecipante");
+
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        uscitaSC.promuoviPartecipante(currentUser.getUsername(),email_partecipante,idUscita);
-        return "Utente promosso ad Organizzatore";
+        uscitaSC.promuoviPartecipante(currentUser.getUsername(),email,idUscita);
+        return new MessaggioGenerico("Utente promosso ad Organizzatore","PP_OOO");
     }
     
     @PostMapping("/api/crea-uscita")
-    public String creaUscita(@Valid @RequestBody UscitaMD uscitaMD) throws GenericError{
+    public MessaggioGenerico creaUscita(@Valid @RequestBody UscitaMD uscitaMD) throws GenericErrorException{
 
     	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
     	uscitaSC.creaUscita(currentUser.getUsername(),uscitaMD);
         
-        return "Uscita creata con successo";
+        return new MessaggioGenerico("Uscita creata con successo","CU_000");
     }
 
     @GetMapping("api/calendario-uscite")
-	public List<Uscita> consultaCalendario()throws GenericError{
+	public MessaggioGenerico consultaCalendario()throws GenericErrorException{
         
     	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
-    	return uscitaSC.consultaCalendario((currentUser.getUsername()));
+    	return new MessaggioGenerico(uscitaSC.consultaCalendario((currentUser.getUsername())), "CC_000");
+
+
     }
-    
 
     @GetMapping("api/leggi-inviti")
-	public List<Invito> leggiInviti()
-			                        throws GenericError{
+	public MessaggioGenerico leggiInviti() throws GenericErrorException{
         
     	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return invitoSC.leggiInviti(currentUser.getUsername());
+        return new MessaggioGenerico(invitoSC.leggiInviti(currentUser.getUsername()),"LV_000");
     }
 
 
-    @PostMapping("/api/uscita/{idUscita}/invita-partecipante") //localhost:8080/api/uscita/{idUScita}/invita-partecipante?email_invitato=email_invitato
-    public Invito salvaInvito(@RequestParam(name = "email_invitato") @Email(message = "Email incorretta") String email_invitato,
-                              @PathVariable long idUscita
-                              ) throws GenericError {
+    @PostMapping("/api/uscita/{idUscita}/invita-partecipante") //localhost:8080/api/uscita/{idUScita}/invita-partecipante
+    public MessaggioGenerico salvaInvito(@RequestBody Map<String, String> json, @PathVariable long idUscita) throws GenericErrorException {
+
+        String email = json.get("email_invitato");
+
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return invitoSC.salvaInvito(currentUser.getUsername(), email_invitato, idUscita);
+        invitoSC.salvaInvito(currentUser.getUsername(), email, idUscita);
+
+        return new MessaggioGenerico("Invito inviato correttamente","SV_000");
     }
 
-    @DeleteMapping("/api/rifiuta-invito") //localhost:8080/api/invito/rifiuta-invito?uscita=id_uscita
-    public String rifiutaInvito(@RequestParam(name = "uscita") long uscita) throws GenericError {
+    @PostMapping("/api/rifiuta-invito") //localhost:8080/api/invito/rifiuta-invito?uscita=id_uscita
+    public MessaggioGenerico rifiutaInvito(@RequestParam(name = "uscita") long uscita) throws GenericErrorException {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return invitoSC.rifiutaInvito(currentUser.getUsername(), uscita);
+        invitoSC.rifiutaInvito(currentUser.getUsername(), uscita);
+        
+        return new MessaggioGenerico("Invito rifiutato correttamente","RV_000");
     }
 
     @PostMapping("/api/accetta-invito") //localhost:8080/api/invito/accetta-invito?uscita=id_uscita
-    public String accettaInvito(@RequestParam(name = "uscita") long uscita) throws GenericError {
+    public MessaggioGenerico accettaInvito(@RequestParam(name = "uscita") long uscita) throws GenericErrorException {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return invitoSC.accettaInvito(currentUser.getUsername(), uscita);
+        invitoSC.accettaInvito(currentUser.getUsername(), uscita);
+
+        return new MessaggioGenerico("Invito accettato correttamente", "AV_000");
     }
     
-
 }

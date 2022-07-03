@@ -1,5 +1,6 @@
 package com.scendodevteam.scendo.service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.scendodevteam.scendo.entity.TokenRegistrazione;
 import com.scendodevteam.scendo.entity.Utente;
-import com.scendodevteam.scendo.exception.GenericError;
+import com.scendodevteam.scendo.exception.GenericErrorException;
 import com.scendodevteam.scendo.model.UtenteMD;
 import com.scendodevteam.scendo.repository.TokenRegistrazioneDB;
 import com.scendodevteam.scendo.repository.UtenteDB;
@@ -27,10 +28,10 @@ public class UtenteSCImplementation implements UtenteSC {
     private PasswordEncoder bcryptEncoder;
 
     @Override
-    public TokenRegistrazione registerUser(UtenteMD usr) throws GenericError{
+    public TokenRegistrazione registerUser(UtenteMD usr) throws GenericErrorException{
 
         if (utenteDB.findByEmail(usr.getEmail()) != null) {
-            throw new GenericError("Esiste già un utente registrato con questa email");
+            throw new GenericErrorException("Esiste già un utente registrato con questa email","RG_001");
         }
 
         Utente utente = new Utente();
@@ -54,16 +55,20 @@ public class UtenteSCImplementation implements UtenteSC {
     }
 
     @Override
-    public boolean verifyRegistration(String token) throws GenericError {
+    public boolean verifyRegistration(Optional<String> token) throws GenericErrorException {
         
-        TokenRegistrazione tokenRegistrazione = tokenRegistrazioneDB.findByToken(token);
+        if (!token.isPresent() || token.get() == "") {
+            throw new GenericErrorException("Non ha inserito nessun token","VR_001");
+        }
+
+        TokenRegistrazione tokenRegistrazione = tokenRegistrazioneDB.findByToken(token.get());
 
         if (tokenRegistrazione == null)
-            throw new GenericError("Il token inserito non è corretto");
+            throw new GenericErrorException("Il token inserito non è corretto","VR_002");
 
         if (tokenRegistrazione.scaduto()){
             tokenRegistrazioneDB.delete(tokenRegistrazione);
-            throw new GenericError("Il token inserito è scaduto");
+            throw new GenericErrorException("Il token inserito è scaduto","VR_003");
         }
             
 
