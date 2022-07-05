@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -46,6 +47,13 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint{
 
             messaggioGenerico.setCode("LG_001");
             messaggioGenerico.setMessage("Non è stato possibile effettuare l'autenticazione con il token fornito");
+            
+        }
+
+        if (authException instanceof BadCredentialsException) {
+
+            messaggioGenerico.setCode("LG_004");
+            messaggioGenerico.setMessage("Password Errata");
             
         }
 

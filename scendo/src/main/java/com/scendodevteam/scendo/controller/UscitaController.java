@@ -53,7 +53,6 @@ public class UscitaController {
         
     	return new MessaggioGenerico(uscitaSC.consultaCalendario((currentUser.getUsername())), "CC_000");
 
-
     }
 
     @GetMapping("api/leggi-inviti")
