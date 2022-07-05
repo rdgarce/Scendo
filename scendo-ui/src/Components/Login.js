@@ -24,7 +24,10 @@ const Login = () => {
             console.log(response);
         }).catch((error) => {
             console.log(error);
-            setErrore({...errore, messaggio: "Email o password errata"});
+            if(error.response.data.message)
+                setErrore({...errore, messaggio: error.response.data.message});
+            else
+                setErrore({...errore, messaggio: "password errata"});
         });
     }
     

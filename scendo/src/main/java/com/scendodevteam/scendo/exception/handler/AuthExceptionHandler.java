@@ -33,7 +33,7 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint{
 
         //Rimane da gestire la creazione di un json di risposta 
         //e di gestire quando manca il token perché è invalido 
-        //e quando viene lanciata l'eccezzione standard da spring quando il token manca proprio
+        //e quando viene lanciata l'eccezione standard da spring quando il token manca proprio
         
         
         if (authException.getCause() instanceof CustomAuthenticationException) {
