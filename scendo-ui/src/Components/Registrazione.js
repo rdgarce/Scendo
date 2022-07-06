@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import AuthService from "../Services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 const Registrazione = () =>{
+
+const navigate = useNavigate()
 
 const [utente, setUtente] = useState({
     nome: "",
@@ -27,11 +30,15 @@ const handleChange = (e) => {
     setUtente({...utente, [e.target.name]: value});
 };
 
+
+
 const salvaUtente = (e) => {
     e.preventDefault();
     AuthService.register(utente).then((response) => {   
         setErrore({...errore, messaggio: ""});
-        setSuccesso({...successo, messaggio: "Registrazione avvenuta con successo"})
+        setSuccesso({...successo, messaggio: "Registrazione avvenuta con successo"});
+        navigate("/login");
+        navigate(0);
         console.log(response.data.message);
 
     }).catch((error) => {
@@ -45,7 +52,7 @@ const salvaUtente = (e) => {
 }
 
 return(
-    <div className="bg-grey-lighter min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col">
             <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
                 <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
                     <h1 className="mb-8 text-3xl text-center">Registrazione</h1>
@@ -113,24 +120,21 @@ return(
                         value={utente.codicePostale}
                         placeholder="Codice Postale" />
 
-
                     <button
                         onClick={salvaUtente}
                         type="submit"
-                        className="w-full text-center py-3 rounded bg-green-400 text-white hover:bg-green-700 focus:outline-none my-1"
+                        className="w-full text-center p-3 rounded bg-green-400 text-white hover:bg-green-700 focus:outline-none my-1"
                     >Crea Account</button>
 
-                    <text
+                    <div
                         type="text"
                         className="text-red-500"
-                    >{errore.messaggio} </text>
+                    >{errore.messaggio} </div>
 
-                    <text
+                    <div
                         type="text"
                         className="text-green-400"
-                    >{successo.messaggio} </text>
-
-
+                    >{successo.messaggio} </div>
                 </div>
 
                 <div className="text-grey-dark mt-6">

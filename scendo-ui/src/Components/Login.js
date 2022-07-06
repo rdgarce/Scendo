@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import AuthService from '../Services/AuthService';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+
+    const navigate = useNavigate()
     
     const [utente, setUtente] = useState({
         username: "",
@@ -21,18 +24,20 @@ const Login = () => {
         e.preventDefault();
         AuthService.login(utente).then((response) => {
             setErrore({...errore, messaggio: ""});
+            navigate("/home");
+            navigate(0);
             console.log(response);
         }).catch((error) => {
             console.log(error);
             if(error.response.data.message)
                 setErrore({...errore, messaggio: error.response.data.message});
             else
-                setErrore({...errore, messaggio: "password errata"});
+                setErrore({...errore, messaggio: "Errore"});
         });
     }
     
     return (
-    <div className="bg-grey-lighter min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col">
             <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
                 <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
                     <h1 className="mb-8 text-3xl text-center">Login</h1>
@@ -57,10 +62,10 @@ const Login = () => {
                         className="w-full text-center py-3 rounded bg-green-400 text-white hover:bg-green-700 focus:outline-none my-1"
                     >Login</button>
                     
-                    <text
+                    <div
                         type="text"
                         className="text-red-500"
-                    >{errore.messaggio} </text>
+                    >{errore.messaggio} </div>
                 </div>
 
                 <div className="text-grey-dark mt-6">
