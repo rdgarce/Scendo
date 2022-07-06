@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.scendodevteam.scendo.service.AuthUserService;
+import com.scendodevteam.scendo.service.AuthUserSC;
 import com.scendodevteam.scendo.util.JwtUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -29,7 +29,7 @@ public class JwtFIlter extends OncePerRequestFilter{
     private JwtUtil jwtUtil;
 
     @Autowired
-    AuthUserService userService;
+    AuthUserSC userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

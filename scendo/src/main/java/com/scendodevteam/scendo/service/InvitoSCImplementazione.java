@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class InvitoSCImplementation implements InvitoSC{
+public class InvitoSCImplementazione implements InvitoSC{
 
     @Autowired
     private InvitoDB invitoDB;

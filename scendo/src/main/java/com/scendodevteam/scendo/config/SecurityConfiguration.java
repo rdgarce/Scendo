@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.scendodevteam.scendo.exception.handler.AuthExceptionHandler;
 import com.scendodevteam.scendo.filter.JwtFIlter;
-import com.scendodevteam.scendo.service.AuthUserService;
+import com.scendodevteam.scendo.service.AuthUserSC;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     AuthExceptionHandler authExceptionHandler;
 
     @Autowired
-    private AuthUserService authUserService;
+    private AuthUserSC authUserService;
 
     @Autowired
     private JwtFIlter jwtFilter;
