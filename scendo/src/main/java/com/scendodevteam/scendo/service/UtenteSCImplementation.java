@@ -72,11 +72,15 @@ public class UtenteSCImplementation implements UtenteSC {
             throw new GenericErrorException("Il token inserito è scaduto","VR_003");
         }
             
-
-        
         Utente utente = tokenRegistrazione.getUtente();
+
+        if (utente.isActive()) {
+            throw new GenericErrorException("Il tuo account è già attivato","VR_004");
+        }
+
         utente.setActive(true);
         utenteDB.save(utente);
+
         return true;
     }
 
