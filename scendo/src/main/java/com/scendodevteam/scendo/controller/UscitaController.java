@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.scendodevteam.scendo.exception.GenericErrorException;
 import com.scendodevteam.scendo.model.MessaggioGenerico;
-import com.scendodevteam.scendo.model.UscitaMD;
+import com.scendodevteam.scendo.model.InUscitaMD;
 import com.scendodevteam.scendo.service.InvitoSC;
 import com.scendodevteam.scendo.service.UscitaSC;
 
@@ -37,13 +37,21 @@ public class UscitaController {
     }
     
     @PostMapping("/api/crea-uscita")
-    public MessaggioGenerico creaUscita(@Valid @RequestBody UscitaMD uscitaMD) throws GenericErrorException{
+    public MessaggioGenerico creaUscita(@Valid @RequestBody InUscitaMD uscitaMD) throws GenericErrorException{
 
     	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
     	uscitaSC.creaUscita(currentUser.getUsername(),uscitaMD);
         
         return new MessaggioGenerico("Uscita creata con successo","CU_000");
+    }
+
+    @GetMapping("/api/uscita/{idUscita}")//?partecipanti=true/false
+    public MessaggioGenerico infoUscita(@RequestParam(name = "partecipanti") boolean partecipanti, @PathVariable long idUscita) throws GenericErrorException{
+        
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return new MessaggioGenerico(uscitaSC.infoUscita(currentUser.getUsername(), idUscita, partecipanti),"IU_000");
     }
 
     @GetMapping("api/calendario-uscite")

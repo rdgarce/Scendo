@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UscitaMD {
+public class InUscitaMD {
 
     @NotEmpty(message = "Il tipo dell'uscita non può essere vuoto")
     private String tipoUscita;

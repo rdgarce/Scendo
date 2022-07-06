@@ -6,6 +6,7 @@ import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.entity.UtenteUscita;
 import com.scendodevteam.scendo.exception.GenericErrorException;
+import com.scendodevteam.scendo.model.OutInvitoMD;
 import com.scendodevteam.scendo.repository.InvitoDB;
 import com.scendodevteam.scendo.repository.UscitaDB;
 import com.scendodevteam.scendo.repository.UtenteDB;
@@ -13,6 +14,7 @@ import com.scendodevteam.scendo.repository.UtenteUscitaDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -112,15 +114,26 @@ public class InvitoSCImplementation implements InvitoSC{
 
     }
     @Override
-    public List<Invito> leggiInviti(String email) throws GenericErrorException{
+    public List<OutInvitoMD> leggiInviti(String email) throws GenericErrorException{
     	         
     	Utente utente = utenteDB.findByEmail(email);
     	List<Invito> InvitiList = invitoDB.findByUtenteInvitato(utente);
+
         if (InvitiList.isEmpty()) {
-            throw new GenericErrorException("Nessun invito in archivio","LV_001");
+            throw new GenericErrorException("Non hai ricevuto nessun invito","LV_001");
         }
 
-    	return InvitiList;
+        ArrayList<OutInvitoMD> outInvitoMD_list = new ArrayList<OutInvitoMD>();
+        
+        for (Invito invito : InvitiList) {
+            OutInvitoMD outInvitoMD = new OutInvitoMD();
+            outInvitoMD.setEmailInvitante(invito.getUtenteInvitante().getEmail());
+            outInvitoMD.setIdUscita(invito.getUscita().getIdUscita());
+            outInvitoMD_list.add(outInvitoMD);
+
+        }
+
+    	return outInvitoMD_list;
 }
     
 }

@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import com.scendodevteam.scendo.entity.TokenRegistrazione;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.exception.GenericErrorException;
-import com.scendodevteam.scendo.model.UtenteMD;
+import com.scendodevteam.scendo.model.InUtenteMD;
+import com.scendodevteam.scendo.model.OutUtenteMD;
 import com.scendodevteam.scendo.repository.TokenRegistrazioneDB;
 import com.scendodevteam.scendo.repository.UtenteDB;
 
@@ -28,7 +29,7 @@ public class UtenteSCImplementation implements UtenteSC {
     private PasswordEncoder bcryptEncoder;
 
     @Override
-    public TokenRegistrazione registerUser(UtenteMD usr) throws GenericErrorException{
+    public TokenRegistrazione registerUser(InUtenteMD usr) throws GenericErrorException{
 
         if (utenteDB.findByEmail(usr.getEmail()) != null) {
             throw new GenericErrorException("Esiste già un utente registrato con questa email","RG_001");
@@ -58,7 +59,7 @@ public class UtenteSCImplementation implements UtenteSC {
     public boolean verifyRegistration(Optional<String> token) throws GenericErrorException {
         
         if (!token.isPresent() || token.get() == "") {
-            throw new GenericErrorException("Non ha inserito nessun token","VR_001");
+            throw new GenericErrorException("Non hai inserito nessun token","VR_001");
         }
 
         TokenRegistrazione tokenRegistrazione = tokenRegistrazioneDB.findByToken(token.get());
@@ -77,6 +78,45 @@ public class UtenteSCImplementation implements UtenteSC {
         utente.setActive(true);
         utenteDB.save(utente);
         return true;
+    }
+
+    @Override
+    public OutUtenteMD infoUtente(String email) throws GenericErrorException {
+        
+
+        Utente utente = utenteDB.findByEmail(email);
+
+        if (utente == null || !utente.isActive()) {
+            throw new GenericErrorException("Non esiste un utente con questa email","IT_001");
+        }
+
+        OutUtenteMD outUtenteMD = new OutUtenteMD();
+
+        outUtenteMD.setNome(utente.getNome());
+        outUtenteMD.setCognome(utente.getCognome());
+        outUtenteMD.setEmail(utente.getEmail());
+
+        return outUtenteMD;
+
+
+    }
+
+    @Override
+    public OutUtenteMD mieInfo(String email) {
+        
+        Utente utente = utenteDB.findByEmail(email);
+
+        OutUtenteMD outUtenteMD = new OutUtenteMD();
+
+        outUtenteMD.setNome(utente.getNome());
+        outUtenteMD.setCognome(utente.getCognome());
+        outUtenteMD.setEmail(utente.getEmail());
+        outUtenteMD.setSesso(utente.getSesso());
+        outUtenteMD.setDataDiNascita(utente.getDataDiNascita());
+        outUtenteMD.setCittaDiResidenza(utente.getCittaDiResidenza());
+        outUtenteMD.setCodicePostale(utente.getCodicePostale());
+
+        return outUtenteMD;
     }
 
 }

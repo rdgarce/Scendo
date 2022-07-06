@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UtenteMD{
+public class InUtenteMD{
 
     @NotEmpty(message = "Il nome non può essere vuoto")
     private String nome;

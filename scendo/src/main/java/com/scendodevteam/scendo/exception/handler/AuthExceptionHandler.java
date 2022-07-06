@@ -60,9 +60,6 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint{
         ObjectMapper objectMapper = new ObjectMapper();
         response.getWriter().write(objectMapper.writeValueAsString(messaggioGenerico));
 
-
-
-        
     }
     
 }

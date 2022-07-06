@@ -15,7 +15,7 @@ import com.scendodevteam.scendo.entity.TokenRegistrazione;
 import com.scendodevteam.scendo.exception.GenericErrorException;
 import com.scendodevteam.scendo.model.JwtRequest;
 import com.scendodevteam.scendo.model.MessaggioGenerico;
-import com.scendodevteam.scendo.model.UtenteMD;
+import com.scendodevteam.scendo.model.InUtenteMD;
 import com.scendodevteam.scendo.service.AuthUserService;
 import com.scendodevteam.scendo.service.UtenteSC;
 import com.scendodevteam.scendo.util.JwtUtil;
@@ -54,7 +54,7 @@ public class AccessManagerController{
     }
 
     @PostMapping("/api/registrazione")
-    public MessaggioGenerico registerUser(@Valid @RequestBody UtenteMD usr, HttpServletRequest request) throws GenericErrorException{
+    public MessaggioGenerico registerUser(@Valid @RequestBody InUtenteMD usr, HttpServletRequest request) throws GenericErrorException{
 
         TokenRegistrazione tokenRegistrazione = utenteSC.registerUser(usr);
         String url = "http://" + 
