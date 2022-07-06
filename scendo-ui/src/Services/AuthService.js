@@ -6,20 +6,20 @@ class AuthService {
       .post(API_URL + "login", utente)
       .then(response => {
         if (response.data.message) {
-          localStorage.setItem("user", JSON.stringify(response.data.message));
-          console.log("Ho salvato user ");
+          localStorage.setItem('token', JSON.stringify(response.data.message));
+          console.log("Ho salvato token ");
         }
         return response.data;
       });
   }
   logout() {
-    localStorage.removeItem("user");
+    localStorage.removeItem('token');
   }
   register(utente) {
     return axios.post(API_URL + "registrazione", utente);
   }
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));;
+    return JSON.parse(localStorage.getItem('token'));;
   }
 }
 export default new AuthService();
