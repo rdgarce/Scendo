@@ -41,6 +41,7 @@ public class RegistrazioneCompletataListener implements ApplicationListener<Regi
         
         } catch (Exception e) {
             
+            System.out.println("Invio dell'email da implementare, ecco il link di verifica:\n" + url);
         }
     
     }

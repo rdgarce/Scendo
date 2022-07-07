@@ -17,10 +17,8 @@ import com.scendodevteam.scendo.event.RegistrazioneCompletata;
 import com.scendodevteam.scendo.exception.GenericErrorException;
 import com.scendodevteam.scendo.model.JwtRequest;
 import com.scendodevteam.scendo.model.MessaggioGenerico;
-import com.scendodevteam.scendo.model.EmailDetails;
 import com.scendodevteam.scendo.model.InUtenteMD;
 import com.scendodevteam.scendo.service.AuthUserSC;
-import com.scendodevteam.scendo.service.EmailSendSC;
 import com.scendodevteam.scendo.service.UtenteSC;
 import com.scendodevteam.scendo.util.JwtUtil;
 
@@ -39,9 +37,6 @@ public class AccessManagerController{
 
     @Autowired
     private AuthUserSC authUserService;
-
-    @Autowired
-    private EmailSendSC emailSendSC;
 
     @Autowired
     private ApplicationEventPublisher publisher;
