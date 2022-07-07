@@ -13,5 +13,12 @@ class UscitaService{
             });
     }
 
+    calendarioUscite(){
+        return axios.get((API_URL + "calendario-uscite", { headers: authHeader()}))
+        .then(response => {
+            return response.data;
+        });
+    }
+
 }
 export default new UscitaService();
