@@ -1,68 +1,50 @@
+import e from 'cors';
 import React, { useState, useEffect } from 'react'
 import UscitaService from '../Services/UscitaService';
+import ContainerUscita from './ContainerUscita';
 
 const Home = () => {
 
   const [loading, setLoading] = useState(true);
-  const [uscite, setUscite] = useState(null);
+  const [uscite, setUscite] = useState([]);
 
   useEffect(() => {
-    const fetchUscite = async () => {
+    const fetchUsciteId = async () => {
       setLoading(true);
       try {
         const response = await UscitaService.calendarioUscite();
-        setUscite(response.data.message);
+        const listaUscite = [];
+        if (response.message){
+            for (let i = 0; i < response.message.length; i++) {
+                const element = await UscitaService.infoUscita(response.message[i], true);
+                listaUscite.push(element);  
+                console.log(element);
+            }
+        }
+        setUscite(listaUscite); 
       } catch (error) {
         console.log(error);
       }
-      setLoading = false;
-    }
-
+      setLoading(false);
+    };
+    fetchUsciteId();
   }, []);
-  
 
   return (
     <>
-    <div className='container mx-auto my-8 shadow border-b'>
-      <div>
-        Descrizione
-      </div>
-      <div>
-        Destinazione
-      </div>
-
-      <div className='flex'>
-        <table className='max-w-xs'>
-          <thead>
-            <tr>
-              <th className='text-left uppercase tracking-wider py-3 px-6'>
-                Nome
-              </th>
-              <th className='text-left uppercase tracking-wider py-3 px-6'>
-                Cognome
-              </th>
-              <th className='text-left uppercase tracking-wider py-3 px-6'>
-                Azioni
-              </th>
-            </tr>
-          </thead>
-          <tbody className='bg-white'>
-            <tr>
-              <td className='px-6'>Simone</td>
-              <td className='px-6'>D'Orta</td>
-              <button
-                //onClick={salvaUtente}
-                type="submit"
-                className="w-full text-center px-6 rounded bg-green-400 text-white hover:bg-green-700 focus:outline-none my-1"
-                >Promuovi</button>
-            </tr>
-          </tbody>
-        </table>
-
-      </div>
-    </div>
+    {!loading &&(
+        <div>
+        {uscite.map((uscita) => (
+            <ContainerUscita 
+            uscita={uscita} 
+            key={uscita.message.idUscita}>            
+            </ContainerUscita>
+            
+        ))}
+        </div>
+    )}
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

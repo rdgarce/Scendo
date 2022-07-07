@@ -5,19 +5,20 @@ const API_URL = "http://localhost:8080/api/";
 
 class UscitaService{
 
-    creaUscita(uscita){
-        return axios
-            .post(API_URL + "crea-uscita", uscita, { headers: authHeader()})
-            .then(response => {
-                return response.data;
-            });
+    async creaUscita(uscita){
+        const response = await axios
+            .post(API_URL + "crea-uscita", uscita, { headers: authHeader() });
+        return response.data;
     }
 
-    calendarioUscite(){
-        return axios.get((API_URL + "calendario-uscite", { headers: authHeader()}))
-        .then(response => {
-            return response.data;
-        });
+    async calendarioUscite(){
+        const response = await axios.get(API_URL + "calendario-uscite", { headers: authHeader() });
+        return response.data;
+    }
+
+    async infoUscita(id, part){
+        const response = await axios.get(API_URL + "uscita/" + id, { headers: authHeader(), params: { partecipanti: part } });
+        return response.data;
     }
 
 }
