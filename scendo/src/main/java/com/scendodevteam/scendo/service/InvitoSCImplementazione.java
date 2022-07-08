@@ -129,6 +129,7 @@ public class InvitoSCImplementazione implements InvitoSC{
         
         for (Invito invito : InvitiList) {
             OutInvitoMD outInvitoMD = new OutInvitoMD();
+            outInvitoMD.setIdInvito(invito.getIdInvito());
             outInvitoMD.setEmailInvitante(invito.getUtenteInvitante().getEmail());
             outInvitoMD.setIdUscita(invito.getUscita().getIdUscita());
             outInvitoMD_list.add(outInvitoMD);

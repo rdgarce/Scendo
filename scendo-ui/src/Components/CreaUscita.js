@@ -1,8 +1,13 @@
 import React, { useState } from "react";
+import AuthService from "../Services/AuthService";
 import UscitaService from "../Services/UscitaService";
+import { useNavigate } from "react-router-dom";
+
 
 
 const CreaUscita = () => {
+
+  const navigate = useNavigate()
 
 const [uscita, setUscita] = useState({
   tipoUscita: "",
@@ -36,6 +41,7 @@ const salvaUscita = (e) => {
   UscitaService.creaUscita(uscita).then((response) => {   
     setErrore({...errore, messaggio: ""});
     setSuccesso({...successo, messaggio: "Uscita creata"});
+    navigate("/home");
     //console.log(response.data.message);
 }).catch((error) => {
     console.log(error);
@@ -44,6 +50,11 @@ const salvaUscita = (e) => {
         setSuccesso({...successo, messaggio: ""})
         setErrore({...errore, messaggio: value});
     }
+    if(error.response.status === 401){
+      AuthService.logout();
+      navigate("/login");
+      navigate(0);
+  }
 });
 }
 

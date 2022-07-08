@@ -7,6 +7,7 @@ class AuthService {
       .then(response => {
         if (response.data.message) {
           localStorage.setItem('token', JSON.stringify(response.data.message));
+          localStorage.setItem('email_utente', utente.username);
           console.log("Ho salvato token ");
         }
         return response.data;
@@ -14,6 +15,7 @@ class AuthService {
   }
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('email_utente');
   }
   register(utente) {
     return axios.post(API_URL + "registrazione", utente);
