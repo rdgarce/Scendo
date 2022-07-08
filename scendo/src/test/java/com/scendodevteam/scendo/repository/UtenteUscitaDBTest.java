@@ -1,11 +1,7 @@
 package com.scendodevteam.scendo.repository;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,7 +45,7 @@ public class UtenteUscitaDBTest {
         Utente utente1 = new Utente();
         utente1.setNome("Raffaele");
         utente1.setCognome("del Gaudio");
-        Date dataDiNascita1 = new SimpleDateFormat("DD/MM/yyyy").parse("24/10/1998");
+        Date dataDiNascita1 = new SimpleDateFormat("dd/MM/yyyy").parse("24/10/1998");
         utente1.setDataDiNascita(dataDiNascita1);
         utente1.setSesso(1);
         utente1.setEmail("raffaele@test.com");
@@ -61,7 +57,7 @@ public class UtenteUscitaDBTest {
         Utente utente2 = new Utente();
         utente2.setNome("Simone");
         utente2.setCognome("D'Orta");
-        Date dataDiNascita2 = new SimpleDateFormat("DD/MM/yyyy").parse("24/01/1999");
+        Date dataDiNascita2 = new SimpleDateFormat("dd/MM/yyyy").parse("24/01/1999");
         utente2.setDataDiNascita(dataDiNascita2);
         utente2.setSesso(1);
         utente2.setEmail("simone@test.com");
@@ -73,7 +69,7 @@ public class UtenteUscitaDBTest {
         Utente utente3 = new Utente();
         utente3.setNome("Daniele");
         utente3.setCognome("Marfella");
-        Date dataDiNascita3 = new SimpleDateFormat("DD/MM/yyyy").parse("01/01/1998");
+        Date dataDiNascita3 = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1998");
         utente3.setDataDiNascita(dataDiNascita3);
         utente3.setSesso(1);
         utente3.setEmail("daniele@test.com");
@@ -85,7 +81,7 @@ public class UtenteUscitaDBTest {
         Utente utente4 = new Utente();
         utente4.setNome("Fantasma");
         utente4.setCognome("Formaggino");
-        Date dataDiNascita4 = new SimpleDateFormat("DD/MM/yyyy").parse("09/09/1998");
+        Date dataDiNascita4 = new SimpleDateFormat("dd/MM/yyyy").parse("09/09/1998");
         utente4.setDataDiNascita(dataDiNascita4);
         utente4.setSesso(1);
         utente4.setEmail("daniele@test.com");
@@ -95,7 +91,7 @@ public class UtenteUscitaDBTest {
         utente4.setActive(true);
 
         Uscita uscita1 = new Uscita();
-        Date dataUscita1 = new SimpleDateFormat("DD/MM/yyyy").parse("30/01/2127");
+        Date dataUscita1 = new SimpleDateFormat("dd/MM/yyyy").parse("30/01/2127");
         uscita1.setDataEOra(dataUscita1);
         uscita1.setDescrizione("descrizione");
         uscita1.setLocationIncontro("locationIncontro");
@@ -105,7 +101,7 @@ public class UtenteUscitaDBTest {
         uscita1.setUscitaPrivata(true);
 
         Uscita uscita2 = new Uscita();
-        Date dataUscita2 = new SimpleDateFormat("DD/MM/yyyy").parse("30/01/2127");
+        Date dataUscita2 = new SimpleDateFormat("dd/MM/yyyy").parse("30/01/2127");
         uscita2.setDataEOra(dataUscita2);
         uscita2.setDescrizione("descrizione");
         uscita2.setLocationIncontro("locationIncontro");
@@ -186,5 +182,37 @@ public class UtenteUscitaDBTest {
     @Test
     void testFindByUtenteAndUscita_quandoUtenteEUscitaEsistono() {
 
+        List<UtenteUscita> utenteUscita_list = utenteUscitaDB.findByUtenteAndUscita(utenti_db.get(0),uscita_db_corretta);
+
+        assertTrue(utenteUscita_list.size() == 1 && utentiUscite_db.contains(utenteUscita_list.get(0)));
+
     }
+
+    @Test
+    void testFindByUtenteAndUscita_quandoUtenteEsisteEUscitaNonEsiste() {
+
+        List<UtenteUscita> utenteUscita_list = utenteUscitaDB.findByUtenteAndUscita(utenti_db.get(0),uscita_db_errata);
+
+        assertTrue(utenteUscita_list != null && utenteUscita_list.size() == 0);
+
+    }
+
+    @Test
+    void testFindByUtenteAndUscita_quandoUtenteNonEsisteEUscitaEsiste() {
+
+        List<UtenteUscita> utenteUscita_list = utenteUscitaDB.findByUtenteAndUscita(utente_db_errato,uscita_db_corretta);
+
+        assertTrue(utenteUscita_list != null && utenteUscita_list.size() == 0);
+
+    }
+
+    @Test
+    void testFindByUtenteAndUscita_quandoUtenteEUscitaNonEsistono() {
+
+        List<UtenteUscita> utenteUscita_list = utenteUscitaDB.findByUtenteAndUscita(utente_db_errato,uscita_db_errata);
+
+        assertTrue(utenteUscita_list != null && utenteUscita_list.size() == 0);
+
+    }
+
 }

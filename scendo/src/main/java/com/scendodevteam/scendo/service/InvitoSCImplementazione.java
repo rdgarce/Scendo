@@ -31,6 +31,7 @@ public class InvitoSCImplementazione implements InvitoSC{
 
     @Override
     public Invito salvaInvito(String invitante, String email_invitato, long id_uscita) throws GenericErrorException {
+        
         //check invitante
         if (!utenteDB.existsByEmail(invitante))
             throw new GenericErrorException("Nessun utente è associato a questa email","SV_001");
@@ -113,6 +114,7 @@ public class InvitoSCImplementazione implements InvitoSC{
         return "Invito inesistente";
 
     }
+    
     @Override
     public List<OutInvitoMD> leggiInviti(String email) throws GenericErrorException{
     	         
