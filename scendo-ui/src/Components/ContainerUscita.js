@@ -13,24 +13,26 @@ const ContainerUscita = ({uscita}) => {
     messaggio: "",
   });
 
+  const [disablePromuovi, setDisablePromuovi] = useState(false);
+
   const handleChange = (e) => {
     const value = e.target.value;
     setEmail(value);
-    console.log(email);
   };
 
   const promuoviUtente = (e, email) => {
     e.preventDefault();
     UscitaService.promuoviUtente(uscita.message.idUscita, email).then((response) => {   
-      //setErrore({...errore, messaggio: ""});
-      //setSuccesso({...successo, messaggio: "Utente promosso"});
+      setErrore({...errore, messaggio: ""});
+      setSuccesso({...successo, messaggio: "Utente promosso"});
+      setDisablePromuovi(true);
       console.log(response.message);
   }).catch((error) => {
       console.log(error);
       if(error.response.data.message){
           const value = error.response.data.message;
-          //setSuccesso({...successo, messaggio: ""})
-          //setErrore({...errore, messaggio: value});
+          setSuccesso({...successo, messaggio: ""})
+          setErrore({...errore, messaggio: value});
       }
   });
   }
@@ -41,10 +43,26 @@ const ContainerUscita = ({uscita}) => {
       console.log(response.message);
     }).catch((error) => {
         console.log(error);
+        if(error.response.data.message){
+          const value = error.response.data.message;
+          setSuccesso({...successo, messaggio: ""})
+          setErrore({...errore, messaggio: value});
+      }
     });
   }
 
   return (
+    <>
+    <div
+      type="text"
+      className="text-red-500 text-center text-lg"
+    >{errore.messaggio} </div>
+
+    <div
+      type="text"
+      className="text-green-400 text-center text-lg"
+    >{successo.messaggio} </div>
+            
     <div className='container mx-auto my-8 shadow border-b'
         key={uscita.message.idUscita}>
             <div>
@@ -88,7 +106,7 @@ const ContainerUscita = ({uscita}) => {
                           type="submit"
                           className="w-full text-center px-6 rounded bg-green-400 text-white hover:bg-green-700 focus:outline-none my-1 disabled:bg-slate-400"
                           // disabilito il tasto promuovi se io non sono creatore o se l'utente della riga è già organizzatore/creatore
-                          disabled={partecipante.utenteCreatore || partecipante.utenteOrganizzatore || 
+                          disabled={disablePromuovi || partecipante.utenteCreatore || partecipante.utenteOrganizzatore || 
                                     uscita.message.partecipanti.find( element => element.email === localStorage.getItem('email_utente') && element.utenteCreatore === false)
                          }
                           >Promuovi
@@ -127,6 +145,7 @@ const ContainerUscita = ({uscita}) => {
                 </table>
               </div>
     </div>
+    </>
   )
 }
 
