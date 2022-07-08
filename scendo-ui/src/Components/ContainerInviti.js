@@ -4,7 +4,7 @@ import AuthService from '../Services/AuthService';
 import UscitaService from '../Services/UscitaService';
 import { useNavigate } from "react-router-dom";
 
-const ContainerInviti = ({invito}) => {
+const ContainerInviti = ({invito, reload, setReload}) => {
 
     const navigate = useNavigate()
 
@@ -12,7 +12,8 @@ const ContainerInviti = ({invito}) => {
         e.preventDefault();
         UscitaService.accettaInvito(idUscita).then((response) => {
             console.log(response);
-            navigate(0);
+            //navigate(0);
+            setReload(!reload);
         }).catch((error) => {
             console.log(error);
             if(error.response.status === 401){
@@ -27,7 +28,8 @@ const ContainerInviti = ({invito}) => {
         e.preventDefault();
         UscitaService.rifiutaInvito(idUscita).then((response) => {
             console.log(response);
-            navigate(0);
+            setReload(!reload);
+            //navigate(0);
         }).catch((error) => {
             console.log(error);
             if(error.response.status === 401){

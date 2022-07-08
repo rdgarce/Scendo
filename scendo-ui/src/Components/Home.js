@@ -13,6 +13,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [uscite, setUscite] = useState([]);
   const [inviti, setInviti] = useState([]);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const fetchUsciteId = async () => {
@@ -38,7 +39,7 @@ const Home = () => {
             const element = await UscitaService.infoUscita(risposta.message[i].idUscita, false);
             element.message.emailInvitante = invitante;
             listaInviti.push(element);
-            console.log(element);
+            //console.log(element);
           }
         }
         setInviti(listaInviti);
@@ -51,11 +52,11 @@ const Home = () => {
           navigate(0);
       }
       }
-
       setLoading(false);
+      console.log("RELOAD");
     };
     fetchUsciteId();
-  }, []);
+  }, [reload]);
 
   return (
     <Container>
@@ -66,6 +67,8 @@ const Home = () => {
           {uscite.map((uscita) => (
               <ContainerUscita 
               uscita={uscita} 
+              reload={reload}
+              setReload={setReload}
               key={uscita.message.idUscita}>            
               </ContainerUscita>               
           ))}
@@ -77,7 +80,9 @@ const Home = () => {
           {inviti.map((invito) => (
             <ContainerInviti
               invito={invito}
-              key={invito.message.idUscita}>
+              key={invito.message.idUscita}
+              reload={reload}
+              setReload={setReload}>
             </ContainerInviti>
           ))}
         </Col>

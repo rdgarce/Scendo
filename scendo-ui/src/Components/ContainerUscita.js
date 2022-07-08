@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import UscitaService from '../Services/UscitaService';
 
-const ContainerUscita = ({uscita}) => {
+const ContainerUscita = ({uscita, reload, setReload}) => {
 
   const [email, setEmail] = useState("");
 
@@ -22,7 +22,8 @@ const ContainerUscita = ({uscita}) => {
     e.preventDefault();
     UscitaService.promuoviUtente(uscita.message.idUscita, email).then((response) => {   
       setErrore({...errore, messaggio: ""});
-      setSuccesso({...successo, messaggio: "Utente promosso"});
+      setSuccesso({...successo, messaggio: response.message});
+      setReload(!reload);
       console.log(response.message);
   }).catch((error) => {
       console.log(error);
@@ -37,7 +38,9 @@ const ContainerUscita = ({uscita}) => {
   const invitaUtente = (e) => {
     e.preventDefault();
     UscitaService.invitaUtente(uscita.message.idUscita, email).then((response) => {
-      console.log(response.message);
+      //console.log(response.message);
+      setSuccesso({...successo, messaggio: response.message});
+      setErrore({...errore, messaggio: ""});
     }).catch((error) => {
         console.log(error);
         if(error.response.data.message){
