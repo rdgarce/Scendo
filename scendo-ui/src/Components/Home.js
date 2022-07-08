@@ -18,7 +18,7 @@ const Home = () => {
             for (let i = 0; i < response.message.length; i++) {
                 const element = await UscitaService.infoUscita(response.message[i], true);
                 listaUscite.push(element);  
-                console.log(element);
+                console.log("element", element);
             }
         }
         setUscite(listaUscite); 
