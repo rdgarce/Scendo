@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OutInvitoMD {
-    
+
+    private long idInvito;
+
     private String emailInvitante;
     
     private long idUscita;
