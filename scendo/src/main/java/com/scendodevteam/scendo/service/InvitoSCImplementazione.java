@@ -121,9 +121,11 @@ public class InvitoSCImplementazione implements InvitoSC{
     	Utente utente = utenteDB.findByEmail(email);
     	List<Invito> InvitiList = invitoDB.findByUtenteInvitato(utente);
 
+        /*
         if (InvitiList.isEmpty()) {
             throw new GenericErrorException("Non hai ricevuto nessun invito","LV_001");
         }
+        */
 
         ArrayList<OutInvitoMD> outInvitoMD_list = new ArrayList<OutInvitoMD>();
         

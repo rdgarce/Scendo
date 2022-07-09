@@ -205,11 +205,11 @@ public class UscitaSCTest {
         try {
 
             List<Long> uscite_list = uscitaSC.consultaCalendario("simone@test.com");
-            fail("Eccezione non lanciata");
+            assertTrue(uscite_list.isEmpty());
 
         } catch (Exception e) {
             
-            assertTrue(e instanceof GenericErrorException && ((GenericErrorException)e).getCode() == "CC_001");
+            fail("Lanciata eccezione: "+ e.getMessage());
 
         }
     

@@ -104,17 +104,22 @@ public class UscitaSCImplementazione implements UscitaSC{
     @Override
     public List<Long> consultaCalendario(String email) throws GenericErrorException { 
     	
-    /*	//check se esiste l'utente
+        /*	
+        //check se esiste l'utente
         Optional<Utente> utente = utenteDB.findById(idUtente);
     	if (!utente.isPresent())
-            throw new GenericError("Non esiste nessun utente con questo Id");*/
+            throw new GenericError("Non esiste nessun utente con questo Id");
+        */
     	
     	Utente utente = utenteDB.findByEmail(email);
     	
     	List<UtenteUscita> utentiUsciteList = utenteUscitaDB.findByUtente(utente);
+        
+        /*
         if (utentiUsciteList.isEmpty()) {
             throw new GenericErrorException("L'utente specificato non partecipa a nessuna uscita attualmente","CC_001");
         }
+        */
 
         ArrayList<Long> uscite = new ArrayList<Long>();
 

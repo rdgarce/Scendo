@@ -128,6 +128,7 @@ public class InvitoSCTest {
         inviti.add(invito);
 
         OutInvitoMD outInvitoMD = new OutInvitoMD();
+        outInvitoMD.setIdInvito(invito.getIdInvito());
         outInvitoMD.setEmailInvitante(invito.getUtenteInvitante().getEmail());
         outInvitoMD.setIdUscita(invito.getUscita().getIdUscita());
 
