@@ -47,8 +47,12 @@ const salvaUscita = (e) => {
     console.log(error);
     if(error.response.data.message){
         const value = error.response.data.message;
-        setSuccesso({...successo, messaggio: ""})
+        setSuccesso({...successo, messaggio: ""});
         setErrore({...errore, messaggio: value});
+    }
+    else {
+      setErrore({...errore, messaggio: "Dati inseriti non validi"});
+      setSuccesso({...successo, messaggio: ""});
     }
     if(error.response.status === 401){
       AuthService.logout();
