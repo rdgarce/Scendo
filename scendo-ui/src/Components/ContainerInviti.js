@@ -1,45 +1,7 @@
 import React from 'react'
 import {Stack} from 'react-bootstrap'
-import AuthService from '../Services/AuthService';
-import UscitaService from '../Services/UscitaService';
-import { useNavigate } from "react-router-dom";
 
-const ContainerInviti = ({invito, reload, setReload}) => {
-
-    const navigate = useNavigate()
-
-    const accettaInvito = (e, idUscita) => {
-        e.preventDefault();
-        UscitaService.accettaInvito(idUscita).then((response) => {
-            console.log(response);
-            //navigate(0);
-            setReload(!reload);
-        }).catch((error) => {
-            console.log(error);
-            if(error.response.status === 401){
-                AuthService.logout();
-                navigate("/login");
-                navigate(0);
-            }
-        });
-    }
-
-    const rifiutaInvito = (e, idUscita) => {
-        e.preventDefault();
-        UscitaService.rifiutaInvito(idUscita).then((response) => {
-            console.log(response);
-            setReload(!reload);
-            //navigate(0);
-        }).catch((error) => {
-            console.log(error);
-            if(error.response.status === 401){
-                AuthService.logout();
-                navigate("/login");
-                navigate(0);
-            }
-
-        });
-    }
+const ContainerInviti = ({invito, rifiutaInvito, accettaInvito}) => {
 
   return (
     <div className='container mx-auto my-8 border-1' 
