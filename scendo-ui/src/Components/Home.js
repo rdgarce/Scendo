@@ -13,7 +13,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [uscite, setUscite] = useState([]);
   const [inviti, setInviti] = useState([]);
-  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const fetchUsciteId = async () => {
@@ -53,10 +52,69 @@ const Home = () => {
       }
       }
       setLoading(false);
-      console.log("RELOAD");
     };
     fetchUsciteId();
-  }, [reload]);
+  }, []);
+
+  const rifiutaInvito = (e, idUscita) => {
+    e.preventDefault();
+    UscitaService.rifiutaInvito(idUscita).then((response) => {
+        console.log(response);
+        setInviti((element) =>{
+          return element.filter((invito) => invito.message.idUscita !== idUscita);
+        })
+    }).catch((error) => {
+        console.log(error);
+        if(error.response.status === 401){
+            AuthService.logout();
+            navigate("/login");
+            navigate(0);
+        }
+
+    });
+  }
+
+  const accettaInvito = async (e, idUscita) => {
+    e.preventDefault();
+    try{
+        const response = await UscitaService.accettaInvito(idUscita)
+        console.log(response);
+        const element = await UscitaService.infoUscita(idUscita, true);
+        setUscite(usc => [...usc, element]);
+
+        setInviti((element) =>{
+          return element.filter((invito) => invito.message.idUscita !== idUscita);
+        });
+
+    }catch(error){
+      console.log(error);
+        if(error.response.status === 401){
+            AuthService.logout();
+            navigate("/login");
+            navigate(0);
+        }
+   }
+  }
+
+  const promuoviUtente = async (e, email, idUscita) => {
+    e.preventDefault();
+    try{
+    await UscitaService.promuoviUtente(idUscita, email);
+    const response = await UscitaService.calendarioUscite();
+    const listaUscite = [];
+    if (response.message){
+        for (let i = 0; i < response.message.length; i++) {
+            const element = await UscitaService.infoUscita(response.message[i], true);
+            listaUscite.push(element);  
+        }
+    }
+    setUscite(listaUscite); 
+    
+  } catch (error){
+    console.log(error);
+  }
+
+  }
 
   return (
     <Container>
@@ -67,8 +125,7 @@ const Home = () => {
           {uscite.map((uscita) => (
               <ContainerUscita 
               uscita={uscita} 
-              reload={reload}
-              setReload={setReload}
+              promuoviUtente={promuoviUtente}
               key={uscita.message.idUscita}>            
               </ContainerUscita>               
           ))}
@@ -80,9 +137,9 @@ const Home = () => {
           {inviti.map((invito) => (
             <ContainerInviti
               invito={invito}
-              key={invito.message.idUscita}
-              reload={reload}
-              setReload={setReload}>
+              rifiutaInvito={rifiutaInvito}
+              accettaInvito={accettaInvito}
+              key={invito.message.idUscita}>
             </ContainerInviti>
           ))}
         </Col>

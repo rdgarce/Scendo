@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import UscitaService from '../Services/UscitaService';
 
-const ContainerUscita = ({uscita, reload, setReload}) => {
+const ContainerUscita = ({uscita, promuoviUtente}) => {
 
   const [email, setEmail] = useState("");
 
@@ -17,23 +17,6 @@ const ContainerUscita = ({uscita, reload, setReload}) => {
     const value = e.target.value;
     setEmail(value);
   };
-
-  const promuoviUtente = (e, email) => {
-    e.preventDefault();
-    UscitaService.promuoviUtente(uscita.message.idUscita, email).then((response) => {   
-      setErrore({...errore, messaggio: ""});
-      setSuccesso({...successo, messaggio: response.message});
-      setReload(!reload);
-      console.log(response.message);
-  }).catch((error) => {
-      console.log(error);
-      if(error.response.data.message){
-          const value = error.response.data.message;
-          setSuccesso({...successo, messaggio: ""})
-          setErrore({...errore, messaggio: value});
-      }
-  });
-  }
 
   const invitaUtente = (e) => {
     e.preventDefault();
@@ -102,7 +85,7 @@ const ContainerUscita = ({uscita, reload, setReload}) => {
                       <td className='px-6'>{partecipante.cognome}</td>
                       <td>
                         <button
-                          onClick={e => promuoviUtente(e, partecipante.email)}
+                          onClick={e => promuoviUtente(e, partecipante.email, uscita.message.idUscita)}
                           type="submit"
                           className="w-full text-center px-6 rounded bg-green-400 text-white hover:bg-green-700 focus:outline-none my-1 disabled:bg-slate-400"
                           // disabilito il tasto promuovi se io non sono creatore o se l'utente della riga è già organizzatore/creatore
