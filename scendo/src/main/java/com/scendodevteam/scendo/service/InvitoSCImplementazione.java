@@ -79,15 +79,18 @@ public class InvitoSCImplementazione implements InvitoSC{
         Uscita uscita = uscitaDB.getReferenceById(id_uscita);
 
         List<Invito> invito = invitoDB.findByUscitaAndUtenteInvitato(uscita, utenteInvitato);
-        if (invito.size() > 0) {
-            invitoDB.deleteAll(invito);
-            return "Invito eliminato";
-        }
-        return "Invito inesistente";
+
+        if (invito.isEmpty())
+            throw new GenericErrorException("Invito inesistente","RV_003");
+
+        invitoDB.deleteAll(invito);
+        return "Invito rifiutato";
+
     }
 
     @Override
     public String accettaInvito(String invitato, long id_uscita) throws GenericErrorException {
+
         //check id invitato
         if (!utenteDB.existsByEmail(invitato))
             throw new GenericErrorException("Nessun utente è associato a questa email","AV_001");
@@ -103,15 +106,16 @@ public class InvitoSCImplementazione implements InvitoSC{
             throw new GenericErrorException("Numero massimo di partecipanti raggiunto","AV_003");
 
         List<Invito> inviti = invitoDB.findByUscitaAndUtenteInvitato(uscita, utenteInvitato);
-        if (inviti.size() > 0) {
-            invitoDB.deleteAll(inviti);
 
-            UtenteUscita utenteUscita = new UtenteUscita(utenteInvitato, uscita, false, false);
-            utenteUscitaDB.save(utenteUscita);
+        if (inviti.isEmpty())
+            throw new GenericErrorException("Invito inesistente","AV_004");
 
-            return "Invito accettato";
-        }
-        return "Invito inesistente";
+        invitoDB.deleteAll(inviti);
+
+        UtenteUscita utenteUscita = new UtenteUscita(utenteInvitato, uscita, false, false);
+        utenteUscitaDB.save(utenteUscita);
+
+        return "Invito accettato";
 
     }
     

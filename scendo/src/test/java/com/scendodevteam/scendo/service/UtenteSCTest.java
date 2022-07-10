@@ -182,7 +182,7 @@ public class UtenteSCTest {
 
         try {
 
-            OutUtenteMD outUtenteMD_test = utenteSC.infoUtente("nonesiste@test.com");
+            utenteSC.infoUtente("nonesiste@test.com");
             fail("Eccezione non lanciata");
             
         } catch (Exception e) {
@@ -196,7 +196,7 @@ public class UtenteSCTest {
 
         try {
 
-            OutUtenteMD outUtenteMD_test = utenteSC.infoUtente("daniele@test.com");
+            utenteSC.infoUtente("daniele@test.com");
             fail("Eccezione non lanciata");
         
         } catch (Exception e) {
@@ -210,7 +210,7 @@ public class UtenteSCTest {
 
         try {
 
-            TokenRegistrazione tokenRegistrazione_test = utenteSC.registerUser(inUtenteMD1_corretto);
+            utenteSC.registerUser(inUtenteMD1_corretto);
 
         } catch (Exception e) {
 
@@ -225,7 +225,7 @@ public class UtenteSCTest {
 
         try {
 
-            TokenRegistrazione tokenRegistrazione_test = utenteSC.registerUser(inUtenteMD1_errato);
+            utenteSC.registerUser(inUtenteMD1_errato);
             fail("Eccezione non lanciata");
 
 

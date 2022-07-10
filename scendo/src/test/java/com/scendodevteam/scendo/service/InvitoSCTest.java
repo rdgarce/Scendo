@@ -4,14 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyIterable;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -166,12 +165,12 @@ public class InvitoSCTest {
 
         try {
 
-            assertEquals("Invito inesistente", invitoSC.accettaInvito("raffaele@test.com", 2L));
+            invitoSC.accettaInvito("raffaele@test.com", 2L);
+            fail("Eccezione non lanciata");
 
         } catch (Exception e) {
 
-            fail("Lanciata eccezione: "+ e.getMessage());
-
+            assertTrue(e instanceof GenericErrorException && ((GenericErrorException)e).getCode() == "AV_004");
         }
 
     }
@@ -198,7 +197,7 @@ public class InvitoSCTest {
 
         try {
 
-            assertEquals("Invito eliminato",invitoSC.rifiutaInvito("simone@test.com", 2L));
+            assertEquals("Invito rifiutato",invitoSC.rifiutaInvito("simone@test.com", 2L));
 
         } catch (Exception e) {
             
@@ -213,11 +212,12 @@ public class InvitoSCTest {
 
         try {
 
-            assertEquals("Invito inesistente",invitoSC.rifiutaInvito("raffaele@test.com", 2L));
+            invitoSC.rifiutaInvito("raffaele@test.com", 2L);
+            fail("Eccezione non lanciata");
 
         } catch (Exception e) {
             
-            fail("Lanciata eccezione: "+ e.getMessage());
+            assertTrue(e instanceof GenericErrorException && ((GenericErrorException)e).getCode() == "RV_003");
 
         }
 

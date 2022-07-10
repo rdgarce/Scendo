@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +22,6 @@ import com.scendodevteam.scendo.entity.Invito;
 import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.entity.UtenteUscita;
-import com.scendodevteam.scendo.exception.GenericErrorException;
 import com.scendodevteam.scendo.model.InUscitaMD;
 import com.scendodevteam.scendo.model.OutPartecipanteMD;
 import com.scendodevteam.scendo.model.OutUscitaMD;
@@ -220,7 +218,7 @@ public class UscitaSCTest {
 
         try {
 
-            Uscita uscita_test = uscitaSC.creaUscita("raffaele@test.com", inUscitaMD_corretta);
+            uscitaSC.creaUscita("raffaele@test.com", inUscitaMD_corretta);
 
 
         } catch (Exception e) {
