@@ -29,7 +29,5 @@ public class OutUscitaMD {
     private String descrizione;
 
     private List<OutPartecipanteMD> partecipanti = null;
-
-
     
 }

@@ -33,7 +33,7 @@ public class UscitaController {
 
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         uscitaSC.promuoviPartecipante(currentUser.getUsername(),email,idUscita);
-        return new MessaggioGenerico("Utente promosso ad Organizzatore","PP_OOO");
+        return new MessaggioGenerico("Utente promosso ad Organizzatore","PP_000");
     }
     
     @PostMapping("/api/crea-uscita")
@@ -63,7 +63,7 @@ public class UscitaController {
 
     }
 
-    @GetMapping("api/leggi-inviti")
+    @GetMapping("/api/leggi-inviti")
 	public MessaggioGenerico leggiInviti() throws GenericErrorException{
         
     	User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -85,17 +85,16 @@ public class UscitaController {
     @PostMapping("/api/rifiuta-invito") //localhost:8080/api/invito/rifiuta-invito?uscita=id_uscita
     public MessaggioGenerico rifiutaInvito(@RequestParam(name = "uscita") long uscita) throws GenericErrorException {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        invitoSC.rifiutaInvito(currentUser.getUsername(), uscita);
         
-        return new MessaggioGenerico("Invito rifiutato correttamente","RV_000");
+        return new MessaggioGenerico(invitoSC.rifiutaInvito(currentUser.getUsername(), uscita),"RV_000");
     }
 
     @PostMapping("/api/accetta-invito") //localhost:8080/api/invito/accetta-invito?uscita=id_uscita
     public MessaggioGenerico accettaInvito(@RequestParam(name = "uscita") long uscita) throws GenericErrorException {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        invitoSC.accettaInvito(currentUser.getUsername(), uscita);
 
-        return new MessaggioGenerico("Invito accettato correttamente", "AV_000");
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return new MessaggioGenerico(invitoSC.accettaInvito(currentUser.getUsername(), uscita), "AV_000");
     }
     
 }

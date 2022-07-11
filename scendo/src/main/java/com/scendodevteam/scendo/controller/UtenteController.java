@@ -23,9 +23,9 @@ public class UtenteController {
     @GetMapping("/api/utente/{email_utente}")
     public MessaggioGenerico infoUtente(@PathVariable(name = "email_utente") String email_utente) throws GenericErrorException{
 
-        //User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return new MessaggioGenerico(utenteSC.infoUtente(email_utente),"IT_OOO");
+        return new MessaggioGenerico(utenteSC.infoUtente(email_utente),"IT_000");
     }
 
     @GetMapping("/api/utente/me")
@@ -33,7 +33,7 @@ public class UtenteController {
 
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return new MessaggioGenerico(utenteSC.mieInfo(currentUser.getUsername()),"MI_OOO");
+        return new MessaggioGenerico(utenteSC.mieInfo(currentUser.getUsername()),"MI_000");
     }
     
 }
