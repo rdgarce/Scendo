@@ -39,7 +39,7 @@ import java.util.UUID;
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
-public class EndToEnd {
+public class EndToEndTest {
 
     @Autowired
     MockMvc mockMvc;
