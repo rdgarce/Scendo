@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.scendodevteam</groupId>
-	<artifactId>scendo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>scendo-backend</artifactId>
+	<version>1.0.0</version>
 	<name>scendo</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Scendo backend application</description>
 	<properties>
 		<java.version>18</java.version>
 	</properties>
