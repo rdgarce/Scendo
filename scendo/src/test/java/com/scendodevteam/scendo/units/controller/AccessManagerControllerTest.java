@@ -1,4 +1,4 @@
-package com.scendodevteam.scendo.controller;
+package com.scendodevteam.scendo.units.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;

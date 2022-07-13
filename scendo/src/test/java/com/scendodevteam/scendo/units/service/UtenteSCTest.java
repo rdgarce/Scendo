@@ -1,4 +1,4 @@
-package com.scendodevteam.scendo.service;
+package com.scendodevteam.scendo.units.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,6 +24,7 @@ import com.scendodevteam.scendo.model.InUtenteMD;
 import com.scendodevteam.scendo.model.OutUtenteMD;
 import com.scendodevteam.scendo.repository.TokenRegistrazioneDB;
 import com.scendodevteam.scendo.repository.UtenteDB;
+import com.scendodevteam.scendo.service.UtenteSC;
 
 @SpringBootTest
 public class UtenteSCTest {

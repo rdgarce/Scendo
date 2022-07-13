@@ -1,4 +1,4 @@
-package com.scendodevteam.scendo.repository;
+package com.scendodevteam.scendo.units.repository;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.entity.UtenteUscita;
+import com.scendodevteam.scendo.repository.UtenteUscitaDB;
 
 @DataJpaTest
 public class UtenteUscitaDBTest {

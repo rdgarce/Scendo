@@ -1,4 +1,4 @@
-package com.scendodevteam.scendo.controller;
+package com.scendodevteam.scendo.units.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,12 +1,13 @@
-package com.scendodevteam.scendo.repository;
+package com.scendodevteam.scendo.units.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,25 +15,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import com.scendodevteam.scendo.entity.TokenRegistrazione;
 import com.scendodevteam.scendo.entity.Utente;
+import com.scendodevteam.scendo.repository.UtenteDB;
 
 @DataJpaTest
-public class TokenRegistrazioneDBTest {
+public class UtenteDBTest {
     
     @Autowired
-    private TokenRegistrazioneDB tokenRegistrazioneDB;
+    private UtenteDB utenteDB;
 
     @Autowired
     private TestEntityManager testEntityManager;
 
-    private String token_corretto = UUID.randomUUID().toString();
-    
-    private String token_errato = UUID.randomUUID().toString();
-
     @BeforeEach
     void setUp() throws ParseException{
-        
+                                    
         Utente utente = new Utente();
         utente.setNome("Raffaele");
         utente.setCognome("del Gaudio");
@@ -46,32 +43,37 @@ public class TokenRegistrazioneDBTest {
         utente.setActive(true);
 
         testEntityManager.persist(utente);
-
-        TokenRegistrazione tokenRegistrazione = new TokenRegistrazione();
-        Date dataScadenza = new SimpleDateFormat("dd/MM/yyyy").parse("24/10/2127");
-        tokenRegistrazione.setDataScadenza(dataScadenza);
-        tokenRegistrazione.setToken(token_corretto);
-        tokenRegistrazione.setUtente(utente);
-
-        testEntityManager.persist(tokenRegistrazione);
-
+        
     }
     
     @Test
-    void testFindByToken_quandoTokenEsiste() {
+    void testExistsByEmail_quandoUtenteEsiste() {
 
-        TokenRegistrazione tokenRegistrazione = tokenRegistrazioneDB.findByToken(token_corretto);
-
-        assertEquals(tokenRegistrazione.getToken(), token_corretto);
+        assertTrue(utenteDB.existsByEmail("email@test.com"));
 
     }
 
     @Test
-    void testFindByToken_quandoTokenNonEsiste() {
+    void testExistsByEmail_quandoUtenteNonEsiste() {
 
-        TokenRegistrazione tokenRegistrazione = tokenRegistrazioneDB.findByToken(token_errato);
+        assertFalse(utenteDB.existsByEmail("emailerrata@test.com"));
 
-        assertNull(tokenRegistrazione);
+    }
+
+    @Test
+    void testFindByEmail_quandoUtenteEsiste() {
+
+        Utente utente = utenteDB.findByEmail("email@test.com");
+        
+        assertEquals(utente.getEmail(), "email@test.com");
+
+    }
+
+    @Test
+    void testFindByEmail_quandoNonUtenteEsiste() {
+
+        Utente utente = utenteDB.findByEmail("emailerrata@test.com");
+        assertNull(utente);
 
     }
 }

@@ -1,4 +1,4 @@
-package com.scendodevteam.scendo.service;
+package com.scendodevteam.scendo.units.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,6 +29,7 @@ import com.scendodevteam.scendo.repository.InvitoDB;
 import com.scendodevteam.scendo.repository.UscitaDB;
 import com.scendodevteam.scendo.repository.UtenteDB;
 import com.scendodevteam.scendo.repository.UtenteUscitaDB;
+import com.scendodevteam.scendo.service.UscitaSC;
 
 @SpringBootTest
 public class UscitaSCTest {
