@@ -1,0 +1,1 @@
+java -jar backend-server/scendo-backend-1.0.0.jar
