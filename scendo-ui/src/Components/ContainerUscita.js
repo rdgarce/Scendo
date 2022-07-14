@@ -115,10 +115,6 @@ const ContainerUscita = ({uscita, promuoviUtente}) => {
                           onClick={invitaUtente}
                           type="submit"
                           className="w-full text-center px-6 rounded bg-green-400 text-white hover:bg-green-700 focus:outline-none my-1 disabled:bg-slate-400"
-                          // disabilito il tasto promuovi se io non sono creatore o se l'utente della riga è già organizzatore/creatore
-                          disabled={uscita.message.partecipanti.find( element => element.email === localStorage.getItem('email_utente') &&
-                           element.utenteCreatore === false)
-                          }
                           >Invita
                         </button>                      
                       </td>
