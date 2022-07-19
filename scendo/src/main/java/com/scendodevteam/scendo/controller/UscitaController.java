@@ -16,7 +16,7 @@ import com.scendodevteam.scendo.service.InvitoSC;
 import com.scendodevteam.scendo.service.UscitaSC;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://44.203.75.74:80")
 public class UscitaController {
 
     @Autowired

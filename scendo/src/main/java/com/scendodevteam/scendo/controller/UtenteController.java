@@ -14,7 +14,7 @@ import com.scendodevteam.scendo.service.UtenteSC;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://44.203.75.74:80")
 public class UtenteController {
 
     @Autowired
