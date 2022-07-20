@@ -23,7 +23,7 @@ import com.scendodevteam.scendo.service.UtenteSC;
 import com.scendodevteam.scendo.util.JwtUtil;
 
 @RestController
-@CrossOrigin(origins = "http://18.212.181.68:80")
+@CrossOrigin(origins = "http://18.212.181.68")
 public class AccessManagerController{
 
     @Autowired
