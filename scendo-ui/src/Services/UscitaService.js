@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from './AuthHeader';
 
-const API_URL = "http://44.203.75.74:8080/api/";
+const API_URL = "http://18.212.181.68:8080/api/";
 
 class UscitaService{
 
