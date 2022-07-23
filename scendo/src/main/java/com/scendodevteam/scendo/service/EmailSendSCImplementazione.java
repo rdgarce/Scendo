@@ -15,21 +15,20 @@ public class EmailSendSCImplementazione implements EmailSendSC{
     @Autowired 
     private JavaMailSender javaMailSender;
  
-    @Value("${spring.mail.username}")
+    @Value("${scendo.email}")
     private String sender;
 
     @Override
     public void sendSimpleMail(EmailDetails details) throws Exception{
         
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
- 
-            mailMessage.setFrom(sender);
-            mailMessage.setTo(details.getRecipient());
-            mailMessage.setText(details.getMsgBody());
-            mailMessage.setSubject(details.getSubject());
- 
-            javaMailSender.send(mailMessage);
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
 
+        mailMessage.setFrom(sender);
+        mailMessage.setTo(details.getRecipient());
+        mailMessage.setText(details.getMsgBody());
+        mailMessage.setSubject(details.getSubject());
+
+        javaMailSender.send(mailMessage);
 
     }
 }
