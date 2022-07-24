@@ -16,7 +16,7 @@ import com.scendodevteam.scendo.service.InvitoSC;
 import com.scendodevteam.scendo.service.UscitaSC;
 
 @RestController
-@CrossOrigin(origins = {"http://scendo.it","https://scendo.it"})
+@CrossOrigin(origins = {"http://scendo.it","https://scendo.it","http://www.scendo.it","https://www.scendo.it"})
 public class UscitaController {
 
     @Autowired

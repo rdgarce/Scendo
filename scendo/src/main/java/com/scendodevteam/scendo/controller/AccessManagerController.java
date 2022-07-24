@@ -23,7 +23,7 @@ import com.scendodevteam.scendo.service.UtenteSC;
 import com.scendodevteam.scendo.util.JwtUtil;
 
 @RestController
-@CrossOrigin(origins = {"http://scendo.it","https://scendo.it"})
+@CrossOrigin(origins = {"http://scendo.it","https://scendo.it","http://www.scendo.it","https://www.scendo.it"})
 public class AccessManagerController{
 
     @Autowired
