@@ -14,16 +14,13 @@ public class EmailSendSCImplementazione implements EmailSendSC{
 
     @Autowired 
     private JavaMailSender javaMailSender;
- 
-    @Value("${scendo.email}")
-    private String sender;
 
     @Override
     public void sendSimpleMail(EmailDetails details) throws Exception{
         
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-        mailMessage.setFrom(sender);
+        mailMessage.setFrom(details.getSender());
         mailMessage.setTo(details.getRecipient());
         mailMessage.setText(details.getMsgBody());
         mailMessage.setSubject(details.getSubject());

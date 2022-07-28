@@ -1,6 +1,7 @@
 package com.scendodevteam.scendo.event.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -15,14 +16,20 @@ import com.scendodevteam.scendo.service.EmailSendSC;
 public class RegistrazioneCompletataListener implements ApplicationListener<RegistrazioneCompletata> {
     
     @Autowired
-    EmailSendSC emailSendSC;
+    private EmailSendSC emailSendSC;
+
+    @Value("${scendo.website}")
+    private String website;
+
+    @Value("${scendo.email}")
+    private String sender;
 
     @Async
     @Override
     public void onApplicationEvent(RegistrazioneCompletata event) {
         
-        String url = "http://" + 
-                    event.getRequest().getServerName() + 
+        String url = "https://" + 
+                    website + 
                     ":" + 
                     event.getRequest().getServerPort() + 
                     event.getRequest().getContextPath() + 
@@ -31,6 +38,7 @@ public class RegistrazioneCompletataListener implements ApplicationListener<Regi
         
 
         EmailDetails emailDetails = new EmailDetails();
+        emailDetails.setSender(sender);
         emailDetails.setRecipient(event.getTokenRegistrazione().getUtente().getEmail());
         emailDetails.setSubject("Verifica il tuo account");
         emailDetails.setMsgBody("Ciao dal team di Scendo.\nPer verificare il tuo account clicca sul seguente link: "+ url);
