@@ -30,9 +30,6 @@ public class RegistrazioneCompletataListener implements ApplicationListener<Regi
         
         String url = "https://" + 
                     website + 
-                    ":" + 
-                    event.getRequest().getServerPort() + 
-                    event.getRequest().getContextPath() + 
                     "/api/verifica-registrazione?token=" + 
                     event.getTokenRegistrazione().getToken();
         
