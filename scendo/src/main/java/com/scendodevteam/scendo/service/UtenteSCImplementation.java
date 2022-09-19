@@ -7,13 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.scendodevteam.scendo.entity.TokenPasswordDimenticata;
 import com.scendodevteam.scendo.entity.TokenRegistrazione;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.exception.GenericErrorException;
+import com.scendodevteam.scendo.model.InPasswordResetMD;
 import com.scendodevteam.scendo.model.InUtenteMD;
 import com.scendodevteam.scendo.model.OutUtenteMD;
+import com.scendodevteam.scendo.repository.TokenPasswordDimenticataDB;
 import com.scendodevteam.scendo.repository.TokenRegistrazioneDB;
 import com.scendodevteam.scendo.repository.UtenteDB;
+import com.scendodevteam.scendo.util.JwtUtil;
 
 
 @Service
@@ -27,6 +31,12 @@ public class UtenteSCImplementation implements UtenteSC {
 
     @Autowired
     private PasswordEncoder bcryptEncoder;
+
+    @Autowired
+    private TokenPasswordDimenticataDB tokenPasswordDimenticataDB;
+
+    @Autowired
+    JwtUtil jwtUtil;
 
     @Override
     public TokenRegistrazione registerUser(InUtenteMD usr) throws GenericErrorException{
@@ -65,7 +75,7 @@ public class UtenteSCImplementation implements UtenteSC {
         TokenRegistrazione tokenRegistrazione = tokenRegistrazioneDB.findByToken(token.get());
 
         if (tokenRegistrazione == null)
-            throw new GenericErrorException("Il token inserito non è corretto","VR_002");
+            throw new GenericErrorException("Il token inserito non esiste nei nostri sistemi","VR_002");
 
         if (tokenRegistrazione.scaduto()){
             tokenRegistrazioneDB.delete(tokenRegistrazione);
@@ -75,11 +85,13 @@ public class UtenteSCImplementation implements UtenteSC {
         Utente utente = tokenRegistrazione.getUtente();
 
         if (utente.isActive()) {
+            tokenRegistrazioneDB.delete(tokenRegistrazione);
             throw new GenericErrorException("Il tuo account è già attivato","VR_004");
         }
 
         utente.setActive(true);
         utenteDB.save(utente);
+        tokenRegistrazioneDB.delete(tokenRegistrazione);
 
         return true;
     }
@@ -121,6 +133,59 @@ public class UtenteSCImplementation implements UtenteSC {
         outUtenteMD.setCodicePostale(utente.getCodicePostale());
 
         return outUtenteMD;
+    }
+
+    @Override
+    public TokenRegistrazione resendToken(Optional<String> email) throws GenericErrorException {
+
+        if (!email.isPresent() || email.get() == "")
+            throw new GenericErrorException("Non hai inserito nessuna email","RT_001");
+
+        Utente utente = utenteDB.findByEmail(email.get());
+
+        if (utente == null)
+            throw new GenericErrorException("Non esiste un utente con questa email","RT_002");
+
+        TokenRegistrazione tokenRegistrazione = utente.getTokenRegistrazione();
+        if (tokenRegistrazione == null)
+            throw new GenericErrorException("Non esiste un token di verifica registrazione associato a questo account","RT_003");
+
+        return tokenRegistrazione;
+
+
+    }
+
+    @Override
+    public TokenPasswordDimenticata passwordForgotten(Optional<String> email) throws GenericErrorException {
+        
+        if (!email.isPresent() || email.get() == "")
+            throw new GenericErrorException("Non hai inserito nessuna email","PD_001");
+
+        Utente utente = utenteDB.findByEmail(email.get());
+
+        if (utente == null)
+            throw new GenericErrorException("Non esiste un utente con questa email","PD_002");
+
+        TokenPasswordDimenticata tokenPasswordDimenticata = new TokenPasswordDimenticata(utente,UUID.randomUUID().toString());
+
+        return tokenPasswordDimenticataDB.save(tokenPasswordDimenticata);
+    }
+
+    @Override
+    public void passwordReset(InPasswordResetMD inPasswordResetMD) throws GenericErrorException {
+
+        TokenPasswordDimenticata tokenPasswordDimenticata = tokenPasswordDimenticataDB.findByToken(inPasswordResetMD.getToken());
+
+        if (tokenPasswordDimenticata == null)
+            throw new GenericErrorException("Il token fornito per il cambio password non è valido","PR_001");
+
+        Utente utente = tokenPasswordDimenticata.getUtente();
+
+        utente.setPassword(bcryptEncoder.encode(inPasswordResetMD.getPassword()));
+        
+        utenteDB.save(utente);
+
+        jwtUtil.forceLogoutByEmail(utente.getEmail());
     }
 
 }

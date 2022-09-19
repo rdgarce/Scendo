@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.scendodevteam.scendo.entity.Invito;
+import com.scendodevteam.scendo.entity.InvitoUscita;
 import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.entity.UtenteUscita;
@@ -143,7 +143,7 @@ public class UscitaSCImplementazione implements UscitaSC{
         //Magari è stati invitato all'uscita quindi se è stato invitato 
         //può vedere i particolari dell'uscita anche se non vi partecipa ancora
         List<UtenteUscita> utente_uscita = utenteUscitaDB.findByUtenteAndUscita(utente, uscita.get());
-        List<Invito> invito_list = invitoDB.findByUscitaAndUtenteInvitato(uscita.get(), utente);
+        List<InvitoUscita> invito_list = invitoDB.findByUscitaAndUtenteInvitato(uscita.get(), utente);
 
         if (utente_uscita.isEmpty() && invito_list.isEmpty()) {
             throw new GenericErrorException("L'utente non è autorizzato a vedere i dettagli dell'uscita "+ id_uscita + " in quanto non vi partecipa", "IU_002");
@@ -189,12 +189,36 @@ public class UscitaSCImplementazione implements UscitaSC{
 
         
     }
-    
+
+    @Override
+    public void abbandonaUscita(String email, long id_uscita) throws GenericErrorException {
+        
+        //check se l'uscita esiste
+        Optional<Uscita> uscita = uscitaDB.findById(id_uscita);
+        if (!uscita.isPresent())
+            throw new GenericErrorException("Nessuna uscita associata a questo id: "+ id_uscita, "AU_001");
+
+        //Ottengo l'utente
+        Utente utente = utenteDB.findByEmail(email);
+
+        //Ottengo una lista contenente solo il record di partecipazione dell'utente all'uscita oppure una lista vuota
+        List<UtenteUscita> utenti_uscita_list = utenteUscitaDB.findByUtenteAndUscita(utente, uscita.get());
+
+        //Check sulla presenza dell'utente nella lista
+        if (utenti_uscita_list.isEmpty())
+            throw new GenericErrorException("Non sei un partecipante di questa uscita", "AU_002");
+
+        if (utenti_uscita_list.get(0).isUtenteCreatore()) {
+
+            utenteUscitaDB.deleteAll(utenteUscitaDB.findByUscita(uscita.get()));
+            uscitaDB.delete(uscita.get());
+
+            return;
+        }
+        utenteUscitaDB.delete(utenti_uscita_list.get(0));
+        return;
 
 
-
-
-
-
+    }
     
 }

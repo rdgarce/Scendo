@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.scendodevteam.scendo.entity.Invito;
+import com.scendodevteam.scendo.entity.InvitoUscita;
 import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.entity.UtenteUscita;
@@ -51,7 +51,7 @@ public class InvitoSCTest {
 
     private ArrayList<OutInvitoMD> outInviti = new ArrayList<OutInvitoMD>();
 
-    private Invito invito_corretto;
+    private InvitoUscita invito_corretto;
 
     @BeforeEach
     void setUp() throws ParseException{
@@ -115,9 +115,9 @@ public class InvitoSCTest {
         Mockito.when(utenteDB.findByEmail("simone@test.com")).thenReturn(utente2);
         Mockito.when(utenteDB.existsByEmail("simone@test.com")).thenReturn(true);
 
-        ArrayList<Invito> inviti = new ArrayList<Invito>();
+        ArrayList<InvitoUscita> inviti = new ArrayList<InvitoUscita>();
 
-        Invito invito = new Invito();
+        InvitoUscita invito = new InvitoUscita();
         invito.setIdInvito(5);
         invito.setUscita(uscita1);
         invito.setUtenteInvitante(utente1);
@@ -227,11 +227,11 @@ public class InvitoSCTest {
     @Test
     void testSalvaInvito_quandoEsitoPositivo() {
 
-        Mockito.when(invitoDB.findByUscitaAndUtenteInvitato(any(), any())).thenReturn(new ArrayList<Invito>());
+        Mockito.when(invitoDB.findByUscitaAndUtenteInvitato(any(), any())).thenReturn(new ArrayList<InvitoUscita>());
 
         try {
 
-            Invito invito_test = invitoSC.salvaInvito("raffaele@test.com", "simone@test.com", 2L);
+            InvitoUscita invito_test = invitoSC.salvaInvito("raffaele@test.com", "simone@test.com", 2L);
             assertEquals(invito_corretto, invito_test);
 
         } catch (Exception e) {

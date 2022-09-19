@@ -1,7 +1,7 @@
 
 package com.scendodevteam.scendo.service;
 
-import com.scendodevteam.scendo.entity.Invito;
+import com.scendodevteam.scendo.entity.InvitoUscita;
 import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.entity.UtenteUscita;
@@ -30,7 +30,7 @@ public class InvitoSCImplementazione implements InvitoSC{
     private UtenteUscitaDB utenteUscitaDB;
 
     @Override
-    public Invito salvaInvito(String invitante, String email_invitato, long id_uscita) throws GenericErrorException {
+    public InvitoUscita salvaInvito(String invitante, String email_invitato, long id_uscita) throws GenericErrorException {
         
         //check invitante
         if (!utenteDB.existsByEmail(invitante))
@@ -61,7 +61,7 @@ public class InvitoSCImplementazione implements InvitoSC{
         if (!invitoDB.findByUscitaAndUtenteInvitato(uscita, utenteInvitato).isEmpty())
             throw new GenericErrorException("L'utente è stato già invitato","SV_006");
 
-        Invito invito = new Invito(utenteInvitante, utenteInvitato, uscita);
+        InvitoUscita invito = new InvitoUscita(utenteInvitante, utenteInvitato, uscita);
         return invitoDB.save(invito);
     }
 
@@ -78,7 +78,7 @@ public class InvitoSCImplementazione implements InvitoSC{
             throw new GenericErrorException("Nessuna uscita è associata a questo id","RV_002");
         Uscita uscita = uscitaDB.getReferenceById(id_uscita);
 
-        List<Invito> invito = invitoDB.findByUscitaAndUtenteInvitato(uscita, utenteInvitato);
+        List<InvitoUscita> invito = invitoDB.findByUscitaAndUtenteInvitato(uscita, utenteInvitato);
 
         if (invito.isEmpty())
             throw new GenericErrorException("Invito inesistente","RV_003");
@@ -105,7 +105,7 @@ public class InvitoSCImplementazione implements InvitoSC{
         if(uscita.getNumeroMaxPartecipanti() == utenteUscitaDB.findByUscita(uscita).size())
             throw new GenericErrorException("Numero massimo di partecipanti raggiunto","AV_003");
 
-        List<Invito> inviti = invitoDB.findByUscitaAndUtenteInvitato(uscita, utenteInvitato);
+        List<InvitoUscita> inviti = invitoDB.findByUscitaAndUtenteInvitato(uscita, utenteInvitato);
 
         if (inviti.isEmpty())
             throw new GenericErrorException("Invito inesistente","AV_004");
@@ -123,7 +123,7 @@ public class InvitoSCImplementazione implements InvitoSC{
     public List<OutInvitoMD> leggiInviti(String email) throws GenericErrorException{
     	         
     	Utente utente = utenteDB.findByEmail(email);
-    	List<Invito> InvitiList = invitoDB.findByUtenteInvitato(utente);
+    	List<InvitoUscita> InvitiList = invitoDB.findByUtenteInvitato(utente);
 
         /*
         if (InvitiList.isEmpty()) {
@@ -133,7 +133,7 @@ public class InvitoSCImplementazione implements InvitoSC{
 
         ArrayList<OutInvitoMD> outInvitoMD_list = new ArrayList<OutInvitoMD>();
         
-        for (Invito invito : InvitiList) {
+        for (InvitoUscita invito : InvitiList) {
             OutInvitoMD outInvitoMD = new OutInvitoMD();
             outInvitoMD.setIdInvito(invito.getIdInvito());
             outInvitoMD.setEmailInvitante(invito.getUtenteInvitante().getEmail());

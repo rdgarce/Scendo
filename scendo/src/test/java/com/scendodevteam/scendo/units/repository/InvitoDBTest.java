@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import com.scendodevteam.scendo.entity.Invito;
+import com.scendodevteam.scendo.entity.InvitoUscita;
 import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.repository.InvitoDB;
@@ -27,7 +27,7 @@ public class InvitoDBTest {
     @Autowired
     private TestEntityManager testEntityManager;
 
-    private Invito invito_db;
+    private InvitoUscita invito_db;
 
     private Utente utenteInvitato_db_corretto;
 
@@ -104,7 +104,7 @@ public class InvitoDBTest {
         uscita_db_corretta = testEntityManager.persist(uscita1);
         uscita_db_errata = testEntityManager.persist(uscita2);
 
-        Invito invito = new Invito();
+        InvitoUscita invito = new InvitoUscita();
         invito.setUscita(uscita1);
         invito.setUtenteInvitante(utenteInvitante);
         invito.setUtenteInvitato(utente1);
@@ -117,7 +117,7 @@ public class InvitoDBTest {
     @Test
     void testFindByUtenteInvitato_quandoUtenteInvitatoEsiste() {
 
-        List<Invito> inviti_list = invitoDB.findByUtenteInvitato(utenteInvitato_db_corretto);
+        List<InvitoUscita> inviti_list = invitoDB.findByUtenteInvitato(utenteInvitato_db_corretto);
 
         assertTrue(inviti_list.size() == 1 && inviti_list.contains(invito_db));
 
@@ -126,7 +126,7 @@ public class InvitoDBTest {
     @Test
     void testFindByUtenteInvitato_quandoUtenteInvitatoNonEsiste() {
 
-        List<Invito> inviti_list = invitoDB.findByUtenteInvitato(utenteInvitato_db_errato);
+        List<InvitoUscita> inviti_list = invitoDB.findByUtenteInvitato(utenteInvitato_db_errato);
 
         assertTrue(inviti_list != null && inviti_list.size() == 0);
 
@@ -135,7 +135,7 @@ public class InvitoDBTest {
     @Test
     void testFindByUscitaAndUtenteInvitato_quandoUtenteInvitatoEUscitaEsistono() {
 
-        List<Invito> inviti_list = invitoDB.findByUscitaAndUtenteInvitato(uscita_db_corretta, utenteInvitato_db_corretto);
+        List<InvitoUscita> inviti_list = invitoDB.findByUscitaAndUtenteInvitato(uscita_db_corretta, utenteInvitato_db_corretto);
 
         assertTrue(inviti_list.size() == 1 && inviti_list.contains(invito_db));
 
@@ -144,7 +144,7 @@ public class InvitoDBTest {
     @Test
     void testFindByUscitaAndUtenteInvitato_quandoUtenteInvitatoEsisteEUscitaNonEsiste() {
 
-        List<Invito> inviti_list = invitoDB.findByUscitaAndUtenteInvitato(uscita_db_errata, utenteInvitato_db_corretto);
+        List<InvitoUscita> inviti_list = invitoDB.findByUscitaAndUtenteInvitato(uscita_db_errata, utenteInvitato_db_corretto);
 
         assertTrue(inviti_list != null && inviti_list.size() == 0);
 
@@ -153,7 +153,7 @@ public class InvitoDBTest {
     @Test
     void testFindByUscitaAndUtenteInvitato_quandoUtenteInvitatoNonEsisteEUscitaEsiste() {
 
-        List<Invito> inviti_list = invitoDB.findByUscitaAndUtenteInvitato(uscita_db_corretta, utenteInvitato_db_errato);
+        List<InvitoUscita> inviti_list = invitoDB.findByUscitaAndUtenteInvitato(uscita_db_corretta, utenteInvitato_db_errato);
 
         assertTrue(inviti_list != null && inviti_list.size() == 0);
 
@@ -162,7 +162,7 @@ public class InvitoDBTest {
     @Test
     void testFindByUscitaAndUtenteInvitato_quandoUtenteInvitatoEUscitaNonEsistono() {
 
-        List<Invito> inviti_list = invitoDB.findByUscitaAndUtenteInvitato(uscita_db_errata, utenteInvitato_db_errato);
+        List<InvitoUscita> inviti_list = invitoDB.findByUscitaAndUtenteInvitato(uscita_db_errata, utenteInvitato_db_errato);
 
         assertTrue(inviti_list != null && inviti_list.size() == 0);
 

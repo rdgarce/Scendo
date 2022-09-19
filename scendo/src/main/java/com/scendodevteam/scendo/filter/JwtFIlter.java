@@ -29,7 +29,7 @@ public class JwtFIlter extends OncePerRequestFilter{
     private JwtUtil jwtUtil;
 
     @Autowired
-    AuthUserSC userService;
+    private AuthUserSC userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -48,15 +48,14 @@ public class JwtFIlter extends OncePerRequestFilter{
                     try {
                         userName = jwtUtil.getUsernameFromToken(token);
                     } catch (ExpiredJwtException e) {
-                        System.out.println("Expired");
                         logger.warn("Il token è scaduto");
-                        //throw new CustomAuthenticationException("Il token è scaduto","LG_004");
+                        
                     }catch(SignatureException e){
                         logger.warn("Non è possibile verificare la firma del token");
-                        //throw new CustomAuthenticationException("Non è possibile verificare la firma del token","LG_005");
+                        
                     }catch(MalformedJwtException e){
                         logger.warn("Il token è malformato");
-                        //throw new CustomAuthenticationException("Il token non è corretto","LG_006");
+                        
                     }
                     
                     

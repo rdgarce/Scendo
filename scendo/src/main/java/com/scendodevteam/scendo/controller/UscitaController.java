@@ -54,6 +54,17 @@ public class UscitaController {
         return new MessaggioGenerico(uscitaSC.infoUscita(currentUser.getUsername(), idUscita, partecipanti),"IU_000");
     }
 
+    @DeleteMapping("/api/uscita/{idUscita}")
+    public MessaggioGenerico abbandonaUscita(@PathVariable long idUscita) throws GenericErrorException{
+
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        uscitaSC.abbandonaUscita(currentUser.getUsername(), idUscita);
+
+        return new MessaggioGenerico("Uscita abbandonata con successo","AU_000");
+
+    }
+
     @GetMapping("api/calendario-uscite")
 	public MessaggioGenerico consultaCalendario()throws GenericErrorException{
         

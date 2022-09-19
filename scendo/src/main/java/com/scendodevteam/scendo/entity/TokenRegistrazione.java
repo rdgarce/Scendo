@@ -29,7 +29,9 @@ public class TokenRegistrazione {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long idToken;
+
     private String token;
+    
     private Date dataScadenza;
 
     @OneToOne(fetch = FetchType.EAGER)

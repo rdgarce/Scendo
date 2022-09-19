@@ -42,7 +42,7 @@ public class Uscita{
 
     @OneToMany(mappedBy = "uscita", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Invito> inviti;
+    private List<InvitoUscita> inviti;
 
 
 }

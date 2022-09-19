@@ -9,9 +9,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor
@@ -35,6 +37,7 @@ public class InUtenteMD{
 
     @Email(message = "Hai inserito una email incorretta")
     @NotEmpty(message = "L'email non può essere vuota")
+    @Setter(AccessLevel.NONE)
     private String email;
 
     @NotEmpty(message = "La password non può essere vuota")
@@ -45,5 +48,11 @@ public class InUtenteMD{
 
     @NotEmpty(message = "Il codice postale non può essere vuoto")
     private String codicePostale;
+
+    public void setEmail(String email){
+
+        //Explicit setter to always lowercase the email
+        this.email = email.toLowerCase();
+    }
 
 }

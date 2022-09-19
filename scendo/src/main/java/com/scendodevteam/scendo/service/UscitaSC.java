@@ -16,4 +16,6 @@ public interface UscitaSC {
     public List<Long> consultaCalendario(String email) throws GenericErrorException;
 
     public OutUscitaMD infoUscita(String email,long idUscita, boolean partecipanti) throws GenericErrorException;
+
+    public void abbandonaUscita(String email, long idUscita) throws GenericErrorException;
 }

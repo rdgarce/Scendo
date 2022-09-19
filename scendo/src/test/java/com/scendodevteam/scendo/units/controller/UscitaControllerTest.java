@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scendodevteam.scendo.entity.Invito;
+import com.scendodevteam.scendo.entity.InvitoUscita;
 import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.exception.GenericErrorException;
 import com.scendodevteam.scendo.exception.handler.RestResponseExceptionHandler;
@@ -487,7 +487,7 @@ public class UscitaControllerTest {
         try {
 
             Mockito.when(invitoSC.salvaInvito("raffaele@test.com","simone@test.com",1))
-                    .thenReturn(new Invito());
+                    .thenReturn(new InvitoUscita());
 
             MockHttpServletResponse resp = mockMvc.perform(post("/api/uscita/{idUscita}/invita-partecipante", 1)
                                             .contentType(MediaType.APPLICATION_JSON).content("{\"email_invitato\": \"simone@test.com\"}"))
@@ -540,4 +540,91 @@ public class UscitaControllerTest {
 
         }
     }
+
+    @Test
+    void testAbbandonaUscita_quandoUscitaEsiste(){
+
+        try {
+
+
+            Mockito.doNothing().when(uscitaSC).abbandonaUscita("raffaele@test.com", 1);
+
+            MockHttpServletResponse resp = mockMvc.perform(delete("/api/uscita/{idUscita}", 1)
+                                            .contentType(MediaType.APPLICATION_JSON))
+                                            .andExpect(status().isOk())
+                                            .andReturn().getResponse();
+            
+            JsonNode json_response = mapper.readTree(resp.getContentAsString());
+            
+            String code = json_response.get("code").asText();
+
+            assertEquals(code, "AU_000");
+
+        } catch (Exception e) {
+
+            fail("Lanciata eccezione: "+ e.getMessage());
+        }
+
+    }
+
+    @Test
+    void testAbbandonaUscita_quandoUscitaNonEsiste(){
+
+        Mockito.when(responseExceptionHandler.genericErrorHandler(any()))
+        .thenReturn(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new MessaggioGenerico("Nessuna uscita associata a questo id: 2", "AU_001")));
+
+        try {
+
+            Mockito.doThrow(new GenericErrorException("Nessuna uscita associata a questo id: 2", "AU_001"))
+                .when(uscitaSC).abbandonaUscita("raffaele@test.com", 2);
+
+            MockHttpServletResponse resp = mockMvc.perform(delete("/api/uscita/{idUscita}", 2)
+                                            .contentType(MediaType.APPLICATION_JSON))
+                                            .andExpect(status().isBadRequest())
+                                            .andReturn().getResponse();
+            
+            JsonNode json_response = mapper.readTree(resp.getContentAsString());
+            
+            String code = json_response.get("code").asText();
+
+            assertEquals(code, "AU_001");
+
+        } catch (Exception e) {
+
+            fail("Lanciata eccezione: "+ e.getMessage());
+        }
+
+    }
+
+    @Test
+    void testAbbandonaUscita_quandoUtenteNonPartecipa(){
+
+        Mockito.when(responseExceptionHandler.genericErrorHandler(any()))
+        .thenReturn(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new MessaggioGenerico("Non sei un partecipante di questa uscita", "AU_002")));
+
+        try {
+
+            Mockito.doThrow(new GenericErrorException("Non sei un partecipante di questa uscita", "AU_002"))
+                .when(uscitaSC).abbandonaUscita("raffaele@test.com", 3);
+
+            MockHttpServletResponse resp = mockMvc.perform(delete("/api/uscita/{idUscita}", 3)
+                                            .contentType(MediaType.APPLICATION_JSON))
+                                            .andExpect(status().isBadRequest())
+                                            .andReturn().getResponse();
+            
+            JsonNode json_response = mapper.readTree(resp.getContentAsString());
+            
+            String code = json_response.get("code").asText();
+
+            assertEquals(code, "AU_002");
+
+        } catch (Exception e) {
+
+            fail("Lanciata eccezione: "+ e.getMessage());
+        }
+
+    }
+    
 }

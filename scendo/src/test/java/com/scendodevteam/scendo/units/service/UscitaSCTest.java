@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.scendodevteam.scendo.entity.Invito;
+import com.scendodevteam.scendo.entity.InvitoUscita;
 import com.scendodevteam.scendo.entity.Uscita;
 import com.scendodevteam.scendo.entity.Utente;
 import com.scendodevteam.scendo.entity.UtenteUscita;
@@ -176,7 +176,7 @@ public class UscitaSCTest {
         Mockito.when(utenteUscitaDB.findByUtenteAndUscita(utente1,uscita1)).thenReturn(utente1_list);
         Mockito.when(utenteUscitaDB.findByUtenteAndUscita(utente2,uscita1)).thenReturn(utente2_list);
 
-        Mockito.when(invitoDB.findByUscitaAndUtenteInvitato(uscita1, utente1)).thenReturn(new ArrayList<Invito>());
+        Mockito.when(invitoDB.findByUscitaAndUtenteInvitato(uscita1, utente1)).thenReturn(new ArrayList<InvitoUscita>());
 
         Mockito.when(utenteUscitaDB.findByUscita(uscita1)).thenReturn(partecipanti);
 

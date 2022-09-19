@@ -7,6 +7,6 @@ import com.scendodevteam.scendo.entity.TokenRegistrazione;
 
 @Repository
 public interface TokenRegistrazioneDB extends JpaRepository<TokenRegistrazione, Long> {
-
+    
     TokenRegistrazione findByToken(String token);
 }

@@ -48,7 +48,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
         http.cors().and().csrf().disable()
         .authorizeRequests()
-        .antMatchers("/api/login","/api/registrazione","/api/verifica-registrazione","/h2-console/**")
+        .antMatchers("/api/login","/api/registrazione","/api/verifica-registrazione",
+                                    "/api/reinvia-token","/api/password-dimenticata","/api/password-reset","/h2-console/**")
         .permitAll()
         .anyRequest()
         .authenticated()
