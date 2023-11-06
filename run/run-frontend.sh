@@ -1,1 +1,0 @@
-serve -s frontend-server
